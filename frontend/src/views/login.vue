@@ -52,7 +52,7 @@
           <span v-if="!loading">login</span>
           <span v-else>logging...</span>
         </el-button>
-        <div style="float: right;" v-if="register">
+        <div style="float: right;" >
           <router-link class="link-type" :to="'/register'">register now</router-link>
         </div>
       </el-form-item>

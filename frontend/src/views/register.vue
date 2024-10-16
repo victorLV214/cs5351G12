@@ -1,14 +1,14 @@
 <template>
   <div class="register">
     <el-form ref="registerRef" :model="registerForm" :rules="registerRules" class="register-form">
-      <h3 class="title">若依后台管理系统</h3>
+      <h3 class="title">Agile Innovators</h3>
       <el-form-item prop="username">
         <el-input 
           v-model="registerForm.username" 
           type="text" 
           size="large" 
           auto-complete="off" 
-          placeholder="账号"
+          placeholder="username"
         >
           <template #prefix><svg-icon icon-class="user" class="el-input__icon input-icon" /></template>
         </el-input>
@@ -19,7 +19,7 @@
           type="password"
           size="large" 
           auto-complete="off"
-          placeholder="密码"
+          placeholder="password"
           @keyup.enter="handleRegister"
         >
           <template #prefix><svg-icon icon-class="password" class="el-input__icon input-icon" /></template>
@@ -31,7 +31,7 @@
           type="password"
           size="large" 
           auto-complete="off"
-          placeholder="确认密码"
+          placeholder="confirmPassword"
           @keyup.enter="handleRegister"
         >
           <template #prefix><svg-icon icon-class="password" class="el-input__icon input-icon" /></template>
@@ -42,7 +42,7 @@
           size="large" 
           v-model="registerForm.code"
           auto-complete="off"
-          placeholder="验证码"
+          placeholder=" "
           style="width: 63%"
           @keyup.enter="handleRegister"
         >
@@ -60,17 +60,17 @@
           style="width:100%;"
           @click.prevent="handleRegister"
         >
-          <span v-if="!loading">注 册</span>
-          <span v-else>注 册 中...</span>
+          <span v-if="!loading">register</span>
+          <span v-else>waiting......</span>
         </el-button>
         <div style="float: right;">
-          <router-link class="link-type" :to="'/login'">使用已有账户登录</router-link>
+          <router-link class="link-type" :to="'/login'">log in</router-link>
         </div>
       </el-form-item>
     </el-form>
     <!--  底部  -->
     <div class="el-register-footer">
-      <span>Copyright © 2018-2023 ruoyi.vip All Rights Reserved.</span>
+      <span>Copyright © 2024 Agile Innovators</span>
     </div>
   </div>
 </template>
@@ -92,7 +92,7 @@ const registerForm = ref({
 
 const equalToPassword = (rule, value, callback) => {
   if (registerForm.value.password !== value) {
-    callback(new Error("两次输入的密码不一致"));
+    callback(new Error("Entered passwords differ!"));
   } else {
     callback();
   }
@@ -100,18 +100,18 @@ const equalToPassword = (rule, value, callback) => {
 
 const registerRules = {
   username: [
-    { required: true, trigger: "blur", message: "请输入您的账号" },
-    { min: 2, max: 20, message: "用户账号长度必须介于 2 和 20 之间", trigger: "blur" }
+    { required: true, trigger: "blur", message: "Please enter your account" },
+    { min: 2, max: 20, message: "The length of the user account must be between 2 and 20", trigger: "blur" }
   ],
   password: [
-    { required: true, trigger: "blur", message: "请输入您的密码" },
-    { min: 5, max: 20, message: "用户密码长度必须介于 5 和 20 之间", trigger: "blur" }
+    { required: true, trigger: "blur", message: "Please enter your password" },
+    { min: 5, max: 20, message: "The length of the user password must be between 5 and 20", trigger: "blur" }
   ],
   confirmPassword: [
-    { required: true, trigger: "blur", message: "请再次输入您的密码" },
+    { required: true, trigger: "blur", message: "Please enter your password again" },
     { required: true, validator: equalToPassword, trigger: "blur" }
   ],
-  code: [{ required: true, trigger: "change", message: "请输入验证码" }]
+  code: [{ required: true, trigger: "change", message: "Please enter the verification code" }]
 };
 
 const codeUrl = ref("");
@@ -124,7 +124,7 @@ function handleRegister() {
       loading.value = true;
       register(registerForm.value).then(res => {
         const username = registerForm.value.username;
-        ElMessageBox.alert("<font color='red'>恭喜你，您的账号 " + username + " 注册成功！</font>", "系统提示", {
+        ElMessageBox.alert("<font color='red'>Congratulations, your account " + username + " registered successfully</font>", "系统提示", {
           dangerouslyUseHTMLString: true,
           type: "success",
         }).then(() => {
@@ -156,10 +156,10 @@ getCode();
 <style lang='scss' scoped>
 .register {
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
   height: 100%;
-  background-image: url("../assets/images/login-background.jpg");
+  background-image: url("../assets/images/background.jpg");
   background-size: cover;
 }
 .title {
@@ -172,6 +172,7 @@ getCode();
   border-radius: 6px;
   background: #ffffff;
   width: 400px;
+  margin-right: 15%;
   padding: 25px 25px 5px 25px;
   .el-input {
     height: 40px;
