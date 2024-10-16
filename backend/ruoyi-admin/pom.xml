@@ -25,10 +25,10 @@
         </dependency>
 
         <!-- swagger3-->
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-boot-starter</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>io.springfox</groupId>-->
+<!--            <artifactId>springfox-boot-starter</artifactId>-->
+<!--        </dependency>-->
 
         <!-- 防止进入swagger页面报类型转换错误，排除3.0.0中的引用，手动增加1.6.2版本 -->
         <dependency>
@@ -61,6 +61,13 @@
             <artifactId>ruoyi-generator</artifactId>
         </dependency>
 
+        <!-- knife4j -->
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-spring-boot-starter</artifactId>
+            <version>3.0.3</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -88,7 +95,15 @@
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                     <warName>${project.artifactId}</warName>
                 </configuration>   
-           </plugin>   
+           </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>9</source>
+                    <target>9</target>
+                </configuration>
+            </plugin>
         </plugins>
         <finalName>${project.artifactId}</finalName>
     </build>
