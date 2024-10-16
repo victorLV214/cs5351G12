@@ -1,13 +1,18 @@
 <template>
   <div>
-    <svg-icon icon-class="github" @click="goto" />
+    <svg-icon icon-class="message" @click="goto" />
   </div>
 </template>
 
 <script setup>
-const url = ref('https://gitee.com/y_project/RuoYi-Vue');
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { Message } from '@element-plus/icons-vue'
+
+const router = useRouter()
+const url = ref('/system/notice')
 
 function goto() {
-  window.open(url.value)
+  router.push(url.value)
 }
 </script>

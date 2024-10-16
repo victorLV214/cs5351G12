@@ -4,10 +4,18 @@
   </div>
 </template>
 
+
+
+
 <script setup>
-const url = ref('http://doc.ruoyi.vip/ruoyi-vue');
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { Message } from '@element-plus/icons-vue'
+
+const router = useRouter()
+const url = ref('/doc/index');
 
 function goto() {
-  window.open(url.value)
+  router.push(url.value)
 }
 </script>

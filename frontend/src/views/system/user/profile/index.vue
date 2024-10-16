@@ -48,7 +48,7 @@
                </div>
             </el-card>
          </el-col>
-        <br>
+        <el-divider />
         <br>
         <br>  <br>
 
