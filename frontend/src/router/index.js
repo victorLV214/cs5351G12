@@ -93,7 +93,7 @@ export const constantRoutes = [
         path: 'index',
         component: () => import('@/views/AgileInnovatorsDoc.vue'),
         name: 'Doc',
-        meta: { title: 'Agile Innovators doc', icon: 'documentation', affix: true }
+        meta: { title: 'Agile Innovators doc', icon: 'documentation', affix: false  }
       }
     ]
   },
