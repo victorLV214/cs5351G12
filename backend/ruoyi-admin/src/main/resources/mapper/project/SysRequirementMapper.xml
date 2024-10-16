@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.mapper.SysRequirementMapper">
+    
+    <resultMap type="SysRequirement" id="SysRequirementResult">
+        <result property="requirementId"    column="requirement_id"    />
+        <result property="projectId"    column="project_id"    />
+        <result property="title"    column="title"    />
+        <result property="description"    column="description"    />
+        <result property="priority"    column="priority"    />
+        <result property="status"    column="status"    />
+        <result property="assignedTo"    column="assigned_to"    />
+        <result property="dueDate"    column="due_date"    />
+        <result property="completedDate"    column="completed_date"    />
+        <result property="type"    column="type"    />
+        <result property="estimatedEffort"    column="estimated_effort"    />
+        <result property="actualEffort"    column="actual_effort"    />
+        <result property="version"    column="version"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+        <result property="delFlag"    column="del_flag"    />
+    </resultMap>
+
+    <sql id="selectSysRequirementVo">
+        select requirement_id, project_id, title, description, priority, status, assigned_to, due_date, completed_date, type, estimated_effort, actual_effort, version, create_by, create_time, update_by, update_time, remark, del_flag from sys_requirement
+    </sql>
+
+    <select id="selectSysRequirementList" parameterType="SysRequirement" resultMap="SysRequirementResult">
+        <include refid="selectSysRequirementVo"/>
+        <where>  
+            <if test="projectId != null "> and project_id = #{projectId}</if>
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="description != null  and description != ''"> and description = #{description}</if>
+            <if test="priority != null "> and priority = #{priority}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="assignedTo != null "> and assigned_to = #{assignedTo}</if>
+            <if test="dueDate != null "> and due_date = #{dueDate}</if>
+            <if test="completedDate != null "> and completed_date = #{completedDate}</if>
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+            <if test="estimatedEffort != null "> and estimated_effort = #{estimatedEffort}</if>
+            <if test="actualEffort != null "> and actual_effort = #{actualEffort}</if>
+            <if test="version != null  and version != ''"> and version = #{version}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysRequirementByRequirementId" parameterType="Long" resultMap="SysRequirementResult">
+        <include refid="selectSysRequirementVo"/>
+        where requirement_id = #{requirementId}
+    </select>
+
+    <insert id="insertSysRequirement" parameterType="SysRequirement" useGeneratedKeys="true" keyProperty="requirementId">
+        insert into sys_requirement
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">project_id,</if>
+            <if test="title != null and title != ''">title,</if>
+            <if test="description != null">description,</if>
+            <if test="priority != null">priority,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="assignedTo != null">assigned_to,</if>
+            <if test="dueDate != null">due_date,</if>
+            <if test="completedDate != null">completed_date,</if>
+            <if test="type != null">type,</if>
+            <if test="estimatedEffort != null">estimated_effort,</if>
+            <if test="actualEffort != null">actual_effort,</if>
+            <if test="version != null">version,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+            <if test="delFlag != null">del_flag,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">#{projectId},</if>
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="description != null">#{description},</if>
+            <if test="priority != null">#{priority},</if>
+            <if test="status != null and status != ''">#{status},</if>
+            <if test="assignedTo != null">#{assignedTo},</if>
+            <if test="dueDate != null">#{dueDate},</if>
+            <if test="completedDate != null">#{completedDate},</if>
+            <if test="type != null">#{type},</if>
+            <if test="estimatedEffort != null">#{estimatedEffort},</if>
+            <if test="actualEffort != null">#{actualEffort},</if>
+            <if test="version != null">#{version},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysRequirement" parameterType="SysRequirement">
+        update sys_requirement
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectId != null">project_id = #{projectId},</if>
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="priority != null">priority = #{priority},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="assignedTo != null">assigned_to = #{assignedTo},</if>
+            <if test="dueDate != null">due_date = #{dueDate},</if>
+            <if test="completedDate != null">completed_date = #{completedDate},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="estimatedEffort != null">estimated_effort = #{estimatedEffort},</if>
+            <if test="actualEffort != null">actual_effort = #{actualEffort},</if>
+            <if test="version != null">version = #{version},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+        </trim>
+        where requirement_id = #{requirementId}
+    </update>
+
+    <delete id="deleteSysRequirementByRequirementId" parameterType="Long">
+        delete from sys_requirement where requirement_id = #{requirementId}
+    </delete>
+
+    <delete id="deleteSysRequirementByRequirementIds" parameterType="String">
+        delete from sys_requirement where requirement_id in 
+        <foreach item="requirementId" collection="array" open="(" separator="," close=")">
+            #{requirementId}
+        </foreach>
+    </delete>
+</mapper>
