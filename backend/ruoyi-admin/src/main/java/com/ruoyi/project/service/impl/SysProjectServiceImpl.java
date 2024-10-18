@@ -6,7 +6,6 @@ import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.SecurityUtils;
-import com.ruoyi.common.utils.ServletUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.project.mapper.SysProjectMapper;
@@ -14,7 +13,7 @@ import com.ruoyi.project.domain.SysProject;
 import com.ruoyi.project.service.ISysProjectService;
 
 /**
- * 项目Service业务层处理
+ * 项目 Service业务层处理
  * 
  * @author AB-IN-LIUSY
  * @date 2024-10-14
@@ -53,7 +52,7 @@ public class SysProjectServiceImpl implements ISysProjectService
      * 新增项目
      * 
      * @param sysProject 项目
-     * @return 结果
+     * @return sysProject.id
      */
     @Override
     public Long insertSysProject(SysProject sysProject)
@@ -75,7 +74,7 @@ public class SysProjectServiceImpl implements ISysProjectService
      * 修改项目
      * 
      * @param sysProject 项目
-     * @return 结果
+     * @return sysProject.id
      */
     @Override
     public Long updateSysProject(SysProject sysProject)

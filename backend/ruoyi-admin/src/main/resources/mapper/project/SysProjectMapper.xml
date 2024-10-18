@@ -2,6 +2,11 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+  @author AB-IN-LIUSY
+-->
+
 <mapper namespace="com.ruoyi.project.mapper.SysProjectMapper">
     
     <resultMap type="SysProject" id="SysProjectResult">
@@ -35,7 +40,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>  
             <if test="projectName != null  and projectName != ''"> and project_name like concat('%', #{projectName}, '%')</if>
             <if test="projectCode != null  and projectCode != ''"> and project_code = #{projectCode}</if>
+            <if test="startDate != null "> and start_date = #{startDate}</if>
+            <if test="actualEndDate != null "> and actual_end_date = #{actualEndDate}</if>
             <if test="projectManagerId != null "> and project_manager_id = #{projectManagerId}</if>
+            <if test="priority != null "> and priority = #{priority}</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
         </where>
     </select>

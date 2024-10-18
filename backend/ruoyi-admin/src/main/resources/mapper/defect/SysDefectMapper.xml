@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+  @author AB-IN-LIUSY
+-->
+
+<mapper namespace="com.ruoyi.defect.mapper.SysDefectMapper">
+    
+    <resultMap type="SysDefect" id="SysDefectResult">
+        <result property="defectId"    column="defect_id"    />
+        <result property="projectId"    column="project_id"    />
+        <result property="title"    column="title"    />
+        <result property="description"    column="description"    />
+        <result property="severity"    column="severity"    />
+        <result property="priority"    column="priority"    />
+        <result property="status"    column="status"    />
+        <result property="reportedBy"    column="reported_by"    />
+        <result property="assignedTo"    column="assigned_to"    />
+        <result property="resolvedAt"    column="resolved_at"    />
+        <result property="closedAt"    column="closed_at"    />
+        <result property="expectedFixVersion"    column="expected_fix_version"    />
+        <result property="actualFixVersion"    column="actual_fix_version"    />
+        <result property="reproductionSteps"    column="reproduction_steps"    />
+        <result property="environment"    column="environment"    />
+        <result property="relatedRequirementId"    column="related_requirement_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+        <result property="delFlag"    column="del_flag"    />
+    </resultMap>
+
+    <sql id="selectSysDefectVo">
+        select defect_id, project_id, title, description, severity, priority, status, reported_by, assigned_to, resolved_at, closed_at, expected_fix_version, actual_fix_version, reproduction_steps, environment, related_requirement_id, create_by, create_time, update_by, update_time, remark, del_flag from sys_defect
+    </sql>
+
+    <select id="selectSysDefectList" parameterType="SysDefect" resultMap="SysDefectResult">
+        <include refid="selectSysDefectVo"/>
+        <where>  
+            <if test="projectId != null "> and project_id = #{projectId}</if>
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="severity != null "> and severity = #{severity}</if>
+            <if test="priority != null "> and priority = #{priority}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="reportedBy != null "> and reported_by = #{reportedBy}</if>
+            <if test="assignedTo != null "> and assigned_to = #{assignedTo}</if>
+            <if test="resolvedAt != null "> and resolved_at = #{resolvedAt}</if>
+            <if test="expectedFixVersion != null  and expectedFixVersion != ''"> and expected_fix_version = #{expectedFixVersion}</if>
+            <if test="actualFixVersion != null  and actualFixVersion != ''"> and actual_fix_version = #{actualFixVersion}</if>
+            <if test="relatedRequirementId != null "> and related_requirement_id = #{relatedRequirementId}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysDefectByDefectId" parameterType="Long" resultMap="SysDefectResult">
+        <include refid="selectSysDefectVo"/>
+        where defect_id = #{defectId}
+    </select>
+
+    <insert id="insertSysDefect" parameterType="SysDefect" useGeneratedKeys="true" keyProperty="defectId">
+        insert into sys_defect
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">project_id,</if>
+            <if test="title != null and title != ''">title,</if>
+            <if test="description != null">description,</if>
+            <if test="severity != null">severity,</if>
+            <if test="priority != null">priority,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="reportedBy != null">reported_by,</if>
+            <if test="assignedTo != null">assigned_to,</if>
+            <if test="resolvedAt != null">resolved_at,</if>
+            <if test="closedAt != null">closed_at,</if>
+            <if test="expectedFixVersion != null">expected_fix_version,</if>
+            <if test="actualFixVersion != null">actual_fix_version,</if>
+            <if test="reproductionSteps != null">reproduction_steps,</if>
+            <if test="environment != null">environment,</if>
+            <if test="relatedRequirementId != null">related_requirement_id,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+            <if test="delFlag != null">del_flag,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">#{projectId},</if>
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="description != null">#{description},</if>
+            <if test="severity != null">#{severity},</if>
+            <if test="priority != null">#{priority},</if>
+            <if test="status != null and status != ''">#{status},</if>
+            <if test="reportedBy != null">#{reportedBy},</if>
+            <if test="assignedTo != null">#{assignedTo},</if>
+            <if test="resolvedAt != null">#{resolvedAt},</if>
+            <if test="closedAt != null">#{closedAt},</if>
+            <if test="expectedFixVersion != null">#{expectedFixVersion},</if>
+            <if test="actualFixVersion != null">#{actualFixVersion},</if>
+            <if test="reproductionSteps != null">#{reproductionSteps},</if>
+            <if test="environment != null">#{environment},</if>
+            <if test="relatedRequirementId != null">#{relatedRequirementId},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysDefect" parameterType="SysDefect">
+        update sys_defect
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectId != null">project_id = #{projectId},</if>
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="severity != null">severity = #{severity},</if>
+            <if test="priority != null">priority = #{priority},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="reportedBy != null">reported_by = #{reportedBy},</if>
+            <if test="assignedTo != null">assigned_to = #{assignedTo},</if>
+            <if test="resolvedAt != null">resolved_at = #{resolvedAt},</if>
+            <if test="closedAt != null">closed_at = #{closedAt},</if>
+            <if test="expectedFixVersion != null">expected_fix_version = #{expectedFixVersion},</if>
+            <if test="actualFixVersion != null">actual_fix_version = #{actualFixVersion},</if>
+            <if test="reproductionSteps != null">reproduction_steps = #{reproductionSteps},</if>
+            <if test="environment != null">environment = #{environment},</if>
+            <if test="relatedRequirementId != null">related_requirement_id = #{relatedRequirementId},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+        </trim>
+        where defect_id = #{defectId}
+    </update>
+
+    <delete id="deleteSysDefectByDefectId" parameterType="Long">
+        delete from sys_defect where defect_id = #{defectId}
+    </delete>
+
+    <delete id="deleteSysDefectByDefectIds" parameterType="String">
+        delete from sys_defect where defect_id in 
+        <foreach item="defectId" collection="array" open="(" separator="," close=")">
+            #{defectId}
+        </foreach>
+    </delete>
+</mapper>

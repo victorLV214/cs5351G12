@@ -26,12 +26,12 @@ import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
 
 /**
- * 项目Controller
+ * 项目管理 Controller
  *
  * @author AB-IN-LIUSY
  * @date 2024-10-14
  */
-@Api("项目信息管理")
+@Api("项目管理")
 @RestController
 @RequestMapping("/dev-api/project")
 public class SysProjectController extends BaseController {
@@ -55,7 +55,7 @@ public class SysProjectController extends BaseController {
      */
     @ApiOperation("导出项目")
     @PreAuthorize("@ss.hasPermi('dev-api:project:export')")
-    @Log(title = "项目", businessType = BusinessType.EXPORT)
+    @Log(title = "项目管理", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, SysProject sysProject) {
         List<SysProject> list = sysProjectService.selectSysProjectList(sysProject);
@@ -78,7 +78,7 @@ public class SysProjectController extends BaseController {
      */
     @ApiOperation("新增项目")
     @PreAuthorize("@ss.hasPermi('dev-api:project:add')")
-    @Log(title = "项目", businessType = BusinessType.INSERT)
+    @Log(title = "项目管理", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody SysProject sysProject) {
         long projectId = sysProjectService.insertSysProject(sysProject);
@@ -92,7 +92,7 @@ public class SysProjectController extends BaseController {
      */
     @ApiOperation("修改项目")
     @PreAuthorize("@ss.hasPermi('dev-api:project:edit')")
-    @Log(title = "项目", businessType = BusinessType.UPDATE)
+    @Log(title = "项目管理", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody SysProject sysProject) {
         long projectId = sysProjectService.updateSysProject(sysProject);
@@ -106,7 +106,7 @@ public class SysProjectController extends BaseController {
      */
     @ApiOperation("删除项目")
     @PreAuthorize("@ss.hasPermi('dev-api:project:remove')")
-    @Log(title = "项目", businessType = BusinessType.DELETE)
+    @Log(title = "项目管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{projectIds}")
     public AjaxResult remove(@PathVariable Long[] projectIds) {
         return toAjax(sysProjectService.deleteSysProjectByProjectIds(projectIds));
