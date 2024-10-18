@@ -4,7 +4,7 @@ import java.util.List;
 import com.ruoyi.project.domain.SysProject;
 
 /**
- * 项目Service接口
+ * 项目 Service接口
  * 
  * @author AB-IN-LIUSY
  * @date 2024-10-14

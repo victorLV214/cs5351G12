@@ -5,7 +5,7 @@ import com.ruoyi.project.domain.SysProject;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
- * 项目Mapper接口
+ * 项目 Mapper接口
  * 
  * @author AB-IN-LIUSY
  * @date 2024-10-14
