@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+  @author AB-IN-LIUSY
+-->
+
+<mapper namespace="com.ruoyi.member.mapper.SysProjectMemberMapper">
+
+    <resultMap type="SysProjectMember" id="SysProjectMemberResult">
+        <result property="projectMemberId" column="project_member_id"/>
+        <result property="projectId" column="project_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="role" column="role"/>
+        <result property="joinDate" column="join_date"/>
+        <result property="leaveDate" column="leave_date"/>
+        <result property="isActive" column="is_active"/>
+        <result property="permissions" column="permissions"/>
+        <result property="allocationPercentage" column="allocation_percentage"/>
+        <result property="notes" column="notes"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectSysProjectMemberVo">
+        select project_member_id,
+               project_id,
+               user_id,
+               role,
+               join_date,
+               leave_date,
+               is_active,
+               permissions,
+               allocation_percentage,
+               notes,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               remark
+        from sys_project_member
+    </sql>
+
+    <select id="selectSysProjectMemberList" parameterType="SysProjectMember" resultMap="SysProjectMemberResult">
+        <include refid="selectSysProjectMemberVo"/>
+        <where>
+            <if test="projectId != null ">and project_id = #{projectId}</if>
+            <if test="userId != null ">and user_id = #{userId}</if>
+            <if test="role != null  and role != ''">and role = #{role}</if>
+            <if test="joinDate != null ">and join_date = #{joinDate}</if>
+            <if test="leaveDate != null ">and leave_date = #{leaveDate}</if>
+            <if test="isActive != null ">and is_active = #{isActive}</if>
+            <if test="permissions != null  and permissions != ''">and permissions = #{permissions}</if>
+            <if test="allocationPercentage != null ">and allocation_percentage = #{allocationPercentage}</if>
+        </where>
+    </select>
+
+    <select id="selectSysProjectMemberByProjectMemberId" parameterType="Long" resultMap="SysProjectMemberResult">
+        <include refid="selectSysProjectMemberVo"/>
+        where project_member_id = #{projectMemberId}
+    </select>
+
+    <insert id="insertSysProjectMember" parameterType="SysProjectMember" useGeneratedKeys="true" keyProperty="projectMemberId">
+        insert into sys_project_member
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">project_id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="role != null and role != ''">role,</if>
+            <if test="joinDate != null">join_date,</if>
+            <if test="leaveDate != null">leave_date,</if>
+            <if test="isActive != null">is_active,</if>
+            <if test="permissions != null">permissions,</if>
+            <if test="allocationPercentage != null">allocation_percentage,</if>
+            <if test="notes != null">notes,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">#{projectId},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="role != null and role != ''">#{role},</if>
+            <if test="joinDate != null">#{joinDate},</if>
+            <if test="leaveDate != null">#{leaveDate},</if>
+            <if test="isActive != null">#{isActive},</if>
+            <if test="permissions != null">#{permissions},</if>
+            <if test="allocationPercentage != null">#{allocationPercentage},</if>
+            <if test="notes != null">#{notes},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSysProjectMember" parameterType="SysProjectMember">
+        update sys_project_member
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectId != null">project_id = #{projectId},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="role != null and role != ''">role = #{role},</if>
+            <if test="joinDate != null">join_date = #{joinDate},</if>
+            <if test="leaveDate != null">leave_date = #{leaveDate},</if>
+            <if test="isActive != null">is_active = #{isActive},</if>
+            <if test="permissions != null">permissions = #{permissions},</if>
+            <if test="allocationPercentage != null">allocation_percentage = #{allocationPercentage},</if>
+            <if test="notes != null">notes = #{notes},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where project_member_id = #{projectMemberId}
+    </update>
+
+    <delete id="deleteSysProjectMemberByProjectMemberId" parameterType="Long">
+        delete
+        from sys_project_member
+        where project_member_id = #{projectMemberId}
+    </delete>
+
+    <delete id="deleteSysProjectMemberByProjectMemberIds" parameterType="String">
+        delete from sys_project_member where project_member_id in
+        <foreach item="projectMemberId" collection="array" open="(" separator="," close=")">
+            #{projectMemberId}
+        </foreach>
+    </delete>
+</mapper>

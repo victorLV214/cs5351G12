@@ -1,21 +1,21 @@
 package com.ruoyi.project.mapper;
 
 import java.util.List;
+
 import com.ruoyi.project.domain.SysProject;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
  * 项目 Mapper接口
- * 
+ *
  * @author AB-IN-LIUSY
  * @date 2024-10-14
  */
 @Mapper
-public interface SysProjectMapper 
-{
+public interface SysProjectMapper {
     /**
      * 查询项目
-     * 
+     *
      * @param projectId 项目主键
      * @return 项目
      */
@@ -23,7 +23,7 @@ public interface SysProjectMapper
 
     /**
      * 查询项目列表
-     * 
+     *
      * @param sysProject 项目
      * @return 项目集合
      */
@@ -31,7 +31,7 @@ public interface SysProjectMapper
 
     /**
      * 新增项目
-     * 
+     *
      * @param sysProject 项目
      * @return 结果
      */
@@ -39,7 +39,7 @@ public interface SysProjectMapper
 
     /**
      * 修改项目
-     * 
+     *
      * @param sysProject 项目
      * @return 结果
      */
@@ -47,7 +47,7 @@ public interface SysProjectMapper
 
     /**
      * 删除项目
-     * 
+     *
      * @param projectId 项目主键
      * @return 结果
      */
@@ -55,7 +55,7 @@ public interface SysProjectMapper
 
     /**
      * 批量删除项目
-     * 
+     *
      * @param projectIds 需要删除的数据主键集合
      * @return 结果
      */

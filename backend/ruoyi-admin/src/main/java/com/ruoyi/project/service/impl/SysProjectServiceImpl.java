@@ -14,49 +14,45 @@ import com.ruoyi.project.service.ISysProjectService;
 
 /**
  * 项目 Service业务层处理
- * 
+ *
  * @author AB-IN-LIUSY
  * @date 2024-10-14
  */
 @Service
-public class SysProjectServiceImpl implements ISysProjectService 
-{
+public class SysProjectServiceImpl implements ISysProjectService {
     @Autowired
     private SysProjectMapper sysProjectMapper;
 
     /**
      * 查询项目
-     * 
+     *
      * @param projectId 项目主键
      * @return 项目
      */
     @Override
-    public SysProject selectSysProjectByProjectId(Long projectId)
-    {
+    public SysProject selectSysProjectByProjectId(Long projectId) {
         return sysProjectMapper.selectSysProjectByProjectId(projectId);
     }
 
     /**
      * 查询项目列表
-     * 
+     *
      * @param sysProject 项目
      * @return 项目
      */
     @Override
-    public List<SysProject> selectSysProjectList(SysProject sysProject)
-    {
+    public List<SysProject> selectSysProjectList(SysProject sysProject) {
         return sysProjectMapper.selectSysProjectList(sysProject);
     }
 
     /**
      * 新增项目
-     * 
+     *
      * @param sysProject 项目
      * @return sysProject.id
      */
     @Override
-    public Long insertSysProject(SysProject sysProject)
-    {
+    public Long insertSysProject(SysProject sysProject) {
         sysProject.setCreateTime(DateUtils.getNowDate());
         sysProject.setUpdateTime(DateUtils.getNowDate());
         sysProject.setDelFlag("0"); // 存在
@@ -72,13 +68,12 @@ public class SysProjectServiceImpl implements ISysProjectService
 
     /**
      * 修改项目
-     * 
+     *
      * @param sysProject 项目
      * @return sysProject.id
      */
     @Override
-    public Long updateSysProject(SysProject sysProject)
-    {
+    public Long updateSysProject(SysProject sysProject) {
         sysProject.setUpdateTime(DateUtils.getNowDate());
 
         LoginUser loginUser = SecurityUtils.getLoginUser();
@@ -92,25 +87,23 @@ public class SysProjectServiceImpl implements ISysProjectService
 
     /**
      * 批量删除项目
-     * 
+     *
      * @param projectIds 需要删除的项目主键
      * @return 结果
      */
     @Override
-    public int deleteSysProjectByProjectIds(Long[] projectIds)
-    {
+    public int deleteSysProjectByProjectIds(Long[] projectIds) {
         return sysProjectMapper.deleteSysProjectByProjectIds(projectIds);
     }
 
     /**
      * 删除项目信息
-     * 
+     *
      * @param projectId 项目主键
      * @return 结果
      */
     @Override
-    public int deleteSysProjectByProjectId(Long projectId)
-    {
+    public int deleteSysProjectByProjectId(Long projectId) {
         return sysProjectMapper.deleteSysProjectByProjectId(projectId);
     }
 }
