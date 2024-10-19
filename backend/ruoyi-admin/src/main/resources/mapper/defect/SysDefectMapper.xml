@@ -1,60 +1,82 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <!--
   @author AB-IN-LIUSY
 -->
 
 <mapper namespace="com.ruoyi.defect.mapper.SysDefectMapper">
-    
+
     <resultMap type="SysDefect" id="SysDefectResult">
-        <result property="defectId"    column="defect_id"    />
-        <result property="projectId"    column="project_id"    />
-        <result property="title"    column="title"    />
-        <result property="description"    column="description"    />
-        <result property="severity"    column="severity"    />
-        <result property="priority"    column="priority"    />
-        <result property="status"    column="status"    />
-        <result property="reportedBy"    column="reported_by"    />
-        <result property="assignedTo"    column="assigned_to"    />
-        <result property="resolvedAt"    column="resolved_at"    />
-        <result property="closedAt"    column="closed_at"    />
-        <result property="expectedFixVersion"    column="expected_fix_version"    />
-        <result property="actualFixVersion"    column="actual_fix_version"    />
-        <result property="reproductionSteps"    column="reproduction_steps"    />
-        <result property="environment"    column="environment"    />
-        <result property="relatedRequirementId"    column="related_requirement_id"    />
-        <result property="createBy"    column="create_by"    />
-        <result property="createTime"    column="create_time"    />
-        <result property="updateBy"    column="update_by"    />
-        <result property="updateTime"    column="update_time"    />
-        <result property="remark"    column="remark"    />
-        <result property="delFlag"    column="del_flag"    />
+        <result property="defectId" column="defect_id"/>
+        <result property="projectId" column="project_id"/>
+        <result property="title" column="title"/>
+        <result property="description" column="description"/>
+        <result property="severity" column="severity"/>
+        <result property="priority" column="priority"/>
+        <result property="status" column="status"/>
+        <result property="reportedBy" column="reported_by"/>
+        <result property="assignedTo" column="assigned_to"/>
+        <result property="resolvedAt" column="resolved_at"/>
+        <result property="closedAt" column="closed_at"/>
+        <result property="expectedFixVersion" column="expected_fix_version"/>
+        <result property="actualFixVersion" column="actual_fix_version"/>
+        <result property="reproductionSteps" column="reproduction_steps"/>
+        <result property="environment" column="environment"/>
+        <result property="relatedRequirementId" column="related_requirement_id"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+        <result property="delFlag" column="del_flag"/>
     </resultMap>
 
     <sql id="selectSysDefectVo">
-        select defect_id, project_id, title, description, severity, priority, status, reported_by, assigned_to, resolved_at, closed_at, expected_fix_version, actual_fix_version, reproduction_steps, environment, related_requirement_id, create_by, create_time, update_by, update_time, remark, del_flag from sys_defect
+        select defect_id,
+               project_id,
+               title,
+               description,
+               severity,
+               priority,
+               status,
+               reported_by,
+               assigned_to,
+               resolved_at,
+               closed_at,
+               expected_fix_version,
+               actual_fix_version,
+               reproduction_steps,
+               environment,
+               related_requirement_id,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               remark,
+               del_flag
+        from sys_defect
     </sql>
 
     <select id="selectSysDefectList" parameterType="SysDefect" resultMap="SysDefectResult">
         <include refid="selectSysDefectVo"/>
-        <where>  
-            <if test="projectId != null "> and project_id = #{projectId}</if>
-            <if test="title != null  and title != ''"> and title = #{title}</if>
-            <if test="severity != null "> and severity = #{severity}</if>
-            <if test="priority != null "> and priority = #{priority}</if>
-            <if test="status != null  and status != ''"> and status = #{status}</if>
-            <if test="reportedBy != null "> and reported_by = #{reportedBy}</if>
-            <if test="assignedTo != null "> and assigned_to = #{assignedTo}</if>
-            <if test="resolvedAt != null "> and resolved_at = #{resolvedAt}</if>
-            <if test="expectedFixVersion != null  and expectedFixVersion != ''"> and expected_fix_version = #{expectedFixVersion}</if>
-            <if test="actualFixVersion != null  and actualFixVersion != ''"> and actual_fix_version = #{actualFixVersion}</if>
-            <if test="relatedRequirementId != null "> and related_requirement_id = #{relatedRequirementId}</if>
+        <where>
+            <if test="projectId != null ">and project_id = #{projectId}</if>
+            <if test="title != null  and title != ''">and title = #{title}</if>
+            <if test="severity != null ">and severity = #{severity}</if>
+            <if test="priority != null ">and priority = #{priority}</if>
+            <if test="status != null  and status != ''">and status = #{status}</if>
+            <if test="reportedBy != null ">and reported_by = #{reportedBy}</if>
+            <if test="assignedTo != null ">and assigned_to = #{assignedTo}</if>
+            <if test="resolvedAt != null ">and resolved_at = #{resolvedAt}</if>
+            <if test="expectedFixVersion != null  and expectedFixVersion != ''">and expected_fix_version = #{expectedFixVersion}</if>
+            <if test="actualFixVersion != null  and actualFixVersion != ''">and actual_fix_version = #{actualFixVersion}</if>
+            <if test="relatedRequirementId != null ">and related_requirement_id = #{relatedRequirementId}</if>
         </where>
     </select>
-    
+
     <select id="selectSysDefectByDefectId" parameterType="Long" resultMap="SysDefectResult">
         <include refid="selectSysDefectVo"/>
         where defect_id = #{defectId}
@@ -84,7 +106,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null">update_time,</if>
             <if test="remark != null">remark,</if>
             <if test="delFlag != null">del_flag,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="projectId != null">#{projectId},</if>
             <if test="title != null and title != ''">#{title},</if>
@@ -107,7 +129,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null">#{updateTime},</if>
             <if test="remark != null">#{remark},</if>
             <if test="delFlag != null">#{delFlag},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateSysDefect" parameterType="SysDefect">
@@ -139,11 +161,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deleteSysDefectByDefectId" parameterType="Long">
-        delete from sys_defect where defect_id = #{defectId}
+        delete
+        from sys_defect
+        where defect_id = #{defectId}
     </delete>
 
     <delete id="deleteSysDefectByDefectIds" parameterType="String">
-        delete from sys_defect where defect_id in 
+        delete from sys_defect where defect_id in
         <foreach item="defectId" collection="array" open="(" separator="," close=")">
             #{defectId}
         </foreach>

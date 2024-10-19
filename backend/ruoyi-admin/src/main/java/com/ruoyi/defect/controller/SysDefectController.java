@@ -27,7 +27,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
 
 /**
  * 缺陷管理 Controller
- * 
+ *
  * @author AB-IN-LIUSY
  * @date 2024-10-17
  */
@@ -44,7 +44,7 @@ public class SysDefectController extends BaseController {
     @ApiOperation("缺陷列表")
     @PreAuthorize("@ss.hasPermi('dev-api:project:defect:list')")
     @GetMapping("/list")
-    public TableDataInfo list(SysDefect sysDefect){
+    public TableDataInfo list(SysDefect sysDefect) {
         startPage();
         List<SysDefect> list = sysDefectService.selectSysDefectList(sysDefect);
         return getDataTable(list);
@@ -107,7 +107,7 @@ public class SysDefectController extends BaseController {
     @ApiOperation("删除缺陷")
     @PreAuthorize("@ss.hasPermi('dev-api:project:defect:remove')")
     @Log(title = "缺陷管理", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{defectIds}")
+    @DeleteMapping("/{defectIds}")
     public AjaxResult remove(@PathVariable Long[] defectIds) {
         return toAjax(sysDefectService.deleteSysDefectByDefectIds(defectIds));
     }

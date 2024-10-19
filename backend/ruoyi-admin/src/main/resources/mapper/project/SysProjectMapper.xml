@@ -1,53 +1,72 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <!--
   @author AB-IN-LIUSY
 -->
 
 <mapper namespace="com.ruoyi.project.mapper.SysProjectMapper">
-    
+
     <resultMap type="SysProject" id="SysProjectResult">
-        <result property="projectId"    column="project_id"    />
-        <result property="projectName"    column="project_name"    />
-        <result property="projectCode"    column="project_code"    />
-        <result property="description"    column="description"    />
-        <result property="startDate"    column="start_date"    />
-        <result property="expectedEndDate"    column="expected_end_date"    />
-        <result property="actualEndDate"    column="actual_end_date"    />
-        <result property="projectManagerId"    column="project_manager_id"    />
-        <result property="priority"    column="priority"    />
-        <result property="status"    column="status"    />
-        <result property="completionPercentage"    column="completion_percentage"    />
-        <result property="budget"    column="budget"    />
-        <result property="actualCost"    column="actual_cost"    />
-        <result property="createBy"    column="create_by"    />
-        <result property="createTime"    column="create_time"    />
-        <result property="updateBy"    column="update_by"    />
-        <result property="updateTime"    column="update_time"    />
-        <result property="remark"    column="remark"    />
-        <result property="delFlag"    column="del_flag"    />
+        <result property="projectId" column="project_id"/>
+        <result property="projectName" column="project_name"/>
+        <result property="projectCode" column="project_code"/>
+        <result property="description" column="description"/>
+        <result property="startDate" column="start_date"/>
+        <result property="expectedEndDate" column="expected_end_date"/>
+        <result property="actualEndDate" column="actual_end_date"/>
+        <result property="projectManagerId" column="project_manager_id"/>
+        <result property="priority" column="priority"/>
+        <result property="status" column="status"/>
+        <result property="completionPercentage" column="completion_percentage"/>
+        <result property="budget" column="budget"/>
+        <result property="actualCost" column="actual_cost"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+        <result property="delFlag" column="del_flag"/>
     </resultMap>
 
     <sql id="selectSysProjectVo">
-        select project_id, project_name, project_code, description, start_date, expected_end_date, actual_end_date, project_manager_id, priority, status, completion_percentage, budget, actual_cost, create_by, create_time, update_by, update_time, remark, del_flag from sys_project
+        select project_id,
+               project_name,
+               project_code,
+               description,
+               start_date,
+               expected_end_date,
+               actual_end_date,
+               project_manager_id,
+               priority,
+               status,
+               completion_percentage,
+               budget,
+               actual_cost,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               remark,
+               del_flag
+        from sys_project
     </sql>
 
     <select id="selectSysProjectList" parameterType="SysProject" resultMap="SysProjectResult">
         <include refid="selectSysProjectVo"/>
-        <where>  
-            <if test="projectName != null  and projectName != ''"> and project_name like concat('%', #{projectName}, '%')</if>
-            <if test="projectCode != null  and projectCode != ''"> and project_code = #{projectCode}</if>
-            <if test="startDate != null "> and start_date = #{startDate}</if>
-            <if test="actualEndDate != null "> and actual_end_date = #{actualEndDate}</if>
-            <if test="projectManagerId != null "> and project_manager_id = #{projectManagerId}</if>
-            <if test="priority != null "> and priority = #{priority}</if>
-            <if test="status != null  and status != ''"> and status = #{status}</if>
+        <where>
+            <if test="projectName != null  and projectName != ''">and project_name like concat('%', #{projectName}, '%')</if>
+            <if test="projectCode != null  and projectCode != ''">and project_code = #{projectCode}</if>
+            <if test="startDate != null ">and start_date = #{startDate}</if>
+            <if test="actualEndDate != null ">and actual_end_date = #{actualEndDate}</if>
+            <if test="projectManagerId != null ">and project_manager_id = #{projectManagerId}</if>
+            <if test="priority != null ">and priority = #{priority}</if>
+            <if test="status != null  and status != ''">and status = #{status}</if>
         </where>
     </select>
-    
+
     <select id="selectSysProjectByProjectId" parameterType="Long" resultMap="SysProjectResult">
         <include refid="selectSysProjectVo"/>
         where project_id = #{projectId}
@@ -74,7 +93,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null">update_time,</if>
             <if test="remark != null">remark,</if>
             <if test="delFlag != null">del_flag,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="projectName != null and projectName != ''">#{projectName},</if>
             <if test="projectCode != null and projectCode != ''">#{projectCode},</if>
@@ -94,7 +113,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null">#{updateTime},</if>
             <if test="remark != null">#{remark},</if>
             <if test="delFlag != null">#{delFlag},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateSysProject" parameterType="SysProject">
@@ -123,11 +142,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deleteSysProjectByProjectId" parameterType="Long">
-        delete from sys_project where project_id = #{projectId}
+        delete
+        from sys_project
+        where project_id = #{projectId}
     </delete>
 
     <delete id="deleteSysProjectByProjectIds" parameterType="String">
-        delete from sys_project where project_id in 
+        delete from sys_project where project_id in
         <foreach item="projectId" collection="array" open="(" separator="," close=")">
             #{projectId}
         </foreach>

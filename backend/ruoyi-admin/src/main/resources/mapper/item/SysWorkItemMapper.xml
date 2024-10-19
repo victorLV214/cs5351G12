@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+  @author AB-IN-LIUSY
+-->
+
+<mapper namespace="com.ruoyi.item.mapper.SysWorkItemMapper">
+
+    <resultMap type="SysWorkItem" id="SysWorkItemResult">
+        <result property="workItemId" column="work_item_id"/>
+        <result property="projectId" column="project_id"/>
+        <result property="iterationId" column="iteration_id"/>
+        <result property="title" column="title"/>
+        <result property="description" column="description"/>
+        <result property="type" column="type"/>
+        <result property="status" column="status"/>
+        <result property="priority" column="priority"/>
+        <result property="assignedTo" column="assigned_to"/>
+        <result property="startDate" column="start_date"/>
+        <result property="dueDate" column="due_date"/>
+        <result property="completedDate" column="completed_date"/>
+        <result property="estimatedEffort" column="estimated_effort"/>
+        <result property="actualEffort" column="actual_effort"/>
+        <result property="parentWorkItemId" column="parent_work_item_id"/>
+        <result property="relatedRequirementId" column="related_requirement_id"/>
+        <result property="relatedDefectId" column="related_defect_id"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+        <result property="delFlag" column="del_flag"/>
+    </resultMap>
+
+    <sql id="selectSysWorkItemVo">
+        select work_item_id,
+               project_id,
+               iteration_id,
+               title,
+               description,
+               type,
+               status,
+               priority,
+               assigned_to,
+               start_date,
+               due_date,
+               completed_date,
+               estimated_effort,
+               actual_effort,
+               parent_work_item_id,
+               related_requirement_id,
+               related_defect_id,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               remark,
+               del_flag
+        from sys_work_item
+    </sql>
+
+    <select id="selectSysWorkItemList" parameterType="SysWorkItem" resultMap="SysWorkItemResult">
+        <include refid="selectSysWorkItemVo"/>
+        <where>
+            <if test="projectId != null ">and project_id = #{projectId}</if>
+            <if test="iterationId != null ">and iteration_id = #{iterationId}</if>
+            <if test="title != null  and title != ''">and title = #{title}</if>
+            <if test="type != null  and type != ''">and type = #{type}</if>
+            <if test="status != null  and status != ''">and status = #{status}</if>
+            <if test="priority != null ">and priority = #{priority}</if>
+            <if test="assignedTo != null ">and assigned_to = #{assignedTo}</if>
+            <if test="startDate != null ">and start_date = #{startDate}</if>
+            <if test="dueDate != null ">and due_date = #{dueDate}</if>
+            <if test="completedDate != null ">and completed_date = #{completedDate}</if>
+            <if test="estimatedEffort != null ">and estimated_effort = #{estimatedEffort}</if>
+            <if test="actualEffort != null ">and actual_effort = #{actualEffort}</if>
+            <if test="parentWorkItemId != null ">and parent_work_item_id = #{parentWorkItemId}</if>
+            <if test="relatedRequirementId != null ">and related_requirement_id = #{relatedRequirementId}</if>
+            <if test="relatedDefectId != null ">and related_defect_id = #{relatedDefectId}</if>
+        </where>
+    </select>
+
+    <select id="selectSysWorkItemByWorkItemId" parameterType="Long" resultMap="SysWorkItemResult">
+        <include refid="selectSysWorkItemVo"/>
+        where work_item_id = #{workItemId}
+    </select>
+
+    <insert id="insertSysWorkItem" parameterType="SysWorkItem" useGeneratedKeys="true" keyProperty="workItemId">
+        insert into sys_work_item
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">project_id,</if>
+            <if test="iterationId != null">iteration_id,</if>
+            <if test="title != null and title != ''">title,</if>
+            <if test="description != null">description,</if>
+            <if test="type != null and type != ''">type,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="priority != null">priority,</if>
+            <if test="assignedTo != null">assigned_to,</if>
+            <if test="startDate != null">start_date,</if>
+            <if test="dueDate != null">due_date,</if>
+            <if test="completedDate != null">completed_date,</if>
+            <if test="estimatedEffort != null">estimated_effort,</if>
+            <if test="actualEffort != null">actual_effort,</if>
+            <if test="parentWorkItemId != null">parent_work_item_id,</if>
+            <if test="relatedRequirementId != null">related_requirement_id,</if>
+            <if test="relatedDefectId != null">related_defect_id,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+            <if test="delFlag != null">del_flag,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">#{projectId},</if>
+            <if test="iterationId != null">#{iterationId},</if>
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="description != null">#{description},</if>
+            <if test="type != null and type != ''">#{type},</if>
+            <if test="status != null and status != ''">#{status},</if>
+            <if test="priority != null">#{priority},</if>
+            <if test="assignedTo != null">#{assignedTo},</if>
+            <if test="startDate != null">#{startDate},</if>
+            <if test="dueDate != null">#{dueDate},</if>
+            <if test="completedDate != null">#{completedDate},</if>
+            <if test="estimatedEffort != null">#{estimatedEffort},</if>
+            <if test="actualEffort != null">#{actualEffort},</if>
+            <if test="parentWorkItemId != null">#{parentWorkItemId},</if>
+            <if test="relatedRequirementId != null">#{relatedRequirementId},</if>
+            <if test="relatedDefectId != null">#{relatedDefectId},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSysWorkItem" parameterType="SysWorkItem">
+        update sys_work_item
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectId != null">project_id = #{projectId},</if>
+            <if test="iterationId != null">iteration_id = #{iterationId},</if>
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="type != null and type != ''">type = #{type},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="priority != null">priority = #{priority},</if>
+            <if test="assignedTo != null">assigned_to = #{assignedTo},</if>
+            <if test="startDate != null">start_date = #{startDate},</if>
+            <if test="dueDate != null">due_date = #{dueDate},</if>
+            <if test="completedDate != null">completed_date = #{completedDate},</if>
+            <if test="estimatedEffort != null">estimated_effort = #{estimatedEffort},</if>
+            <if test="actualEffort != null">actual_effort = #{actualEffort},</if>
+            <if test="parentWorkItemId != null">parent_work_item_id = #{parentWorkItemId},</if>
+            <if test="relatedRequirementId != null">related_requirement_id = #{relatedRequirementId},</if>
+            <if test="relatedDefectId != null">related_defect_id = #{relatedDefectId},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+        </trim>
+        where work_item_id = #{workItemId}
+    </update>
+
+    <delete id="deleteSysWorkItemByWorkItemId" parameterType="Long">
+        delete
+        from sys_work_item
+        where work_item_id = #{workItemId}
+    </delete>
+
+    <delete id="deleteSysWorkItemByWorkItemIds" parameterType="String">
+        delete from sys_work_item where work_item_id in
+        <foreach item="workItemId" collection="array" open="(" separator="," close=")">
+            #{workItemId}
+        </foreach>
+    </delete>
+</mapper>
