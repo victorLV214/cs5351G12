@@ -1,7 +1,7 @@
-package com.ruoyi.project.service;
+package com.ruoyi.requirement.service;
 
 import java.util.List;
-import com.ruoyi.project.domain.SysRequirement;
+import com.ruoyi.requirement.domain.SysRequirement;
 
 /**
  * 需求Service接口
