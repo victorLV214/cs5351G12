@@ -1,4 +1,4 @@
-package com.ruoyi.project.domain;
+package com.ruoyi.requirement.domain;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -71,7 +71,7 @@ public class SysRequirement extends BaseEntity
     @Excel(name = "版本号")
     private String version;
 
-    /** 删除标志（0代表存在 2代表删除） */
+    /** 删除标志（0:存在 2:删除） */
     private String delFlag;
 
     public void setRequirementId(Long requirementId) 

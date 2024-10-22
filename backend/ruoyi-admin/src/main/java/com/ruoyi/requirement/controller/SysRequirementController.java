@@ -1,4 +1,4 @@
-package com.ruoyi.project.controller;
+package com.ruoyi.requirement.controller;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,8 +21,8 @@ import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.project.domain.SysRequirement;
-import com.ruoyi.project.service.ISysRequirementService;
+import com.ruoyi.requirement.domain.SysRequirement;
+import com.ruoyi.requirement.service.ISysRequirementService;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
 

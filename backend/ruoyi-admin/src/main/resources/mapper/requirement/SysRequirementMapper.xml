@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.project.mapper.SysRequirementMapper">
+<mapper namespace="com.ruoyi.requirement.mapper.SysRequirementMapper">
     
     <resultMap type="SysRequirement" id="SysRequirementResult">
         <result property="requirementId"    column="requirement_id"    />

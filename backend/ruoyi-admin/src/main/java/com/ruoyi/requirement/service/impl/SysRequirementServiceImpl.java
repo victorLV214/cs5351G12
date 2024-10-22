@@ -1,12 +1,12 @@
-package com.ruoyi.project.service.impl;
+package com.ruoyi.requirement.service.impl;
 
 import java.util.List;
 import com.ruoyi.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.ruoyi.project.mapper.SysRequirementMapper;
-import com.ruoyi.project.domain.SysRequirement;
-import com.ruoyi.project.service.ISysRequirementService;
+import com.ruoyi.requirement.mapper.SysRequirementMapper;
+import com.ruoyi.requirement.domain.SysRequirement;
+import com.ruoyi.requirement.service.ISysRequirementService;
 
 /**
  * 需求Service业务层处理

@@ -1,7 +1,7 @@
-package com.ruoyi.project.mapper;
+package com.ruoyi.requirement.mapper;
 
 import java.util.List;
-import com.ruoyi.project.domain.SysRequirement;
+import com.ruoyi.requirement.domain.SysRequirement;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
