@@ -34,7 +34,8 @@ export default defineConfig(({ mode, command }) => {
           target: 'http://localhost:8080',
           // target: 'https://api.wzs.pub/mock/13',
           changeOrigin: true,
-          rewrite: (p) => p.replace(/^\/dev-api/, '')
+          rewrite: (p) => p.replace(/^\/dev-api/, ''),
+
         }
       }
     },
