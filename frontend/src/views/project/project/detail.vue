@@ -1,9 +1,9 @@
 <template>
   <div class="project-detail-container">
-    <!-- 顶部导航栏 -->
+
     <div class="top-navbar">
       <el-menu
-          :default-active="activeMenu"
+          :default-active="setBarMenuChoice"
           class="project-menu"
           mode="horizontal"
           @select="handleSelect"
@@ -89,55 +89,33 @@ import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import {
-
   DataBoard,
-
   Calendar,
-
   List,
-
   Warning,
-
   Tickets,
-
   Refresh,
-
   Upload,
-
   Files,
-
   ChatDotRound,
-
   Histogram,
-
   Document,
-
   Connection,
-
   PieChart
-
 } from '@element-plus/icons-vue'
 
 const route = useRoute()
-
 const router = useRouter()
 
-const activeMenu = ref('overview')
 
+const setBarMenuChoice = ref('overview')
 const handleSelect = (key) => {
-
   router.push(`/project/detail/${route.params.id}/${key}`)
-
 }
 
 onMounted(() => {
-
-// 根据当前路由设置激活的菜单项
-
   const pathArray = route.path.split('/')
-
-  activeMenu.value = pathArray[pathArray.length - 1] || 'overview'
-
+  setBarMenuChoice.value = pathArray[pathArray.length - 1] || 'overview'
 })
 
 </script>
@@ -191,7 +169,7 @@ onMounted(() => {
   background-color: #ecf5ff;
 }
 
-/* 当菜单项太多时，确保能够横向滚动 */
+
 :deep(.el-menu--horizontal) {
   white-space: nowrap;
   flex-wrap: nowrap;

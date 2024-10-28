@@ -23,7 +23,7 @@
         <el-table-column prop="createTime" label="Create Time" />
         <el-table-column label="Action" width="180">
           <template #default="scope">
-            <!-- 添加更多按钮 -->
+
             <el-dropdown trigger="click">
               <el-button type="primary" link class="action-button">
                 <el-icon><MoreFilled /></el-icon>
@@ -31,10 +31,10 @@
               <template #dropdown>
                 <el-dropdown-menu>
                   <el-dropdown-item @click="handleEdit(scope.row)">
-                    <el-icon><EditPen /></el-icon> 编辑
+                    <el-icon><EditPen /></el-icon> edit
                   </el-dropdown-item>
                   <el-dropdown-item @click="handleDetails(scope.row)">
-                    <el-icon><Document /></el-icon> 详情
+                    <el-icon><Document /></el-icon> detail
                   </el-dropdown-item>
                 </el-dropdown-menu>
               </template>
@@ -45,72 +45,72 @@
     </el-card>
     <el-dialog v-model="projectFormVisible" :title="projectFormTitle" width="600px" :close-on-click-modal="false">
       <el-form ref="formRef" :model="formDataForAddProject" :rules="rulesForForm" label-width="120px">
-        <el-form-item label="项目名称" prop="projectName">
-          <el-input v-model="formDataForAddProject.projectName" placeholder="请输入项目名称"/>
+        <el-form-item label="projectName" prop="projectName">
+          <el-input v-model="formDataForAddProject.projectName" placeholder="projectName"/>
         </el-form-item>
-        <el-form-item label="项目编码" prop="projectCode">
-          <el-input v-model="formDataForAddProject.projectCode" placeholder="请输入项目编码"/>
+        <el-form-item label="projectCode" prop="projectCode">
+          <el-input v-model="formDataForAddProject.projectCode" placeholder="projectCode"/>
         </el-form-item>
-        <el-form-item label="项目描述" prop="description">
+        <el-form-item label="description" prop="description">
           <el-input
               v-model="formDataForAddProject.description"
               type="textarea"
-              placeholder="请输入项目描述"/>
+              placeholder="description"/>
         </el-form-item>
-        <el-form-item label="开始日期" prop="startDate">
+        <el-form-item label="startDate" prop="startDate">
           <el-date-picker
               v-model="formDataForAddProject.startDate"
               type="date"
-              placeholder="请选择开始日期"
+              placeholder="choose startDate"
               format="YYYY-MM-DD"
               value-format="YYYY-MM-DD"/>
         </el-form-item>
-        <el-form-item label="预计结束日期" prop="expectedEndDate">
+        <el-form-item label="expectedEndDate" prop="expectedEndDate">
           <el-date-picker
               v-model="formDataForAddProject.expectedEndDate"
               type="date"
-              placeholder="请选择预计结束日期"
+              placeholder="expectedEndDate"
               format="YYYY-MM-DD"
               value-format="YYYY-MM-DD"/>
         </el-form-item>
-        <el-form-item label="优先级" prop="priority">
-          <el-select v-model="formDataForAddProject.priority" placeholder="请选择优先级">
-            <el-option label="低" :value="1"/>
-            <el-option label="中" :value="2"/>
-            <el-option label="高" :value="3"/>
+        <el-form-item label="priority" prop="priority">
+          <el-select v-model="formDataForAddProject.priority" placeholder="priority">
+            <el-option label="low" :value="1"/>
+            <el-option label="medium" :value="2"/>
+            <el-option label="high" :value="3"/>
           </el-select>
         </el-form-item>
-        <el-form-item label="项目状态" prop="status">
-          <el-select v-model="formDataForAddProject.status" placeholder="请选择项目状态">
+        <el-form-item label="status" prop="status">
+          <el-select v-model="formDataForAddProject.status" placeholder="status">
             <el-option label="未开始" value="未开始"/>
             <el-option label="进行中" value="进行中"/>
             <el-option label="已完成" value="已完成"/>
             <el-option label="已暂停" value="已暂停"/>
           </el-select>
         </el-form-item>
-        <el-form-item label="项目预算" prop="budget">
+        <el-form-item label="budget" prop="budget">
           <el-input-number
               v-model="formDataForAddProject.budget"
               :precision="2"
               :step="1000"
               :min="0"
-              placeholder="请输入项目预算"/>
+              placeholder="input the budget"/>
         </el-form-item>
-        <el-form-item label="备注" prop="remark">
+        <el-form-item label="remark" prop="remark">
           <el-input
               v-model="formDataForAddProject.remark"
               type="textarea"
-              placeholder="请输入备注"/>
+              placeholder="remark"/>
         </el-form-item>
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button @click="projectFormVisible = false">取消</el-button>
-          <el-button type="primary" @click="submitForm">确定</el-button>
+          <el-button @click="projectFormVisible = false">cancle</el-button>
+          <el-button type="primary" @click="submitForm">confirm</el-button>
         </div>
       </template>
     </el-dialog>
-    <el-dialog v-model="detailV" title="项目详情" width="800px">
+    <el-dialog v-model="detailV" title="details" width="800px">
       <div class="detail-container" v-if="currentProject">
         <div class="detail-section">
           <h3 class="section-title">
@@ -118,20 +118,20 @@
             基本信息
           </h3>
           <el-descriptions :column="2" border>
-            <el-descriptions-item label="项目名称">{{ currentProject.projectName }}</el-descriptions-item>
-            <el-descriptions-item label="项目编码">{{ currentProject.projectCode }}</el-descriptions-item>
-            <el-descriptions-item label="创建时间">{{ currentProject.createTime }}</el-descriptions-item>
-            <el-descriptions-item label="项目状态">
-              <el-tag :type="getStatusType(currentProject.status)">{{ currentProject.status }}</el-tag>
+            <el-descriptions-item label="projectName">{{ currentProject.projectName }}</el-descriptions-item>
+            <el-descriptions-item label="projectCode">{{ currentProject.projectCode }}</el-descriptions-item>
+            <el-descriptions-item label="createTime">{{ currentProject.createTime }}</el-descriptions-item>
+            <el-descriptions-item label="status">
+              <el-tag :type="setStatusType(currentProject.status)">{{ currentProject.status }}</el-tag>
             </el-descriptions-item>
-            <el-descriptions-item label="开始日期">{{ currentProject.startDate }}</el-descriptions-item>
-            <el-descriptions-item label="预计结束日期">{{ currentProject.expectedEndDate }}</el-descriptions-item>
-            <el-descriptions-item label="优先级">
+            <el-descriptions-item label="startDate">{{ currentProject.startDate }}</el-descriptions-item>
+            <el-descriptions-item label="expectedEndDate">{{ currentProject.expectedEndDate }}</el-descriptions-item>
+            <el-descriptions-item label="priority">
               <el-tag :type="getPriorityType(currentProject.priority)">
                 {{ getPriorityLabel(currentProject.priority) }}
               </el-tag>
             </el-descriptions-item>
-            <el-descriptions-item label="项目预算">{{ currentProject.budget }}</el-descriptions-item>
+            <el-descriptions-item label="budget">{{ currentProject.budget }}</el-descriptions-item>
           </el-descriptions>
         </div>
 
@@ -139,7 +139,7 @@
         <div class="detail-section">
           <h3 class="section-title">
             <el-icon><Document /></el-icon>
-            项目描述
+            description
           </h3>
           <div class="description-content">{{ currentProject.description}}</div>
         </div>
@@ -148,7 +148,7 @@
         <div class="detail-section">
           <h3 class="section-title">
             <el-icon><ChatLineSquare /></el-icon>
-            备注
+            remark
           </h3>
           <div class="description-content">{{ currentProject.remark }}</div>
         </div>
@@ -157,20 +157,20 @@
         <div class="detail-section">
           <h3 class="section-title">
             <el-icon><User /></el-icon>
-            项目成员
+            member
 
           </h3>
           <el-table :data="currentProjectMembers" style="width: 100%">
-            <el-table-column prop="userName" label="成员姓名" />
-            <el-table-column prop="nickName" label="昵称" />
-            <el-table-column prop="role" label="角色" />
-            <el-table-column prop="joinDate" label="加入时间" />
-            <el-table-column prop="allocationPercentage" label="工时分配">
+            <el-table-column prop="userName" label="userName" />
+            <el-table-column prop="nickName" label="Name" />
+            <el-table-column prop="role" label="role" />
+            <el-table-column prop="joinDate" label="joinDate" />
+            <el-table-column prop="allocationPercentage" label="allocationPercentage">
               <template #default="{ row }">
                 {{ row.allocationPercentage }}%
               </template>
             </el-table-column>
-            <el-table-column prop="notes" label="备注" show-overflow-tooltip />
+            <el-table-column prop="notes" label="notes" show-overflow-tooltip />
 
           </el-table>
         </div>
@@ -192,6 +192,9 @@ import { listProjectMember } from '@/api/project/member.js'
 import {  EditPen, Delete, InfoFilled, Document, ChatLineSquare, User, Plus, MoreFilled,
   } from '@element-plus/icons-vue'
 import {getUser} from "@/api/system/user.js";
+
+
+
 const currentRow = ref(null)
 const projectFormVisible = ref(false)
 const projectFormTitle = ref('')
@@ -211,27 +214,43 @@ const formDataForAddProject = reactive({
   remark: '',
   projectManagerId: '',// 项目经理
 })
+
+
+
+
+
+
 const tableRowClassName = ({ row }) => {
   if (currentRow.value && currentRow.value === row) {
     return 'selected-row'
   }
   return ''
-}
+} // for select the row
+
+
+
 const handleRowsClickSingleProject = (row) => {
   currentRow.value = row
 }
+
+
 const handleDetails = async (row) => {
   try {
     const id = row.projectId
     const projectRes = await getProject(id)
+    // console.log('projectRes:', projectRes)
     currentProject.value = projectRes.data
     await myGetMembers(id)
+    
     detailV.value = true
   } catch (error) {
     console.error('获取项目详情失败:', error)
     ElMessage.error('获取项目详情失败')
   }
 }
+
+
+
 
 const myGetMembers = async (projectId) => {
   try {
@@ -240,11 +259,11 @@ const myGetMembers = async (projectId) => {
       pageNum: 1,
       pageSize: 999
     })
+    // console.log('members:', members)
     const membersWithUserInfo = []
     for (const member of members.rows) {
       try {
         const userInfo = await getUser(member.userId)
-
         membersWithUserInfo.push({
           ...member,
           userName: userInfo.data.userName,
@@ -262,16 +281,18 @@ const myGetMembers = async (projectId) => {
       }
     }
     currentProjectMembers.value = membersWithUserInfo
+    
   } catch (error) {
+    
     console.error('获取项目成员列表失败:', error)
     ElMessage.error('获取项目成员列表失败')
   }
 }
 
-const getStatusType = (status) => {
+const setStatusType = (status) => {
   const statusMap = {
     '未开始': 'info',
-    '进行中': '',
+    '进行中': '',//error!!!
     '已完成': 'success',
     '已暂停': 'warning'
   }
@@ -294,7 +315,7 @@ const getPriorityLabel = (priority) => {
     2: '中',
     3: '高'
   }
-  return priorityMap[priority] || '未知'
+  return priorityMap[priority] || 'unknown'
 }
 const rulesForForm = {
   projectName: [
@@ -313,7 +334,9 @@ const rulesForForm = {
     { required: true, message: '请选择优先级', trigger: 'change' }
   ]
 }
+
 const projectList = ref([])
+
 const handleAddProjects = () => {
   projectFormVisible.value = true
   projectFormTitle.value = '新增项目'
@@ -322,6 +345,7 @@ const handleAddProjects = () => {
     formRef.value.resetFields()
   }
 }
+
 const getList = async () => {
   const userStore = useUserStore()
   const userId = userStore.id
@@ -331,6 +355,7 @@ const getList = async () => {
       pageSize: 999,
       userId:userId,
     })
+    // console.log('allProject:', allProject)
     projectList.value = allProject.rows
   } catch (error) {
     console.error('获取项目列表失败:', error)
@@ -347,6 +372,7 @@ const submitForm = async () => {
         const userId = userStore.id
         formDataForAddProject.projectManagerId = userId
         await addProject(formDataForAddProject)
+
         ElMessage.success('新增成功')
         projectFormVisible.value = false
         getList() // 刷新列表
@@ -358,7 +384,7 @@ const submitForm = async () => {
 }
 
 const handleEdit = (row) => {
-  // 处理编辑项目
+
   console.log('编辑:', row)
 }
 

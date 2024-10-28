@@ -97,7 +97,7 @@ export const constantRoutes = [
       }
     ]
   },
-  // 新增项目管理路由
+
   {
     path: '/project',
     component: Layout,
@@ -110,13 +110,13 @@ export const constantRoutes = [
         meta: { title: '项目管理', icon: 'tree', affix: false }
       },
       {
-        path: 'detail/:id',  // 使用动态路由参数
+        path: 'detail/:id',
         redirect: '/project/detail/:id/overview',
         component: () => import('@/views/project/project/detail.vue'),
         name: 'ProjectDetail',
         hidden: true,
         meta: { title: '项目详情' },
-        props: true , // 允许通过 props 接收参数
+        props: true ,
         children: [ {
           path: 'overview',
           component: () => import('@/views/project/project/overview.vue'),
