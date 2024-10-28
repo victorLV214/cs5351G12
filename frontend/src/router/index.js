@@ -98,7 +98,107 @@ export const constantRoutes = [
     ]
   },
   // 新增项目管理路由
-
+  {
+    path: '/project',
+    component: Layout,
+    hidden: false,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/project/project/index.vue'),
+        name: 'ProjectList',
+        meta: { title: '项目管理', icon: 'tree', affix: false }
+      },
+      {
+        path: 'detail/:id',  // 使用动态路由参数
+        redirect: '/project/detail/:id/overview',
+        component: () => import('@/views/project/project/detail.vue'),
+        name: 'ProjectDetail',
+        hidden: true,
+        meta: { title: '项目详情' },
+        props: true , // 允许通过 props 接收参数
+        children: [ {
+          path: 'overview',
+          component: () => import('@/views/project/project/overview.vue'),
+          name: 'ProjectOverview',
+          meta: { title: '项目概览' }
+        },
+          {
+            path: 'plan',
+            component: () => import('@/views/project/project/plan.vue'),
+            name: 'ProjectPlan',
+            meta: { title: '项目规划' }
+          },
+          {
+            path: 'requirements',
+            component: () => import('@/views/project/project/requirements.vue'),
+            name: 'ProjectRequirements',
+            meta: { title: '需求管理' }
+          },
+          {
+            path: 'defects',
+            component: () => import('@/views/project/project/defects.vue'),
+            name: 'ProjectDefects',
+            meta: { title: '缺陷管理' }
+          },
+          {
+            path: 'tasks',
+            component: () => import('@/views/project/project/tasks.vue'),
+            name: 'ProjectTasks',
+            meta: { title: '工作项' }
+          },
+          {
+            path: 'iterations',
+            component: () => import('@/views/project/project/iterations.vue'),
+            name: 'ProjectIterations',
+            meta: { title: '迭代管理' }
+          },
+          {
+            path: 'releases',
+            component: () => import('@/views/project/project/releases.vue'),
+            name: 'ProjectReleases',
+            meta: { title: '发布管理' }
+          },
+          {
+            path: 'baseline',
+            component: () => import('@/views/project/project/baseline.vue'),
+            name: 'ProjectBaseline',
+            meta: { title: '基线管理' }
+          },
+          {
+            path: 'reviews',
+            component: () => import('@/views/project/project/reviews.vue'),
+            name: 'ProjectReviews',
+            meta: { title: '评审管理' }
+          },
+          {
+            path: 'testing',
+            component: () => import('@/views/project/project/testing.vue'),
+            name: 'ProjectTesting',
+            meta: { title: '测试管理' }
+          },
+          {
+            path: 'documents',
+            component: () => import('@/views/project/project/documents.vue'),
+            name: 'ProjectDocuments',
+            meta: { title: '文档管理' }
+          },
+          {
+            path: 'resources',
+            component: () => import('@/views/project/project/resources.vue'),
+            name: 'ProjectResources',
+            meta: { title: '资源管理' }
+          },
+          {
+            path: 'reports',
+            component: () => import('@/views/project/project/reports.vue'),
+            name: 'ProjectReports',
+            meta: { title: '统计报表' }
+          }
+        ]
+      }
+    ]
+  }
 
 ]
 

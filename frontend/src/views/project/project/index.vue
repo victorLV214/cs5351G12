@@ -9,7 +9,16 @@
       </template>
       <el-table
           :data="projectList" style="width: 100%" class="project-table" :row-class-name="tableRowClassName" @row-click="handleRowsClickSingleProject">
-        <el-table-column prop="projectName" label="Project Name" />
+        <el-table-column prop="projectName" label="Project Name">
+          <template #default="scope">
+            <router-link
+                :to="`/project/detail/${scope.row.projectId}`"
+                class="project-link"
+            >
+              {{ scope.row.projectName }}
+            </router-link>
+          </template>
+        </el-table-column>
         <el-table-column prop="projectCode" label="Project Code" />
         <el-table-column prop="createTime" label="Create Time" />
         <el-table-column label="Action" width="180">
