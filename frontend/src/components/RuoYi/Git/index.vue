@@ -19,10 +19,8 @@ function goto() {
   router.push(url.value)
 }
 
-// 模拟获取通知数量的函数
+
 async function fetchNoticeCount() {
-  // 这里应该是从API获取实际的通知数量
-  // 现在我们用一个模拟的数字
   noticeCount.value = 5
 }
 

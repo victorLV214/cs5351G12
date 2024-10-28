@@ -32,6 +32,7 @@
           </div>
           <template #dropdown>
             <el-dropdown-menu>
+
               <router-link to="/user/profile">
                 <el-dropdown-item>profile</el-dropdown-item>
               </router-link>

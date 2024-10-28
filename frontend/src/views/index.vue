@@ -1,7 +1,7 @@
 <template>
   <div class="app-container home">
     <el-row :gutter="20">
-      <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8" v-for="(item, index) in projectDaat" :key="index">
+      <el-col :xs="24" :sm="4" :md="4" :lg="4.8" :xl="4.8" v-for="(item, index) in projectDaat" :key="index">
         <el-card class="box-card">
           <div class="card-header">
             <span>{{ item.title }}</span>
@@ -74,6 +74,9 @@ import * as echarts from 'echarts'
 import { ElMessage } from 'element-plus'
 import { listItem } from '@/api/project/item'
 import { listProject } from '@/api/project/index'
+import {listProjectMember} from "@/api/project/member.js";
+import useUserStore from "@/store/modules/user.js";
+import {listUser} from "@/api/system/user.js";
 // 图表实例
 let activeChart1 = null
 let taskChart1 = null
@@ -93,83 +96,153 @@ const recentProjects = computed(function() {
   return result.slice(0, 5)
 })
 
-// 获取统计数据
+
 const getStatistics = async () => {
-    const response = await listProject({
+    const allList = await listProject({
       pageNum: 1,
       pageSize: 999
     })
-      const projectList = response.rows
+      const projectList = allList.rows
       const ongoingProjects = projectList.filter(p => p.status === '进行中').length
       const planProjects = projectList.filter(p => p.status === '规划中').length
       const completedProjects = projectList.filter(p => p.status === '已完成').length
-      projectDaat.value = [
-        { title: '进行中的项目', value: ongoingProjects }, { title: '规划中项目', value: planProjects }, { title: '已完成项目', value: completedProjects }
-      ]
-      projects.value = projectList
+  const allTasks = await listItem({
+    pageNum: 1,
+    pageSize: 999
+  })
 
+  const unfinishedTasks = allTasks.rows.filter(task => task.status !== '已完成').length
+  const nowDate = new Date()
+  const now = nowDate.getTime()
+  const oneWeek = new Date(now - 7 * 24 * 3600 * 1000)
 
+  const nearlyTasks = allTasks.rows.filter(task => {
+    if (task.status === '已完成') return false
+    const deadline = new Date(task.due_date)
+    return deadline <= oneWeek && deadline >= now
+  }).length
+
+  projectDaat.value = [
+    { title: '进行中的项目', value: ongoingProjects }, { title: '规划中项目', value: planProjects }, { title: '已完成项目', value: completedProjects },
+    { title: '未完成任务', value: unfinishedTasks },{ title: '近期任务', value: nearlyTasks }
+  ]
+  projects.value = projectList
 }
 
-// 获取团队成员活跃度数据
 const getTeamActivityData = async () => {
   try {
-    const response = await listItem({
+    const userStore = useUserStore()
+    const userId = userStore.id
+    
+    const allProjects = await listProjectMember({
+      userId: userId,
+      pageSize: 999,
+      pageNum: 1
+    })
+
+    const projectIds = allProjects.rows.map(item => item.projectId)
+
+    const allMember = await listProjectMember({
+      projectIds: projectIds,
+      pageSize: 999,
+      pageNum: 1
+    })
+    const teamMemberIds = new Set()
+    allMember.rows.forEach(member => {teamMemberIds.add(member.userId)})
+    teamMemberIds.add(userId)
+
+
+    const allUsers = await listUser({
+      pageSize: 999,
+      pageNum: 1
+    })
+
+    const userNameMap = {}
+    allUsers.rows.forEach(user => {
+        if (teamMemberIds.has(user.userId)) {
+          userNameMap[user.userId] = user.nickName}
+      })
+    
+    const thisMonth = new Date()
+    thisMonth.setDate(thisMonth.getDate() - 30)
+    const allTasks = await listItem({
       status: '已完成',
+      projectIds: projectIds,
       pageNum: 1,
       pageSize: 999
     })
-
-    if (response.code === 200 && response.rows) {
-      const memberStats = {}
-      response.rows.forEach(item => {
-        const memberName = item.updateBy || 'null'
-        memberStats[memberName] = (memberStats[memberName] || 0) + 1
-      })
-      const members = Object.keys(memberStats)
-
-      const activities = members.map(member => ({
-        value: memberStats[member],
-        itemStyle: {
-          color: getRandomColor()
-        }
-      }))
-
-      if (activeChart1) {
-        activeChart1.setOption({
-          tooltip: {
-            trigger: 'axis',
-            axisPointer: { type: 'shadow' }
-          },
-          grid: {
-            left: '3%',
-            right: '4%',
-            bottom: '15%',
-            containLabel: true
-          },
-          xAxis: {
-            type: 'category',
-            data: members,
-            axisLabel: {
-              interval: 0,
-              rotate: 30
-            }
-          },
-          yAxis: {
-            type: 'value',
-            name: '完成任务数'
-          },
-          series: [{
-            type: 'bar',
-            data: activities,
-            label: {
-              show: true,
-              position: 'top'
-            },
-            barWidth: '40%'
-          }]
-        })
+    
+    const memberStats = {}
+    allTasks.rows.forEach(task => {
+      const completionDate = new Date(task.completedDate || task.updateTime)
+      if (completionDate >= thisMonth &&
+          task.status === '已完成' &&
+          task.assignedTo &&
+          teamMemberIds.has(task.assignedTo)) {
+        const assignedNames = userNameMap[task.assignedTo] || `用户${task.assignedTo}`
+        memberStats[assignedNames] = (memberStats[assignedNames] || 0) + 1
       }
+    })
+
+    const currentUserName = userNameMap[userId]
+    if (!memberStats[currentUserName]) {
+      memberStats[currentUserName] = 0
+    }
+
+
+    const members = Object.keys(memberStats)
+    const activities = members.map(member => ({
+      value: memberStats[member],
+      itemStyle: {
+        color: member === currentUserName ? '#409EFF' : getRandomColor()
+      }
+    }))
+
+    if (activeChart1) {
+      activeChart1.setOption({
+        title: {
+          text: '近30天团队成员任务完成情况',
+          left: 'center'
+        },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: { type: 'shadow' },
+          formatter: (params) => {
+            const data = params[0]
+            return `${data.name}<br/>完成任务数：${data.value}`
+          }
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '15%',
+          containLabel: true
+        },
+        xAxis: {
+          type: 'category',
+          data: members,
+          axisLabel: {
+            interval: 0,
+            rotate: 30,
+            overflow: 'break'
+          }
+        },
+        yAxis: {
+          type: 'value',
+          name: '完成任务数',
+          minInterval: 1
+        },
+        series: [{
+          type: 'bar',
+          data: activities,
+          label: {
+            show: true,
+            position: 'top',
+            formatter: '{c}'
+          },
+          barWidth: '40%'
+        }]
+      })
     }
   } catch (error) {
     ElMessage.error('获取团队活跃度数据失败')
@@ -177,7 +250,7 @@ const getTeamActivityData = async () => {
   }
 }
 
-// 获取本周任务统计
+
 const getWeeklyTasksData = async () => {
   try {
     const now = new Date()
@@ -185,19 +258,19 @@ const getWeeklyTasksData = async () => {
     startDay1.setDate(now.getDate() - now.getDay() + 1)
     startDay1.setHours(0, 0, 0, 0)
 
-    const response = await listItem({
+    const allList = await listItem({
       status: '已完成',
       pageNum: 1,
       pageSize: 999
     })
-
-    if (response.code === 200 && response.rows) {
-      const weekDays = ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+  console.log(allList)
+    if (allList.code === 200) {
+      const weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
       const dailyTasks = new Array(7).fill(0)
 
-      response.rows.forEach(item => {
-        if (item.completedDate) {
-          const completedDate = new Date(item.completedDate)
+      allList.rows.forEach(item => {
+        if (item.updateTime) {
+          const completedDate = new Date(item.updateTime)
           if (completedDate >= startDay1) {
             const dayIndex = completedDate.getDay() || 7
             dailyTasks[dayIndex - 1]++
@@ -251,19 +324,23 @@ const getRandomColor = () => {
   return colors[Math.floor(Math.random() * colors.length)]
 }
 
-const calculateProgress = (project) => {
-  if (!project.startDate || !project.actualEndDate) return 0
+const calculateProgress = async (project) => {
+  try {
+    // 获取项目所有任务
+    const allTasksforCalc = await listItem({
+      projectId: project.projectId,
+      pageNum: 1,
+      pageSize: 999
+    })
 
-  const start = new Date(project.startDate)
-  const end = new Date(project.actualEndDate)
-  const now = new Date()
-
-  if (project.status === 'completed') return 100
-  if (now < start) return 0
-
-  const total = end - start
-  const current = now - start
-  return Math.min(Math.round((current / total) * 100), 100)
+    const allTasks = allTasksforCalc.rows
+    const completedTasks = allTasks.filter(task => task.status === '已完成')
+    const progress = Math.round((completedTasks.length / allTasks.length) * 100)
+    return progress
+  } catch (error) {
+    console.error('计算项目进度失败:', error)
+    return 0
+  }
 }
 
 const formatDate = (date) => {
@@ -289,26 +366,45 @@ const initCharts = () => {
 // 获取项目进度数据
 const getProjectProgressData = async () => {
   try {
-    const response = await listProject({
+    const userStore = useUserStore()
+    const userId = userStore.id
+    const userProjectforV = await listProjectMember({
+      userId: userId,
+      pageSize: 999,
+      pageNum: 1
+    })
+    const projectIds = userProjectforV.rows.map(item => item.projectId)
+
+    const allProjects = await listProject({
+      projectIds: projectIds,
       pageNum: 1,
       pageSize: 999
     })
 
-    if (response.code === 200 && response.rows) {
-      const projectList = response.rows
+
+    if (allProjects.code === 200 && allProjects.rows) {
+      const projectList = allProjects.rows
       const names = projectList.map(p => p.projectName)
-      const progress = projectList.map(p => calculateProgress(p))
+      const progressPromises = projectList.map(p => calculateProgress(p))
+      const progress = await Promise.all(progressPromises)
 
       if (projectChart) {
         projectChart.setOption({
+          title: {
+            text: '参与项目进度',
+            left: 'center'
+          },
           tooltip: {
             trigger: 'axis',
-            formatter: '{b}: {c}%'
+            formatter: (params) => {
+              const project = projectList[params[0].dataIndex]
+              return `${project.projectName}<br/>完成进度：${params[0].value}%`
+            }
           },
           grid: {
             left: '3%',
             right: '4%',
-            bottom: '3%',
+            bottom: '15%',
             containLabel: true
           },
           xAxis: {
@@ -316,7 +412,8 @@ const getProjectProgressData = async () => {
             data: names,
             axisLabel: {
               interval: 0,
-              rotate: 30
+              rotate: 30,
+              overflow: 'break'
             }
           },
           yAxis: {
@@ -331,20 +428,19 @@ const getProjectProgressData = async () => {
           },
           series: [{
             type: 'bar',
-            data: progress,
+            data: progress.map(value => ({
+              value: value,
+              itemStyle: {
+                color: value < 30 ? '#FF4949' :
+                    value < 70 ? '#FFA500' : '#67C23A'
+              }
+            })),
             label: {
               show: true,
               position: 'top',
               formatter: '{c}%'
             },
-            itemStyle: {
-              color: function(params) {
-                const value = params.value
-                if (value < 30) return '#FF4949'
-                if (value < 70) return '#FFA500'
-                return '#67C23A'
-              }
-            }
+            barWidth: '40%'
           }]
         })
       }
@@ -355,7 +451,6 @@ const getProjectProgressData = async () => {
   }
 }
 
-// 窗口大小变化处理
 const handleResize = () => {
   activeChart1?.resize()
   taskChart1?.resize()
