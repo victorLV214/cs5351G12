@@ -51,17 +51,21 @@
         <el-card class="box-card">
           <template #header>
             <div class="card-header">
-              <span>Recent Project Overview</span>
+              <span>我负责的工作项</span>
             </div>
           </template>
-          <div v-for="project in recentProjects" :key="project.id" class="project-item">
-            <h3>{{ project.projectName }}</h3>
-            <el-progress :percentage="calculateProgress(project)" :format="percentageFormat" />
-            <div class="project-metrics">
-              <span>status: {{ project.status }}</span>
-              <span>startDate: {{ formatDate(project.startDate) }}</span>
-              <span>actualEndDate: {{ formatDate(project.actualEndDate) }}</span>
-            </div>
+          <div class="work-items-list">
+            <el-table :data="myWorkItems" style="width: 100%">
+              <el-table-column prop="title" label="工作项" />
+              <el-table-column prop="dueDate" label="截止日期" width="120" />
+              <el-table-column prop="status" label="状态" width="100">
+                <template #default="scope">
+                  <el-tag :type="getStatusType(scope.row.status)">
+                    {{ scope.row.status }}
+                  </el-tag>
+                </template>
+              </el-table-column>
+            </el-table>
           </div>
         </el-card>
       </el-col>
@@ -82,6 +86,7 @@ let activeChart1 = null
 let taskChart1 = null
 let projectChart = null
 // 初始化ref
+const myWorkItems = ref([])
 const projectDaat = ref([])
 const projects = ref([])
 const teamActivityChartRef = ref(null)
@@ -351,7 +356,37 @@ const formatDate = (date) => {
 const percentageFormat = (percentage) => {
   return percentage + '%'
 }
+const getMyWorkItems = async () => {
+  try {
+    const userStore = useUserStore()
+    const response = await listItem({
+      assignedTo: userStore.id,
+      pageNum: 1,
+      pageSize: 999,
+    })
 
+
+    if (response.code === 200) {
+      myWorkItems.value = response.rows.map(item => ({
+        title: item.title,
+        dueDate: formatDate(item.dueDate),
+        status: item.status
+      }))
+    }
+  } catch (error) {
+    console.error('获取工作项失败:', error)
+  }
+}
+// 状态标签类型
+const getStatusType = (status) => {
+  const statusMap = {
+    '未开始': 'info',
+    '进行中': 'primary',
+    '已完成': 'success',
+    '已逾期': 'danger'
+  }
+  return statusMap[status] || 'info'
+}
 // 初始化图表
 const initCharts = () => {
   activeChart1 = echarts.init(teamActivityChartRef.value)
@@ -361,6 +396,7 @@ const initCharts = () => {
   getTeamActivityData()
   getWeeklyTasksData()
   getProjectProgressData()
+  getMyWorkItems()
 }
 
 // 获取项目进度数据
@@ -467,6 +503,7 @@ onUnmounted(() => {
   activeChart1?.dispose()
   taskChart1?.dispose()
   projectChart?.dispose()
+
   window.removeEventListener('resize', handleResize)
 })
 </script>
@@ -521,4 +558,68 @@ onUnmounted(() => {
     }
   }
 }
+.project-overview-card {
+  margin-bottom: 20px;
+}
+
+.project-overview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.project-overview-switcher {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.project-overview-switcher .el-icon {
+  cursor: pointer;
+}
+
+.project-overview-switcher .switcher-disabled {
+  color: var(--el-text-color-placeholder);
+  cursor: not-allowed;
+}
+
+.project-overview-content {
+  padding: 10px 0;
+}
+
+.project-overview-title {
+  margin-bottom: 15px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.project-overview-progress {
+  margin: 20px 0;
+}
+
+.project-overview-metrics {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.project-metric-item {
+  text-align: center;
+  flex: 1;
+}
+
+.metric-label {
+  display: block;
+  font-size: 14px;
+  color: var(--el-text-color-secondary);
+}
+
+.metric-value {
+  display: block;
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 5px;
+  color: var(--el-color-primary);
+}
+
 </style>

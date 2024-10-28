@@ -36,6 +36,9 @@
               <router-link to="/user/profile">
                 <el-dropdown-item>profile</el-dropdown-item>
               </router-link>
+              <router-link to="/system/user" v-if="userStore.roles && userStore.roles.includes('admin')">
+                <el-dropdown-item>user manage</el-dropdown-item>
+              </router-link>
 <!--              <el-dropdown-item command="setLayout" v-if="settingsStore.showSettings">-->
 <!--                <span>布局设置</span>-->
 <!--              </el-dropdown-item>-->
@@ -102,6 +105,9 @@ const emits = defineEmits(['setLayout'])
 function setLayout() {
   emits('setLayout');
 }
+
+
+
 </script>
 
 <style lang='scss' scoped>
