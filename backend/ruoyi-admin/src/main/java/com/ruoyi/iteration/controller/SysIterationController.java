@@ -29,7 +29,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
 /**
  * 迭代Controller
  * 
- * @author ruoyi
+ * @author sarek
  * @date 2024-10-27
  */
 @RestController
@@ -89,7 +89,7 @@ public class SysIterationController extends BaseController
     {
         int rows = sysIterationService.insertSysIteration(sysIteration);
         return rows > 0
-                ? AjaxResult.success(Map.of("requirementId", sysIteration))
+                ? AjaxResult.success(Map.of("requirementId", sysIteration.getIterationId()))
                 : AjaxResult.error();
     }
 

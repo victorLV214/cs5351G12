@@ -33,7 +33,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
  * @date 2024-10-14
  */
 @RestController
-@RequestMapping("/dev-api/project/{projectId}/requirement")
+@RequestMapping("/dev-api/project/requirement")
 @Api(tags = "需求管理")
 public class SysRequirementController extends BaseController
 {
@@ -42,7 +42,7 @@ public class SysRequirementController extends BaseController
 
     /**
      * 查询需求列表
-     * GET /dev-api/project/{projectId}/requirement/list
+     * GET /dev-api/project/requirement/list
      */
     @PreAuthorize("@ss.hasPermi('system:requirement:list')")
     @GetMapping("/list")
@@ -57,7 +57,7 @@ public class SysRequirementController extends BaseController
 
     /**
      * 导出需求列表
-     * GET /dev-api/project/{projectId}/requirement/export
+     * GET /dev-api/project/requirement/export
      */
     @PreAuthorize("@ss.hasPermi('system:requirement:export')")
     @Log(title = "需求", businessType = BusinessType.EXPORT)
@@ -72,7 +72,7 @@ public class SysRequirementController extends BaseController
 
     /**
      * 获取需求详细信息
-     * GET /dev-api/project/{projectId}/requirement/{reqId}
+     * GET /dev-api/project/requirement/{reqId}
      */
     @PreAuthorize("@ss.hasPermi('system:requirement:query')")
     @GetMapping(value = "/{reqId}")
@@ -84,7 +84,7 @@ public class SysRequirementController extends BaseController
 
     /**
      * 新增需求
-     * POST /dev-api/project/{projectId}/requirement
+     * POST /dev-api/project/requirement
      */
     @PreAuthorize("@ss.hasPermi('system:requirement:add')")
     @Log(title = "需求", businessType = BusinessType.INSERT)
@@ -93,14 +93,14 @@ public class SysRequirementController extends BaseController
     public AjaxResult add(@RequestBody SysRequirement sysRequirement)
     {
         int rows = sysRequirementService.insertSysRequirement(sysRequirement);
-        Map<String, Long> data = new HashMap<>();
-        data.put("requirementId", sysRequirement.getRequirementId());
-        return rows > 0 ? AjaxResult.success(data) : AjaxResult.error();
+        return rows > 0
+                ? AjaxResult.success(Map.of("requirementId", sysRequirement.getRequirementId()))
+                : AjaxResult.error();
     }
 
     /**
      * 修改需求
-     *  PUT  /dev-api/project/{projectId}/requirement
+     *  PUT  /dev-api/project/requirement
      */
     @PreAuthorize("@ss.hasPermi('system:requirement:edit')")
     @Log(title = "需求", businessType = BusinessType.UPDATE)
