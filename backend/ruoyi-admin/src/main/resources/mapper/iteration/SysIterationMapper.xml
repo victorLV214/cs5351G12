@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.iteration.mapper.SysIterationMapper">
+    
+    <resultMap type="SysIteration" id="SysIterationResult">
+        <result property="iterationId"    column="iteration_id"    />
+        <result property="projectId"    column="project_id"    />
+        <result property="name"    column="name"    />
+        <result property="description"    column="description"    />
+        <result property="startDate"    column="start_date"    />
+        <result property="endDate"    column="end_date"    />
+        <result property="status"    column="status"    />
+        <result property="goal"    column="goal"    />
+        <result property="plannedStoryPoints"    column="planned_story_points"    />
+        <result property="completedStoryPoints"    column="completed_story_points"    />
+        <result property="velocity"    column="velocity"    />
+        <result property="retrospective"    column="retrospective"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+        <result property="delFlag"    column="del_flag"    />
+    </resultMap>
+
+    <sql id="selectSysIterationVo">
+        select iteration_id, project_id, name, description, start_date, end_date, status, goal, planned_story_points, completed_story_points, velocity, retrospective, create_by, create_time, update_by, update_time, remark, del_flag from sys_iteration
+    </sql>
+
+    <select id="selectSysIterationList" parameterType="SysIteration" resultMap="SysIterationResult">
+        <include refid="selectSysIterationVo"/>
+        <where>  
+            <if test="projectId != null "> and project_id = #{projectId}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="description != null  and description != ''"> and description = #{description}</if>
+            <if test="startDate != null "> and start_date = #{startDate}</if>
+            <if test="endDate != null "> and end_date = #{endDate}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="goal != null  and goal != ''"> and goal = #{goal}</if>
+            <if test="plannedStoryPoints != null "> and planned_story_points = #{plannedStoryPoints}</if>
+            <if test="completedStoryPoints != null "> and completed_story_points = #{completedStoryPoints}</if>
+            <if test="velocity != null "> and velocity = #{velocity}</if>
+            <if test="retrospective != null  and retrospective != ''"> and retrospective = #{retrospective}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysIterationByIterationId" parameterType="Long" resultMap="SysIterationResult">
+        <include refid="selectSysIterationVo"/>
+        where iteration_id = #{iterationId}
+    </select>
+
+    <insert id="insertSysIteration" parameterType="SysIteration" useGeneratedKeys="true" keyProperty="iterationId">
+        insert into sys_iteration
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">project_id,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="description != null">description,</if>
+            <if test="startDate != null">start_date,</if>
+            <if test="endDate != null">end_date,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="goal != null">goal,</if>
+            <if test="plannedStoryPoints != null">planned_story_points,</if>
+            <if test="completedStoryPoints != null">completed_story_points,</if>
+            <if test="velocity != null">velocity,</if>
+            <if test="retrospective != null">retrospective,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+            <if test="delFlag != null">del_flag,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">#{projectId},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="description != null">#{description},</if>
+            <if test="startDate != null">#{startDate},</if>
+            <if test="endDate != null">#{endDate},</if>
+            <if test="status != null and status != ''">#{status},</if>
+            <if test="goal != null">#{goal},</if>
+            <if test="plannedStoryPoints != null">#{plannedStoryPoints},</if>
+            <if test="completedStoryPoints != null">#{completedStoryPoints},</if>
+            <if test="velocity != null">#{velocity},</if>
+            <if test="retrospective != null">#{retrospective},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysIteration" parameterType="SysIteration">
+        update sys_iteration
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectId != null">project_id = #{projectId},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="startDate != null">start_date = #{startDate},</if>
+            <if test="endDate != null">end_date = #{endDate},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="goal != null">goal = #{goal},</if>
+            <if test="plannedStoryPoints != null">planned_story_points = #{plannedStoryPoints},</if>
+            <if test="completedStoryPoints != null">completed_story_points = #{completedStoryPoints},</if>
+            <if test="velocity != null">velocity = #{velocity},</if>
+            <if test="retrospective != null">retrospective = #{retrospective},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+        </trim>
+        where iteration_id = #{iterationId}
+    </update>
+
+    <delete id="deleteSysIterationByIterationId" parameterType="Long">
+        delete from sys_iteration where iteration_id = #{iterationId}
+    </delete>
+
+    <delete id="deleteSysIterationByIterationIds" parameterType="String">
+        delete from sys_iteration where iteration_id in 
+        <foreach item="iterationId" collection="array" open="(" separator="," close=")">
+            #{iterationId}
+        </foreach>
+    </delete>
+</mapper>
