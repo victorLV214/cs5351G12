@@ -3,6 +3,9 @@ package com.ruoyi.requirement.domain;
 import java.math.BigDecimal;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -14,64 +17,79 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * @author sarek
  * @date 2024-10-14
  */
+@ApiModel(description = "需求实体")
 public class SysRequirement extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** 需求ID */
+    @ApiModelProperty(value = "需求ID")
     private Long requirementId;
 
     /** 项目ID */
     @Excel(name = "项目ID")
+    @ApiModelProperty(value = "项目ID")
     private Long projectId;
 
     /** 需求标题 */
     @Excel(name = "需求标题")
+    @ApiModelProperty(value = "需求标题")
     private String title;
 
     /** 需求详细描述 */
     @Excel(name = "需求详细描述")
+    @ApiModelProperty(value = "需求详细描述")
     private String description;
 
     /** 优先级（1低 2中 3高） */
     @Excel(name = "优先级", readConverterExp = "1=低,2=中,3=高")
+    @ApiModelProperty(value = "优先级", allowableValues = "1,2,3")
     private Integer priority;
 
     /** 需求状态 */
     @Excel(name = "需求状态")
+    @ApiModelProperty(value = "需求状态")
     private String status;
 
     /** 负责人ID */
     @Excel(name = "负责人ID")
+    @ApiModelProperty(value = "负责人ID")
     private Long assignedTo;
 
     /** 预期完成日期 */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "预期完成日期", width = 30, dateFormat = "yyyy-MM-dd")
+    @ApiModelProperty(value = "预期完成日期")
     private Date dueDate;
 
     /** 实际完成日期 */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "实际完成日期", width = 30, dateFormat = "yyyy-MM-dd")
+    @ApiModelProperty(value = "实际完成日期")
     private Date completedDate;
 
     /** 需求类型 */
     @Excel(name = "需求类型")
+    @ApiModelProperty(value = "需求类型")
     private String type;
 
     /** 估计工作量 */
     @Excel(name = "估计工作量")
+    @ApiModelProperty(value = "估计工作量")
     private BigDecimal estimatedEffort;
 
     /** 实际工作量 */
     @Excel(name = "实际工作量")
+    @ApiModelProperty(value = "实际工作量")
     private BigDecimal actualEffort;
 
     /** 版本号 */
     @Excel(name = "版本号")
+    @ApiModelProperty(value = "版本号")
     private String version;
 
     /** 删除标志（0:存在 2:删除） */
+    @ApiModelProperty(value = "删除标志")
     private String delFlag;
 
     public void setRequirementId(Long requirementId) 

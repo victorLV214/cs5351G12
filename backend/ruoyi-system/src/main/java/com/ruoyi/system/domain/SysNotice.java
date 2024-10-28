@@ -31,6 +31,18 @@ public class SysNotice extends BaseEntity
     /** 公告状态（0正常 1关闭） */
     private String status;
 
+    /**
+     * 用户阅读状态（0未读 1已读）
+     * 仅用于用户通知列表的前台显示,不写入数据库
+     */
+    private Integer userReadStatus;
+    public Integer getUserReadStatus() {
+		return userReadStatus;
+	}
+    public void setUserReadStatus(int userReadStatus) {
+        this.userReadStatus = userReadStatus;
+    }
+
     public Long getNoticeId()
     {
         return noticeId;
@@ -47,7 +59,7 @@ public class SysNotice extends BaseEntity
     }
 
     @Xss(message = "公告标题不能包含脚本字符")
-    @NotBlank(message = "公告标题不能为空")
+//    @NotBlank(message = "公告标题不能为空")
     @Size(min = 0, max = 50, message = "公告标题不能超过50个字符")
     public String getNoticeTitle()
     {

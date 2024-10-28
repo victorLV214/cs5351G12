@@ -6,7 +6,7 @@ import com.ruoyi.iteration.domain.SysIteration;
 /**
  * 迭代Service接口
  * 
- * @author ruoyi
+ * @author sarek
  * @date 2024-10-27
  */
 public interface ISysIterationService 

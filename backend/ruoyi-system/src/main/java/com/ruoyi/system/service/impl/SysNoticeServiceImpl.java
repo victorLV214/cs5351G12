@@ -42,14 +42,19 @@ public class SysNoticeServiceImpl implements ISysNoticeService
         return noticeMapper.selectNoticeList(notice);
     }
 
+    @Override
+    public List<SysNotice> selectSysNoticeByIds(List<Long> noticeIds) {
+        return noticeMapper.selectNoticeByIds(noticeIds);
+    }
+
     /**
      * 新增公告
-     * 
+     *
      * @param notice 公告信息
      * @return 结果
      */
     @Override
-    public int insertNotice(SysNotice notice)
+    public Long insertNotice(SysNotice notice)
     {
         return noticeMapper.insertNotice(notice);
     }

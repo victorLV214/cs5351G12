@@ -41,26 +41,35 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</if>
 		</where>
     </select>
-    
-    <insert id="insertNotice" parameterType="SysNotice">
+
+    <select id="selectNoticeByIds" parameterType="java.util.List" resultMap="SysNoticeResult">
+        <include refid="selectNoticeVo"/>
+        where notice_id in
+        <foreach item="noticeId" collection="noticeIds" open="(" separator="," close=")">
+            #{noticeId}
+        </foreach>
+    </select>
+
+    <insert id="insertNotice" parameterType="SysNotice" useGeneratedKeys="true" keyProperty="noticeId">
         insert into sys_notice (
-			<if test="noticeTitle != null and noticeTitle != '' ">notice_title, </if>
-			<if test="noticeType != null and noticeType != '' ">notice_type, </if>
-			<if test="noticeContent != null and noticeContent != '' ">notice_content, </if>
-			<if test="status != null and status != '' ">status, </if>
-			<if test="remark != null and remark != ''">remark,</if>
- 			<if test="createBy != null and createBy != ''">create_by,</if>
- 			create_time
- 		)values(
-			<if test="noticeTitle != null and noticeTitle != ''">#{noticeTitle}, </if>
-			<if test="noticeType != null and noticeType != ''">#{noticeType}, </if>
-			<if test="noticeContent != null and noticeContent != ''">#{noticeContent}, </if>
-			<if test="status != null and status != ''">#{status}, </if>
-			<if test="remark != null and remark != ''">#{remark},</if>
- 			<if test="createBy != null and createBy != ''">#{createBy},</if>
- 			sysdate()
-		)
+        <if test="noticeTitle != null and noticeTitle != '' ">notice_title, </if>
+        <if test="noticeType != null and noticeType != '' ">notice_type, </if>
+        <if test="noticeContent != null and noticeContent != '' ">notice_content, </if>
+        <if test="status != null and status != '' ">status, </if>
+        <if test="remark != null and remark != ''">remark,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        create_time
+        ) values (
+        <if test="noticeTitle != null and noticeTitle != ''">#{noticeTitle}, </if>
+        <if test="noticeType != null and noticeType != ''">#{noticeType}, </if>
+        <if test="noticeContent != null and noticeContent != ''">#{noticeContent}, </if>
+        <if test="status != null and status != ''">#{status}, </if>
+        <if test="remark != null and remark != ''">#{remark},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        sysdate()
+        )
     </insert>
+
 	 
     <update id="updateNotice" parameterType="SysNotice">
         update sys_notice 

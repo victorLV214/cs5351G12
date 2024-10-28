@@ -3,6 +3,8 @@ package com.ruoyi.iteration.domain;
 import java.math.BigDecimal;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -11,63 +13,77 @@ import com.ruoyi.common.core.domain.BaseEntity;
 /**
  * 迭代对象 sys_iteration
  * 
- * @author ruoyi
+ * @author sarek
  * @date 2024-10-27
  */
+@ApiModel(description = "迭代实体")
 public class SysIteration extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** 迭代ID */
+    @ApiModelProperty(value = "迭代ID")
     private Long iterationId;
 
     /** 项目ID */
     @Excel(name = "项目ID")
+    @ApiModelProperty(value = "项目ID")
     private Long projectId;
 
     /** 迭代名称 */
     @Excel(name = "迭代名称")
+    @ApiModelProperty(value = "迭代名称")
     private String name;
 
     /** 迭代详细描述 */
     @Excel(name = "迭代详细描述")
+    @ApiModelProperty(value = "迭代详细描述")
     private String description;
 
     /** 开始日期 */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "开始日期", width = 30, dateFormat = "yyyy-MM-dd")
+    @ApiModelProperty(value = "开始日期")
     private Date startDate;
 
     /** 结束日期 */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "结束日期", width = 30, dateFormat = "yyyy-MM-dd")
+    @ApiModelProperty(value = "结束日期")
     private Date endDate;
 
     /** 迭代状态 */
     @Excel(name = "迭代状态")
+    @ApiModelProperty(value = "迭代状态")
     private String status;
 
     /** 迭代目标 */
     @Excel(name = "迭代目标")
+    @ApiModelProperty(value = "迭代目标")
     private String goal;
 
     /** 计划完成的故事点数 */
     @Excel(name = "计划完成的故事点数")
+    @ApiModelProperty(value = "计划完成的故事点数")
     private Long plannedStoryPoints;
 
     /** 实际完成的故事点数 */
     @Excel(name = "实际完成的故事点数")
+    @ApiModelProperty(value = "实际完成的故事点数")
     private Long completedStoryPoints;
 
     /** 团队速度 */
     @Excel(name = "团队速度")
+    @ApiModelProperty(value = "团队速度")
     private BigDecimal velocity;
 
     /** 迭代回顾总结 */
     @Excel(name = "迭代回顾总结")
+    @ApiModelProperty(value = "迭代回顾总结")
     private String retrospective;
 
     /** 删除标志（0代表存在 2代表删除） */
+    @Excel(name = "删除标志")
     private String delFlag;
 
     public void setIterationId(Long iterationId) 

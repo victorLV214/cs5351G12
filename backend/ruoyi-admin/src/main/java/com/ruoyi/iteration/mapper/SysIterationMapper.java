@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 /**
  * 迭代Mapper接口
  * 
- * @author ruoyi
+ * @author sarek
  * @date 2024-10-27
  */
 @Mapper
