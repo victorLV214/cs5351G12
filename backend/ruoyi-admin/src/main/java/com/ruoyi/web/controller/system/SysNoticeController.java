@@ -1,17 +1,21 @@
 package com.ruoyi.web.controller.system;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import com.alibaba.fastjson2.JSON;
+import com.ruoyi.common.core.domain.entity.SysUser;
+import com.ruoyi.notice.domain.SysNoticeDTO;
+import com.ruoyi.notice.domain.SysUserNotice;
+import com.ruoyi.notice.service.ISysUserNoticeService;
+import com.ruoyi.system.service.ISysUserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
@@ -27,16 +31,23 @@ import com.ruoyi.system.service.ISysNoticeService;
  */
 @RestController
 @RequestMapping("/system/notice")
+@Api(tags = "通知公告管理")
 public class SysNoticeController extends BaseController
 {
     @Autowired
     private ISysNoticeService noticeService;
+    @Autowired
+    private ISysUserService userService;
+    @Autowired
+    private ISysUserNoticeService userNoticeService;
 
     /**
      * 获取通知公告列表
+     * GET /system/notice/list
      */
     @PreAuthorize("@ss.hasPermi('system:notice:list')")
     @GetMapping("/list")
+    @ApiOperation(value = "获取通知公告列表")
     public TableDataInfo list(SysNotice notice)
     {
         startPage();
@@ -46,9 +57,11 @@ public class SysNoticeController extends BaseController
 
     /**
      * 根据通知公告编号获取详细信息
+     * GET /system/notice/{noticeId}
      */
     @PreAuthorize("@ss.hasPermi('system:notice:query')")
     @GetMapping(value = "/{noticeId}")
+    @ApiOperation(value = "获取通知公告详细信息")
     public AjaxResult getInfo(@PathVariable Long noticeId)
     {
         return success(noticeService.selectNoticeById(noticeId));
@@ -56,22 +69,59 @@ public class SysNoticeController extends BaseController
 
     /**
      * 新增通知公告
+     * POST /system/notice
+     *
+     * @param sysNoticeDTO 通知数据传输对象，包含通知内容和接收通知的用户ID列表
      */
     @PreAuthorize("@ss.hasPermi('system:notice:add')")
     @Log(title = "通知公告", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@Validated @RequestBody SysNotice notice)
+    @ApiOperation(value = "新增通知公告")
+    public AjaxResult add(@RequestBody SysNoticeDTO sysNoticeDTO)
     {
+        SysNotice notice = sysNoticeDTO.getSysNotice();
+        List<Long> userIds = sysNoticeDTO.getUserIds();
+
         notice.setCreateBy(getUsername());
-        return toAjax(noticeService.insertNotice(notice));
+
+        // 插入公告
+        Long noticeId = noticeService.insertNotice(notice);
+        // 插入信息成功则保存用户与通知的关系
+        if (noticeId > 0){
+            saveUserNoticeRelation(notice.getNoticeId(), userIds);
+        }
+        return noticeId > 0
+                ? AjaxResult.success(Map.of("noticeId", notice.getNoticeId()))
+                : AjaxResult.error();
+    }
+
+    /**
+     * 保存用户与通知的关系
+     * @param noticeId 通知ID
+     * @param userIds 用户ID列表
+     */
+    private void saveUserNoticeRelation(Long noticeId, List<Long> userIds) {
+        if (userIds != null && !userIds.isEmpty()) {
+            List<SysUserNotice> userNotices = new ArrayList<>();
+            for (Long userId : userIds) {
+                SysUserNotice userNotice = new SysUserNotice();
+                userNotice.setNoticeId(noticeId);
+                userNotice.setUserId(userId);
+                userNotices.add(userNotice);
+            }
+            // 批量保存用户与通知的关系
+            userNoticeService.insertBatch(userNotices);
+        }
     }
 
     /**
      * 修改通知公告
+     * PUT /system/notice
      */
     @PreAuthorize("@ss.hasPermi('system:notice:edit')")
     @Log(title = "通知公告", businessType = BusinessType.UPDATE)
     @PutMapping
+    @ApiOperation(value = "修改通知公告")
     public AjaxResult edit(@Validated @RequestBody SysNotice notice)
     {
         notice.setUpdateBy(getUsername());
@@ -80,10 +130,12 @@ public class SysNoticeController extends BaseController
 
     /**
      * 删除通知公告
+     * DELETE /system/notice/{noticeIds}
      */
     @PreAuthorize("@ss.hasPermi('system:notice:remove')")
     @Log(title = "通知公告", businessType = BusinessType.DELETE)
     @DeleteMapping("/{noticeIds}")
+    @ApiOperation(value = "删除通知公告")
     public AjaxResult remove(@PathVariable Long[] noticeIds)
     {
         return toAjax(noticeService.deleteNoticeByIds(noticeIds));

@@ -27,12 +27,20 @@ public interface ISysNoticeService
     public List<SysNotice> selectNoticeList(SysNotice notice);
 
     /**
+     * 根据ID列表查询公告列表
+     *
+     * @param noticeIds 公告ID
+     * @return 公告集合
+     */
+    List<SysNotice> selectSysNoticeByIds(List<Long> noticeIds);
+
+    /**
      * 新增公告
-     * 
+     *
      * @param notice 公告信息
      * @return 结果
      */
-    public int insertNotice(SysNotice notice);
+    public Long insertNotice(SysNotice notice);
 
     /**
      * 修改公告
@@ -57,4 +65,6 @@ public interface ISysNoticeService
      * @return 结果
      */
     public int deleteNoticeByIds(Long[] noticeIds);
+
+
 }
