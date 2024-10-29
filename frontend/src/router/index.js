@@ -91,7 +91,7 @@ export const constantRoutes = [
     children: [
       {
         path: 'index',
-        component: () => import('@/views/AgileInnovatorsDoc.vue'),
+        component: () => import('@/views/agileInnovatorsDoc.vue'),
         name: 'Doc',
         meta: { title: 'Agile Innovators doc', icon: 'documentation', affix: false  }
       }
