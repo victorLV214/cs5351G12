@@ -1,0 +1,63 @@
+name: Frontend CI/CD
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'frontend/**'    # 只有前端代码变更时才触发
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Deploy to server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          script: |
+            echo "====== Starting Frontend Deployment ======"
+            
+            # 进入项目目录
+            cd /home/lighthouse/se/cs5351G12/frontend
+            
+            # 拉取最新代码
+            git pull origin main
+            
+            # 安装依赖
+            npm install
+            
+            # 重启 PM2 进程
+            pm2 reload "frontend" || pm2 start npm --name "frontend" -- run dev
+            
+            # 检查部署状态
+            pm2 status
+            
+            echo "====== Frontend Deployment Complete ======"
+
+      - name: Deployment notification
+        if: always()
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const status = "${{ job.status }}".toLowerCase();
+            const emoji = status === "success" ? "✅" : "❌";
+            const message = `${emoji} Frontend deployment ${status}\nPath: /home/lighthouse/se/cs5351G12/frontend\nTime: ${new Date().toISOString()}`;
+            
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `Frontend Deployment: ${status}`,
+              body: message
+            });
