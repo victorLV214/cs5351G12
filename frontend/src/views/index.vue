@@ -551,7 +551,7 @@ const getProgress = async () => {
         })
       }
     }
-  
+
 }
 
 const handleResize = () => {
