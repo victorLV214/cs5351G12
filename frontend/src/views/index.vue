@@ -1,75 +1,43 @@
 <template>
   <div class="app-container home">
-    <el-row :gutter="20">
-      <el-col :xs="24" :sm="4" :md="4" :lg="4.8" :xl="4.8" v-for="(item, index) in projectDaat" :key="index">
+    <el-row :gutter="20"><el-col :xs="24" :sm="4" :md="4" :lg="4.8" :xl="4.8" v-for="(item, index) in projectDaat" :key="index">
         <el-card class="box-card">
-          <div class="card-header">
-            <span>{{ item.title }}</span>
-          </div>
-          <div class="ss">{{ item.value }}</div>
-        </el-card>
-      </el-col>
-    </el-row>
+          <div class="card-header"><span>{{ item.title }}</span></div><div class="ss">{{ item.value }}</div></el-card>
+    </el-col></el-row>
 
     <el-row :gutter="20" style="margin-top: 20px;">
       <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
         <el-card class="box-card">
-          <template #header>
-            <div class="card-header">
+          <template #header><div class="card-header">
               <span>Team member activity level</span>
+          </div>
+          </template><div ref="chartR" style="height: 300px;"></div></el-card>
+      </el-col><el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12"><el-card class="box-card"><template #header>
+            <div class="card-header"><span>Complete task statistics this week</span>
             </div>
-          </template>
-          <div ref="chartR" style="height: 300px;"></div>
-        </el-card>
-      </el-col>
-
+    </template>
+        <div ref="weekChart" style="height: 300px;"></div></el-card></el-col></el-row><el-row :gutter="20" style="margin-top: 20px;">
       <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
         <el-card class="box-card">
-          <template #header>
-            <div class="card-header">
-              <span>Complete task statistics this week</span>
-            </div>
-          </template>
-          <div ref="weekChart" style="height: 300px;"></div>
+          <template #header><div class="card-header">
+              <span>Project progress visualization</span></div>
+          </template><div ref="projectC" style="height: 300px;"></div>
         </el-card>
       </el-col>
-    </el-row>
-
-    <el-row :gutter="20" style="margin-top: 20px;">
-      <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-        <el-card class="box-card">
-          <template #header>
-            <div class="card-header">
-              <span>Project progress visualization</span>
+    <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+        <el-card class="box-card"><template #header>
+            <div class="card-header"><span>My Responsible Work Items</span>
             </div>
-          </template>
-          <div ref="projectC" style="height: 300px;"></div>
-        </el-card>
-      </el-col>
-
-      <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-        <el-card class="box-card">
-          <template #header>
-            <div class="card-header">
-              <span>My Responsible Work Items</span>
-            </div>
-          </template>
-          <div class="itemlist">
-            <el-table :data="myWorkItems" style="width: 100%">
-              <el-table-column prop="title" label="title" />
-              <el-table-column prop="dueDate" label="dueDate" width="120" />
-              <el-table-column prop="status" label="status" width="100">
-                <template #default="scope">
+          </template><div class="itemlist">
+          <el-table :data="myWorkItems" style="width: 100%">
+            <el-table-column prop="title" label="title" /><el-table-column prop="dueDate" label="dueDate" width="120" />
+            <el-table-column prop="status" label="status" width="100"><template #default="scope">
                   <el-tag :type="setT(scope.row.status)">
                     {{ scope.row.status }}
                   </el-tag>
-                </template>
+            </template>
               </el-table-column>
-            </el-table>
-          </div>
-        </el-card>
-      </el-col>
-    </el-row>
+          </el-table></div></el-card></el-col></el-row>
   </div>
 </template>
 <script setup name="Index">

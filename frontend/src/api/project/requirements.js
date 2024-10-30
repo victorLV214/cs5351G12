@@ -9,36 +9,36 @@ export function listRequirement(query) {
     })
 }
 
-// 获取需求详细信息
-export function getRequirement(projectId, reqId) {
+
+export function getRequirementDetail(requirementId) {
     return request({
-        url: `/dev-api/project/${projectId}/requirement/${reqId}`,
+        url: `/dev-api/project/requirement/${requirementId}`,
         method: 'get'
     })
 }
 
 // 新增需求
-export function addRequirement(projectId, data) {
+export function addRequirement(data) {
     return request({
-        url: `/dev-api/project/${projectId}/requirement`,
+        url: `/dev-api/project/requirement`,
         method: 'post',
         data: data
     })
 }
 
 // 修改需求
-export function updateRequirement(projectId, data) {
+export function updateRequirement(data) {
     return request({
-        url: `/dev-api/project/${projectId}/requirement`,
+        url: `/dev-api/project/requirement`,
         method: 'put',
         data: data
     })
 }
 
 // 删除需求
-export function delRequirement(projectId, requirementIds) {
+export function delRequirement(requirementId) {
     return request({
-        url: `/dev-api/project/${projectId}/requirement/${requirementIds}`,
+        url: `/dev-api/project/requirement/${requirementId}`,
         method: 'delete'
     })
 }
