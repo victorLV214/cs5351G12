@@ -7,6 +7,12 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.util.List;
 
+/**
+ * 仪表盘对象 sys_dashboard
+ *
+ * @author AB-IN-LIUSY
+ * @date 2024-10-31
+ */
 @ApiModel("仪表盘数据")
 public class SysDashboard {
 

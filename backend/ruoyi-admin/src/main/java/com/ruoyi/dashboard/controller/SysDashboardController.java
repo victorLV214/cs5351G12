@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  * 仪表盘 Controller
  *
  * @author AB-IN-LIUSY
- * @date 2024-10-17
+ * @date 2024-10-31
  */
 @Api("仪表盘")
 @RestController

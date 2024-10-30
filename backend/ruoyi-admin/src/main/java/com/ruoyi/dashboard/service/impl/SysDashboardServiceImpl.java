@@ -14,6 +14,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * 仪表盘 Service业务层处理
+ *
+ * @author AB-IN-LIUSY
+ * @date 2024-10-31
+ */
 @Service
 public class SysDashboardServiceImpl implements ISysDashboardService {
 
