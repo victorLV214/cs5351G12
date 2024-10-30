@@ -134,4 +134,10 @@
             #{projectMemberId}
         </foreach>
     </delete>
+
+    <select id="countMembersByProjectId" parameterType="Long" resultType="int">
+        SELECT COUNT(DISTINCT user_id)
+        FROM sys_project_member
+        WHERE project_id = #{projectId}
+    </select>
 </mapper>
