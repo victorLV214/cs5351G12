@@ -68,4 +68,13 @@ public interface SysProjectMemberMapper {
      * @return 成员数量
      */
     public int countMembersByProjectId(Long projectId);
+
+    /**
+     * 根据用户ID查询其参与的项目ID列表
+     *
+     * @param userId 用户ID
+     * @return 项目ID列表
+     */
+    List<Long> selectProjectIdsByUserId( Long userId);
+
 }

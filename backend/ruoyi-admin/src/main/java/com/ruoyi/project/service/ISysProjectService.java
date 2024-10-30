@@ -2,7 +2,7 @@ package com.ruoyi.project.service;
 
 import java.util.List;
 
-import com.ruoyi.project.domain.ProjectStatisticsDTO;
+import com.ruoyi.project.domain.SysProjectStatisticsDTO;
 import com.ruoyi.project.domain.SysProject;
 
 /**
@@ -65,5 +65,5 @@ public interface ISysProjectService {
      * @param projectId 项目ID
      * @return 项目统计信息
      */
-    public ProjectStatisticsDTO getProjectStatisticsByProjectId(Long projectId);
+    public SysProjectStatisticsDTO getProjectStatisticsByProjectId(Long projectId);
 }

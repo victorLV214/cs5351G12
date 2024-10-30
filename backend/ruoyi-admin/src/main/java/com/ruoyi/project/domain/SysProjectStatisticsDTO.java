@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.math.BigDecimal;
 
 @ApiModel("项目统计信息")
-public class ProjectStatisticsDTO extends SysProject {
+public class SysProjectStatisticsDTO extends SysProject {
 
     private static final long serialVersionUID = 1L;
 
