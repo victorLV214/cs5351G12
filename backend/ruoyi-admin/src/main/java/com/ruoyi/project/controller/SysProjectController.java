@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ruoyi.project.domain.ProjectStatisticsDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -110,5 +111,15 @@ public class SysProjectController extends BaseController {
     @DeleteMapping("/{projectIds}")
     public AjaxResult remove(@PathVariable Long[] projectIds) {
         return toAjax(sysProjectService.deleteSysProjectByProjectIds(projectIds));
+    }
+
+    /**
+     * 获取指定项目ID的统计信息
+     */
+    @ApiOperation("获取项目统计信息")
+    @PreAuthorize("@ss.hasPermi('dev-api:project:statistics')")
+    @GetMapping("/statistics/{projectId}")
+    public AjaxResult getProjectStatistics(@PathVariable("projectId") Long projectId) {
+        return success(sysProjectService.getProjectStatisticsByProjectId(projectId));
     }
 }

@@ -60,4 +60,20 @@ public interface SysRequirementMapper
      * @return 结果
      */
     public int deleteSysRequirementByRequirementIds(Long[] requirementIds);
+
+    /**
+     * 查询项目中的需求总数
+     *
+     * @param projectId 项目ID
+     * @return 需求总数
+     */
+    public int countRequirementsByProjectId(Long projectId);
+
+    /**
+     * 查询项目中已完成的需求数量
+     *
+     * @param projectId 项目ID
+     * @return 已完成的需求数量
+     */
+    public int countCompletedRequirementsByProjectId(Long projectId);
 }

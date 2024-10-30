@@ -172,4 +172,17 @@
             #{defectId}
         </foreach>
     </delete>
+
+    <select id="countDefectsByProjectId" parameterType="Long" resultType="int">
+        SELECT COUNT(*)
+        FROM sys_defect
+        WHERE project_id = #{projectId}
+    </select>
+
+    <select id="countCompletedDefectsByProjectId" parameterType="Long" resultType="int">
+        SELECT COUNT(*)
+        FROM sys_defect
+        WHERE project_id = #{projectId}
+          AND status = '已修复'
+    </select>
 </mapper>

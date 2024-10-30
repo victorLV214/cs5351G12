@@ -60,4 +60,20 @@ public interface SysDefectMapper {
      * @return 结果
      */
     public int deleteSysDefectByDefectIds(Long[] defectIds);
+
+    /**
+     * 查询项目中的缺陷总数
+     *
+     * @param projectId 项目ID
+     * @return 缺陷总数
+     */
+    public int countDefectsByProjectId(Long projectId);
+
+    /**
+     * 查询项目中已解决的缺陷数量
+     *
+     * @param projectId 项目ID
+     * @return 已解决的缺陷数量
+     */
+    public int countCompletedDefectsByProjectId(Long projectId);
 }

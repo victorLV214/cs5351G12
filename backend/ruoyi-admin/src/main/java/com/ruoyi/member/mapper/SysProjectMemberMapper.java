@@ -60,4 +60,12 @@ public interface SysProjectMemberMapper {
      * @return 结果
      */
     public int deleteSysProjectMemberByProjectMemberIds(Long[] projectMemberIds);
+
+    /**
+     * 查询项目成员数量
+     *
+     * @param projectId 项目ID
+     * @return 成员数量
+     */
+    public int countMembersByProjectId(Long projectId);
 }

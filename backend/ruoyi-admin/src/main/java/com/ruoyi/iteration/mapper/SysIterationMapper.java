@@ -1,5 +1,6 @@
 package com.ruoyi.iteration.mapper;
 
+import java.math.BigDecimal;
 import java.util.List;
 import com.ruoyi.iteration.domain.SysIteration;
 import org.apache.ibatis.annotations.Mapper;
@@ -60,4 +61,20 @@ public interface SysIterationMapper
      * @return 结果
      */
     public int deleteSysIterationByIterationIds(Long[] iterationIds);
+
+    /**
+     * 查询项目中的迭代总数
+     *
+     * @param projectId 项目ID
+     * @return 迭代总数
+     */
+    public int countIterationsByProjectId(Long projectId);
+
+    /**
+     * 获取项目中进行中的迭代
+     *
+     * @param projectId 项目ID
+     * @return 进行中的迭代对象
+     */
+    public SysIteration getInProgressIterationByProjectId(Long projectId);
 }

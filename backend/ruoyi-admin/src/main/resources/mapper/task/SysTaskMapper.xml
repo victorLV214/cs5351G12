@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+  @author AB-IN-LIUSY
+-->
+
+<mapper namespace="com.ruoyi.task.mapper.SysTaskMapper">
+
+    <resultMap type="SysTask" id="SysTaskResult">
+        <result property="taskId"    column="task_id"    />
+        <result property="projectId"    column="project_id"    />
+        <result property="title"    column="title"    />
+        <result property="description"    column="description"    />
+        <result property="status"    column="status"    />
+        <result property="priority"    column="priority"    />
+        <result property="assignedTo"    column="assigned_to"    />
+        <result property="dueDate"    column="due_date"    />
+        <result property="estimatedHours"    column="estimated_hours"    />
+        <result property="actualHours"    column="actual_hours"    />
+        <result property="parentTaskId"    column="parent_task_id"    />
+        <result property="tags"    column="tags"    />
+        <result property="iterationId"    column="iteration_id"    />
+        <result property="complexity"    column="complexity"    />
+        <result property="dependencies"    column="dependencies"    />
+        <result property="completedAt"    column="completed_at"    />
+        <result property="isArchived"    column="is_archived"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="delFlag"    column="del_flag"    />
+    </resultMap>
+
+    <sql id="selectSysTaskVo">
+        select task_id, project_id, title, description, status, priority, assigned_to, due_date, estimated_hours, actual_hours, parent_task_id, tags, iteration_id, complexity, dependencies, completed_at, is_archived, create_by, create_time, update_by, update_time, del_flag from sys_task
+    </sql>
+
+    <select id="selectSysTaskList" parameterType="SysTask" resultMap="SysTaskResult">
+        <include refid="selectSysTaskVo"/>
+        <where>
+            <if test="projectId != null "> and project_id = #{projectId}</if>
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="priority != null "> and priority = #{priority}</if>
+            <if test="assignedTo != null "> and assigned_to = #{assignedTo}</if>
+            <if test="dueDate != null "> and due_date = #{dueDate}</if>
+            <if test="estimatedHours != null "> and estimated_hours = #{estimatedHours}</if>
+            <if test="actualHours != null "> and actual_hours = #{actualHours}</if>
+            <if test="parentTaskId != null "> and parent_task_id = #{parentTaskId}</if>
+            <if test="iterationId != null "> and iteration_id = #{iterationId}</if>
+            <if test="complexity != null "> and complexity = #{complexity}</if>
+            <if test="dependencies != null  and dependencies != ''"> and dependencies = #{dependencies}</if>
+            <if test="completedAt != null "> and completed_at = #{completedAt}</if>
+            <if test="isArchived != null "> and is_archived = #{isArchived}</if>
+        </where>
+    </select>
+
+    <select id="selectSysTaskByTaskId" parameterType="Long" resultMap="SysTaskResult">
+        <include refid="selectSysTaskVo"/>
+        where task_id = #{taskId}
+    </select>
+
+    <insert id="insertSysTask" parameterType="SysTask" useGeneratedKeys="true" keyProperty="taskId">
+        insert into sys_task
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">project_id,</if>
+            <if test="title != null and title != ''">title,</if>
+            <if test="description != null">description,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="priority != null">priority,</if>
+            <if test="assignedTo != null">assigned_to,</if>
+            <if test="dueDate != null">due_date,</if>
+            <if test="estimatedHours != null">estimated_hours,</if>
+            <if test="actualHours != null">actual_hours,</if>
+            <if test="parentTaskId != null">parent_task_id,</if>
+            <if test="tags != null">tags,</if>
+            <if test="iterationId != null">iteration_id,</if>
+            <if test="complexity != null">complexity,</if>
+            <if test="dependencies != null">dependencies,</if>
+            <if test="completedAt != null">completed_at,</if>
+            <if test="isArchived != null">is_archived,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="delFlag != null">del_flag,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">#{projectId},</if>
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="description != null">#{description},</if>
+            <if test="status != null and status != ''">#{status},</if>
+            <if test="priority != null">#{priority},</if>
+            <if test="assignedTo != null">#{assignedTo},</if>
+            <if test="dueDate != null">#{dueDate},</if>
+            <if test="estimatedHours != null">#{estimatedHours},</if>
+            <if test="actualHours != null">#{actualHours},</if>
+            <if test="parentTaskId != null">#{parentTaskId},</if>
+            <if test="tags != null">#{tags},</if>
+            <if test="iterationId != null">#{iterationId},</if>
+            <if test="complexity != null">#{complexity},</if>
+            <if test="dependencies != null">#{dependencies},</if>
+            <if test="completedAt != null">#{completedAt},</if>
+            <if test="isArchived != null">#{isArchived},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysTask" parameterType="SysTask">
+        update sys_task
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectId != null">project_id = #{projectId},</if>
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="priority != null">priority = #{priority},</if>
+            <if test="assignedTo != null">assigned_to = #{assignedTo},</if>
+            <if test="dueDate != null">due_date = #{dueDate},</if>
+            <if test="estimatedHours != null">estimated_hours = #{estimatedHours},</if>
+            <if test="actualHours != null">actual_hours = #{actualHours},</if>
+            <if test="parentTaskId != null">parent_task_id = #{parentTaskId},</if>
+            <if test="tags != null">tags = #{tags},</if>
+            <if test="iterationId != null">iteration_id = #{iterationId},</if>
+            <if test="complexity != null">complexity = #{complexity},</if>
+            <if test="dependencies != null">dependencies = #{dependencies},</if>
+            <if test="completedAt != null">completed_at = #{completedAt},</if>
+            <if test="isArchived != null">is_archived = #{isArchived},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+        </trim>
+        where task_id = #{taskId}
+    </update>
+
+    <delete id="deleteSysTaskByTaskId" parameterType="Long">
+        delete from sys_task where task_id = #{taskId}
+    </delete>
+
+    <delete id="deleteSysTaskByTaskIds" parameterType="String">
+        delete from sys_task where task_id in
+        <foreach item="taskId" collection="array" open="(" separator="," close=")">
+            #{taskId}
+        </foreach>
+    </delete>
+
+    <select id="countTasksByProjectId" parameterType="Long" resultType="int">
+        SELECT COUNT(*)
+        FROM sys_task
+        WHERE project_id = #{projectId}
+    </select>
+
+    <select id="countCompletedTasksByProjectId" parameterType="Long" resultType="int">
+        SELECT COUNT(*)
+        FROM sys_task
+        WHERE project_id = #{projectId}
+          AND status = '已完成'
+    </select>
+</mapper>
