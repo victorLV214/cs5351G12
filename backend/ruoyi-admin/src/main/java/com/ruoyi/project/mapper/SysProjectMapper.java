@@ -60,4 +60,13 @@ public interface SysProjectMapper {
      * @return 结果
      */
     public int deleteSysProjectByProjectIds(Long[] projectIds);
+
+    /**
+     * 根据项目ID列表查询项目列表
+     *
+     * @param projectIds 项目ID列表
+     * @return 项目列表
+     */
+    List<SysProject> selectProjectsByIds(List<Long> projectIds);
+
 }

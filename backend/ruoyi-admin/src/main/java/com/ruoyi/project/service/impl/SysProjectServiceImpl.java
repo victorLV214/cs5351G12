@@ -12,7 +12,7 @@ import com.ruoyi.defect.mapper.SysDefectMapper;
 import com.ruoyi.iteration.domain.SysIteration;
 import com.ruoyi.iteration.mapper.SysIterationMapper;
 import com.ruoyi.member.mapper.SysProjectMemberMapper;
-import com.ruoyi.project.domain.ProjectStatisticsDTO;
+import com.ruoyi.project.domain.SysProjectStatisticsDTO;
 import com.ruoyi.requirement.mapper.SysRequirementMapper;
 import com.ruoyi.task.mapper.SysTaskMapper;
 import org.springframework.beans.BeanUtils;
@@ -139,11 +139,11 @@ public class SysProjectServiceImpl implements ISysProjectService {
      * @return 项目统计信息
      */
     @Override
-    public ProjectStatisticsDTO getProjectStatisticsByProjectId(Long projectId) {
+    public SysProjectStatisticsDTO getProjectStatisticsByProjectId(Long projectId) {
         // 获取项目基本信息
         SysProject project = sysProjectMapper.selectSysProjectByProjectId(projectId);
         // 创建 DTO 对象
-        ProjectStatisticsDTO dto = new ProjectStatisticsDTO();
+        SysProjectStatisticsDTO dto = new SysProjectStatisticsDTO();
         // 将项目基本信息复制到 DTO 中
         BeanUtils.copyProperties(project, dto);
 

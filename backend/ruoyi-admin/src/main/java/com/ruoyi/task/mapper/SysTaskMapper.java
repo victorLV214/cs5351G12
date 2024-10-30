@@ -76,4 +76,13 @@ public interface SysTaskMapper {
      * @return 已完成的任务数量
      */
     public int countCompletedTasksByProjectId(Long projectId);
+
+    /**
+     * 根据用户ID查询任务列表
+     *
+     * @param userId 用户ID
+     * @return 任务列表
+     */
+    List<SysTask> selectTasksByUserId(Long userId);
+
 }
