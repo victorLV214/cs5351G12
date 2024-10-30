@@ -111,7 +111,9 @@ export const constantRoutes = [
       },
       {
         path: 'detail/:id',
-        redirect: '/project/detail/:id/overview',
+        redirect: to => {
+          return `/project/detail/${to.params.id}/overview`
+        },
         component: () => import('@/views/project/project/detail.vue'),
         name: 'ProjectDetail',
         hidden: true,

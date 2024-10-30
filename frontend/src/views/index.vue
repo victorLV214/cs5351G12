@@ -6,7 +6,7 @@
           <div class="card-header">
             <span>{{ item.title }}</span>
           </div>
-          <div class="statistic-value">{{ item.value }}</div>
+          <div class="ss">{{ item.value }}</div>
         </el-card>
       </el-col>
     </el-row>
@@ -19,7 +19,7 @@
               <span>Team member activity level</span>
             </div>
           </template>
-          <div ref="teamActivityChartRef" style="height: 300px;"></div>
+          <div ref="chartR" style="height: 300px;"></div>
         </el-card>
       </el-col>
 
@@ -30,7 +30,7 @@
               <span>Complete task statistics this week</span>
             </div>
           </template>
-          <div ref="weeklyTasksChartRef" style="height: 300px;"></div>
+          <div ref="weekChart" style="height: 300px;"></div>
         </el-card>
       </el-col>
     </el-row>
@@ -43,7 +43,7 @@
               <span>Project progress visualization</span>
             </div>
           </template>
-          <div ref="projectProgressChartRef" style="height: 300px;"></div>
+          <div ref="projectC" style="height: 300px;"></div>
         </el-card>
       </el-col>
 
@@ -54,13 +54,13 @@
               <span>My Responsible Work Items</span>
             </div>
           </template>
-          <div class="work-items-list">
+          <div class="itemlist">
             <el-table :data="myWorkItems" style="width: 100%">
               <el-table-column prop="title" label="title" />
               <el-table-column prop="dueDate" label="dueDate" width="120" />
               <el-table-column prop="status" label="status" width="100">
                 <template #default="scope">
-                  <el-tag :type="setStatusType(scope.row.status)">
+                  <el-tag :type="setT(scope.row.status)">
                     {{ scope.row.status }}
                   </el-tag>
                 </template>
@@ -89,13 +89,13 @@ let projectChart = null
 const myWorkItems = ref([])
 const projectDaat = ref([])
 const projects = ref([])
-const teamActivityChartRef = ref(null)
-const weeklyTasksChartRef = ref(null)
-const projectProgressChartRef = ref(null)
+const chartR = ref(null)
+const weekChart = ref(null)
+const projectC = ref(null)
 
 
 
-const getStatistics = async () => {
+const getData = async () => {
     const allList = await listProject({
       pageNum: 1,
       pageSize: 999
@@ -115,10 +115,10 @@ const getStatistics = async () => {
       planProjects++
     }}
 
-      let completedProjects = 0
+      let endProject = 0
     for (let i = 0; i < projectList.length; i++) {
     if (projectList[i].status === '已完成') {
-      completedProjects++
+      endProject++
       }
     }
 
@@ -129,10 +129,10 @@ const getStatistics = async () => {
     pageSize: 999
   })
   console.log(allTasks)
-  let unfinishedTasks= 0
+  let notFinishT= 0
   for (let i = 0; i < allTasks.rows.length; i++) {
     if (allTasks.rows[i].status === '未完成') {
-      unfinishedTasks++
+      notFinishT++
     }
   }
 
@@ -141,7 +141,7 @@ const getStatistics = async () => {
   const oneWeek = new Date(now - 604800000)
 
 
-  let nearlyTasks = 0
+  let nearT = 0
   for (let i = 0; i < allTasks.rows.length; i++) {
     const deadline = new Date(allTasks.rows[i].dueDate)
 
@@ -149,14 +149,14 @@ const getStatistics = async () => {
       continue
     }
     if (deadline <= oneWeek && deadline >= now) {
-      nearlyTasks++
+      nearT++
     }
   }
 
 
   projectDaat.value = [
-    { title: '进行中的项目', value: ongoingProjects }, { title: '规划中项目', value: planProjects }, { title: '已完成项目', value: completedProjects },
-    { title: '未完成任务', value: unfinishedTasks },{ title: '近期任务', value: nearlyTasks }
+    { title: '进行中的项目', value: ongoingProjects }, { title: '规划中项目', value: planProjects }, { title: '已完成项目', value: endProject },
+    { title: '未完成任务', value: notFinishT },{ title: '近期任务', value: nearT }
   ]
 
   projects.value = projectList
@@ -167,17 +167,17 @@ const getTeamActivityData = async () => {
     const userStore = useUserStore()
     const userId = userStore.id
     
-    const allProjects = await listProjectMember({
+    const allP = await listProjectMember({
       userId: userId,
       pageSize: 999,
       pageNum: 1
     })
-    // console.log("allProjects",allProjects)
+    // console.log("allP",allP)
 
 
     let projectIds=[]
-    for (let i = 0; i < allProjects.rows.length; i++) {
-      projectIds.push(allProjects.rows[i].projectId)
+    for (let i = 0; i < allP.rows.length; i++) {
+      projectIds.push(allP.rows[i].projectId)
     }
     const allMember = await listProjectMember({
       projectIds: projectIds,
@@ -198,11 +198,11 @@ const getTeamActivityData = async () => {
     })
   // console.log("allUsers",allUsers)
 
-    const userNameMap = {}
+    const usernamewithNickName = {}
     for (let i = 0; i < allUsers.rows.length; i++) {
       const user = allUsers.rows[i]
       if (teamMemberIds.has(user.userId)) {
-        userNameMap[user.userId] = user.nickName
+        usernamewithNickName[user.userId] = user.nickName
       }
     }
 
@@ -227,14 +227,14 @@ const getTeamActivityData = async () => {
       const task = allTasks.rows[i]
       const completionDate = new Date(task.completedDate || task.updateTime)
       if (completionDate >= thisMonth && task.status === '已完成' ) {
-        const assignedNames = userNameMap[task.assignedTo]
+        const assignedNames = usernamewithNickName[task.assignedTo]
         if (!memberStats[assignedNames]) {
           memberStats[assignedNames] = 1
         } else {memberStats[assignedNames]++}
       }
     }
 
-    const currentUserName = userNameMap[userId]
+    const currentUserName = usernamewithNickName[userId]
     if (!memberStats[currentUserName]) {
       memberStats[currentUserName] = 0
     }
@@ -248,7 +248,7 @@ const getTeamActivityData = async () => {
       activities.push({
         value: memberStats[member],
         itemStyle: {
-          color: getRandomColor()
+          color: setColors()
         }
       })
     }
@@ -374,12 +374,12 @@ const getWeeklyTasksData = async () => {
 }
 
 
-const getRandomColor = () => {
+const setColors = () => {
   const colors = ['#409EFF', '#67C23A', '#E6A23C', '#F56C6C', '#909399','#4B77BE', '#3498DB', '#5DADE2', '#1ABC9C', '#2E86C1', '#A569BD', '#EC7063', '#F39C12', '#E74C3C', '#BFC9CA']
   return colors[Math.floor(Math.random() * colors.length)]
 }
 
-const calculateProgress = async (project) => {
+const calFun = async (project) => {
   try {
 
     const allTasksforCalc = await listItem({
@@ -433,7 +433,7 @@ const getMyWorkItems = async () => {
   }
 }
 // 状态标签类型
-const setStatusType = (status) => {
+const setT = (status) => {
   const statusMap = {
     '未开始': 'info',
     '进行中': 'primary',
@@ -444,20 +444,20 @@ const setStatusType = (status) => {
 }
 // 初始化图表
 const initCharts = () => {
-  activeChart1 = echarts.init(teamActivityChartRef.value)
-  taskChart1 = echarts.init(weeklyTasksChartRef.value)
-  projectChart = echarts.init(projectProgressChartRef.value)
+  activeChart1 = echarts.init(chartR.value)
+  taskChart1 = echarts.init(weekChart.value)
+  projectChart = echarts.init(projectC.value)
 
 
   getTeamActivityData()
   getWeeklyTasksData()
-  getProjectProgressData()
+  getProgress()
   getMyWorkItems()
 }
 
 // 获取项目进度数据
-const getProjectProgressData = async () => {
-  try {
+const getProgress = async () => {
+
     const userStore = useUserStore()
     const userId = userStore.id
     const userProjectforV = await listProjectMember({
@@ -475,24 +475,24 @@ const getProjectProgressData = async () => {
 
 
 
-    const allProjects = await listProject({
+    const allP = await listProject({
       projectIds: projectIds,
       pageNum: 1,
       pageSize: 999
     })
-    // console.log("allProjects",allProjects)
+    // console.log("allP",allP)
 
-    if (allProjects.rows) {
-      const projectList = allProjects.rows
+    if (allP.rows) {
+      const projectList = allP.rows
       const names = projectList.map(p => p.projectName)
 
-      const progressPromises = []
+      const promisess = []
       for (let i = 0; i < projectList.length; i++) {
-        progressPromises.push(calculateProgress(projectList[i]))
+        promisess.push(calFun(projectList[i]))
       }
 
 
-      const progress = await Promise.all(progressPromises)
+      const progress = await Promise.all(promisess)
 
 
       if (projectChart) {
@@ -538,7 +538,7 @@ const getProjectProgressData = async () => {
             data: progress.map(value => ({
               value: value,
               itemStyle: {
-                color: getRandomColor(),
+                color: setColors(),
               }
             })),
             label: {
@@ -551,10 +551,7 @@ const getProjectProgressData = async () => {
         })
       }
     }
-  } catch (error) {
-    ElMessage.error('获取项目进度数据失败')
-    console.error('获取项目进度数据失败:', error)
-  }
+  
 }
 
 const handleResize = () => {
@@ -564,7 +561,7 @@ const handleResize = () => {
 }
 
 onMounted(() => {
-  getStatistics()
+  getData()
   initCharts()
   window.addEventListener('resize', handleResize)
 })
@@ -590,7 +587,7 @@ onUnmounted(() => {
     align-items: center;
   }
 
-  .statistic-value {
+  .ss {
     font-size: 24px;
     font-weight: bold;
     color: #409EFF;

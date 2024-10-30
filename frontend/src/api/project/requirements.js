@@ -1,9 +1,9 @@
 import request from '@/utils/request'
 
 // 查询需求列表
-export function listRequirement(projectId, query) {
+export function listRequirement(query) {
     return request({
-        url: `/dev-api/project/${projectId}/requirement/list`,
+        url: '/dev-api/project/requirement/list',
         method: 'get',
         params: query
     })
