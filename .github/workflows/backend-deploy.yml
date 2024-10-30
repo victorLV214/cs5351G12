@@ -1,0 +1,110 @@
+name: Backend CI/CD
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'backend/**'
+      - 'pom.xml'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 9
+        uses: actions/setup-java@v3
+        with:
+          java-version: '9'
+          distribution: 'adopt'
+          cache: 'maven'
+
+      - name: Deploy to server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          script: |
+            echo "====== Starting Backend Deployment ======"
+            
+            # 设置 JAVA_HOME
+            export JAVA_HOME=/usr/lib/jvm/java-9
+            export PATH=$JAVA_HOME/bin:$PATH
+            
+            # 进入后端项目目录
+            cd /home/lighthouse/se/cs5351G12/backend
+            
+            # 拉取最新代码
+            git pull origin main
+            
+            # 停止当前运行的应用
+            pid=$(ps -ef | grep ruoyi-admin.jar | grep -v grep | awk '{print $2}')
+            if [ -n "$pid" ]; then
+              echo "Stopping existing application (PID: $pid)"
+              kill $pid
+              sleep 10
+              
+              # 确保进程已经停止
+              if ps -p $pid > /dev/null; then
+                echo "Force stopping application"
+                kill -9 $pid
+              fi
+            fi
+            
+            # Maven 打包
+            mvn clean package -DskipTests \
+              -Dmaven.wagon.http.ssl.insecure=true \
+              -Dmaven.wagon.http.ssl.allowall=true \
+              --settings settings.xml
+            
+            # 进入目标目录并启动应用
+            cd ruoyi-admin/target/
+            
+            # 备份旧的日志文件
+            if [ -f ruoyi.log ]; then
+              mv ruoyi.log ruoyi.log.$(date +%Y%m%d_%H%M%S)
+            fi
+            
+            # 启动应用
+            nohup java -jar ruoyi-admin.jar > ruoyi.log 2>&1 &
+            
+            # 等待应用启动
+            echo "Waiting for application to start..."
+            sleep 30
+            
+            # 检查应用状态
+            if ps -ef | grep ruoyi-admin.jar | grep -v grep > /dev/null; then
+              echo "Application started successfully"
+              echo "Last 50 lines of application log:"
+              tail -n 50 ruoyi.log
+            else
+              echo "Failed to start application"
+              echo "Last 50 lines of log:"
+              tail -n 50 ruoyi.log
+              exit 1
+            fi
+            
+            echo "====== Backend Deployment Complete ======"
+
+      - name: Deployment notification
+        if: always()
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const status = "${{ job.status }}".toLowerCase();
+            const emoji = status === "success" ? "✅" : "❌";
+            const message = `${emoji} Backend deployment ${status}
+            \nPath: /home/lighthouse/se/cs5351G12/backend
+            \nTime: ${new Date().toISOString()}
+            \nApplication: ruoyi-admin.jar`;
+            
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `Backend Deployment: ${status}`,
+              body: message
+            });
