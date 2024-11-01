@@ -33,7 +33,8 @@
     "vue": "3.4.0",
     "vue-cropper": "1.1.1",
     "vue-router": "4.2.5",
-    "vuedraggable": "^4.1.0"
+    "vuedraggable": "^4.1.0",
+    "dhtmlx-gantt": "^8.0.6"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "5.0.1",

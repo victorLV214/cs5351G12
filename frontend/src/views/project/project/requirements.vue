@@ -5,6 +5,7 @@
         </div>
       <div class="addR">
         <el-button type="primary" :icon="Plus" @click="addReq"></el-button>
+        <el-button type="primary" :icon="Download" @click="showGantt"></el-button>
       </div></div></template>
 
 
@@ -26,16 +27,16 @@
         </el-form-item>
       </el-form>
     </div>
-    
+
     <div class="rList">
       <el-table
           v-loading="loading"
-          :data="requirementsList"
+          :data="reqList"
           style="width: 100%"
       >
         <el-table-column label="ID" align="center">
           <template #default="{ row }">
-            <el-link type="primary" @click="handleView(row)">{{ row.requirementId }}</el-link>
+            <el-link type="primary" @click="clickV(row)">{{ row.requirementId }}</el-link>
           </template>
         </el-table-column>
         <el-table-column label="title" align="center" prop="title" />
@@ -47,6 +48,8 @@
 
 
 
+        
+        
 
       </el-table>
 
@@ -63,62 +66,47 @@
       </div>
     </div>
   </el-card>
-  <!-- 在el-card结束标签前添加 -->
+
   <el-dialog
       v-model="dialogVisible"
-      title="需求详情"
+      title="requirement details"
       width="60%"
   >
-    <el-form
-        ref="formRef"
-        :model="currentRequirement"
-        :rules="rules"
-        label-width="120px"
-    >
-      <el-form-item label="需求ID" prop="requirementId">
-        <span>{{ currentRequirement?.requirementId }}</span>
+    <el-form ref="formRef" :model="curReq" :rules="rules" label-width="120px">
+      <el-form-item label="requirement ID" prop="requirementId">
+        <span>{{ curReq?.requirementId }}</span>
       </el-form-item>
 
-      <el-form-item label="需求标题" prop="title">
-        <el-input v-model="currentRequirement.title" :disabled="!isEdit"/>
+      <el-form-item label="title" prop="title">
+        <el-input v-model="curReq.title" :disabled="!isEdit"/>
       </el-form-item>
 
-      <el-form-item label="优先级" prop="priority">
-        <el-select v-model="currentRequirement.priority" :disabled="!isEdit">
+      <el-form-item label="priority" prop="priority">
+        <el-select v-model="curReq.priority" :disabled="!isEdit">
           <el-option label="high" value="1" />
           <el-option label="medium" value="2" />
           <el-option label="low" value="3" />
         </el-select>
       </el-form-item>
-
-      <el-form-item label="状态" prop="status">
-        <el-select v-model="currentRequirement.status" :disabled="!isEdit">
+      <el-form-item label="status" prop="status">
+        <el-select v-model="curReq.status" :disabled="!isEdit">
           <el-option label="pending" value="待处理" />
-          <el-option label="processing" value="进行中" />
-          <el-option label="completed" value="已完成" />
+          <el-option label="processing" value="进行中" /><el-option label="completed" value="已完成" />
         </el-select>
       </el-form-item>
-
-      <el-form-item label="需求类型" prop="type">
-        <el-input v-model="currentRequirement.type" :disabled="!isEdit"/>
+      <el-form-item label="type" prop="type">
+        <el-input v-model="curReq.type" :disabled="!isEdit"/>
+      </el-form-item>
+      <el-form-item label="assignedTo" prop="assignedTo">
+        <el-input v-model="curReq.assignedTo" :disabled="!isEdit"/>
+      </el-form-item>
+      <el-form-item label="description" prop="description"><el-input v-model="curReq.description" type="textarea" :rows="3"
+            :disabled="!isEdit"/>
       </el-form-item>
 
-      <el-form-item label="指派给" prop="assignedTo">
-        <el-input v-model="currentRequirement.assignedTo" :disabled="!isEdit"/>
-      </el-form-item>
-
-      <el-form-item label="描述" prop="description">
+      <el-form-item label="remarks" prop="remarks">
         <el-input
-            v-model="currentRequirement.description"
-            type="textarea"
-            :rows="3"
-            :disabled="!isEdit"
-        />
-      </el-form-item>
-
-      <el-form-item label="备注" prop="remarks">
-        <el-input
-            v-model="currentRequirement.remarks"
+            v-model="curReq.remarks"
             type="textarea"
             :rows="3"
             :disabled="!isEdit"
@@ -128,87 +116,79 @@
 
     <template #footer>
   <span class="dialog-footer">
-    <el-button @click="dialogVisible  = false">关闭</el-button>
-    <!-- 添加删除按钮，仅当创建者是当前用户时显示 -->
-    <el-button
-        v-if="currentRequirement?.createBy === username"
-        type="danger"
-        @click="handleDelete(currentRequirement)"
-    >
-      删除
+    <el-button @click="dialogVisible  = false">cancel</el-button>
+    <el-button v-if="curReq?.createBy === username" type="danger" @click="delReq(curReq)">DEL
     </el-button>
-    <el-button v-if="!isEdit" type="primary" @click="handleEdit">编辑</el-button>
+    <el-button v-if="!isEdit" type="primary" @click="ISEDITT">EDit</el-button>
     <template v-else>
-      <el-button @click="cancelEdit">取消</el-button>
-      <el-button type="primary" @click="submitEdit">保存</el-button>
+      <el-button @click="donotEDITT">CALCEL</el-button>
+      <el-button type="primary" @click="submitEdit">SAVE</el-button>
     </template>
-  </span>
-    </template>
+  </span></template>
   </el-dialog>
   <!-- 新增需求对话框 -->
-  <el-dialog
-      v-model="addDialogVisible"
-      title="新增需求"
-      width="60%"
+  <el-dialog v-model="addButten" title="add new requirements" width="60%"
   >
-    <el-form
-        ref="addFormRef"
-        :model="reqForm"
-        :rules="rules"
-        label-width="120px"
+    <el-form ref="addFormRef" :model="reqForm" :rules="rules" label-width="120px"
     >
-      <el-form-item label="需求标题" prop="title">
-        <el-input v-model="reqForm.title" placeholder="请输入需求标题"/>
+      <el-form-item label="title" prop="title">
+        <el-input v-model="reqForm.title" placeholder="title"/>
       </el-form-item>
 
-      <el-form-item label="优先级" prop="priority">
-        <el-select v-model="reqForm.priority" placeholder="请选择优先级">
+      <el-form-item label="priority" prop="priority">
+        <el-select v-model="reqForm.priority" placeholder="priority">
           <el-option label="high" value="1" />
           <el-option label="medium" value="2" />
           <el-option label="low" value="3" />
         </el-select>
       </el-form-item>
 
-      <el-form-item label="需求类型" prop="type">
-        <el-input v-model="reqForm.type" placeholder="请输入需求类型"/>
+      <el-form-item label="type" prop="type">
+        <el-input v-model="reqForm.type" placeholder="type"/>
       </el-form-item>
 
-      <el-form-item label="指派给" prop="assignedTo">
-        <el-input v-model="reqForm.assignedTo" placeholder="请输入负责人"/>
+      <el-form-item label="assignedTo" prop="assignedTo">
+        <el-input v-model="reqForm.assignedTo" placeholder="assignedTo"/>
       </el-form-item>
 
-      <el-form-item label="描述" prop="description">
+      <el-form-item label="description" prop="description">
         <el-input
             v-model="reqForm.description"
             type="textarea"
-            :rows="3"
-            placeholder="请输入需求描述"
+            placeholder="description"
         />
       </el-form-item>
 
-      <el-form-item label="备注" prop="remarks">
-        <el-input
-            v-model="reqForm.remarks"
-            type="textarea"
+      <el-form-item label="remarks" prop="remarks">
+        <el-input v-model="reqForm.remarks" type="textarea"
             :rows="3"
-            placeholder="请输入备注信息"
+            placeholder="remarks"
         />
       </el-form-item>
     </el-form>
 
     <template #footer>
     <span class="dialog-footer">
-      <el-button @click="addDialogVisible = false">取消</el-button>
-      <el-button type="primary" @click="submitAdd">确定</el-button>
+      <el-button @click="addButten = false">cancel</el-button>
+      <el-button type="primary" @click="submitAdd">ADD</el-button>
     </span>
     </template>
   </el-dialog>
+  <el-dialog v-model="ganttDialogVisible"
+      title="Requirements Gantt Chart"
+      width="90%"
+      :destroy-on-close="true"
+  >
+    <div ref="ganttContainer" style="height: 600px; width: 100%;"></div>
+  </el-dialog>
+
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { Search, Refresh, Plus, Edit, Delete, Download, View } from '@element-plus/icons-vue'
-
+import { ref, onMounted, onUnmounted } from 'vue'
+import { Search, Refresh, Plus, Download } from '@element-plus/icons-vue'
+import 'dhtmlx-gantt/codebase/dhtmlxgantt.css'
+import 'dhtmlx-gantt/codebase/dhtmlxgantt.js'
 import {useRoute} from "vue-router";
 import {
   addRequirement,
@@ -218,9 +198,11 @@ import {
   updateRequirement
 } from "@/api/project/requirements.js";
 import {ElMessage, ElMessageBox} from "element-plus";
+const ganttContainer = ref(null)
+const ganttDialogVisible = ref(false)
 import useUserStore from "@/store/modules/user.js";
 import {getUser} from "@/api/system/user.js";
-const requirementsList = ref([])
+const reqList = ref([])
 const userStore = useUserStore()
 const total = ref(0)
 const route = useRoute()
@@ -228,18 +210,18 @@ const username=ref(null)
 const projectId=route.params.id
 const loading = ref(false)
 const dialogVisible = ref(false)
-const currentRequirement = ref(null)
+const curReq = ref(null)
 const formRef = ref(null)
 const isEdit = ref(false)
-const originalData = ref(null) // 用于存储原始数据
-const addDialogVisible = ref(false)
+const firstData = ref(null) // 用于存储原始数据
+const addButten = ref(false)
 const addFormRef = ref(null)
-const deleteVisible = ref(false)
+const delButten = ref(false)
 const id =userStore.id
 const reqForm = ref({
   title: '',
   priority: '',
-  status: '待处理',  // 默认状态
+  status: 'processing',  // 默认状态
   type: '',
   assignedTo: '',
   description: '',
@@ -259,11 +241,83 @@ const Params = ref({
   projectId: projectId,
   delFlag:1,
 })
+const initGantt = () => {
+  gantt.config.autosize = "y"
+  gantt.config.date_format = "%Y-%m-%d"
+  gantt.config.task_height = 20
+  gantt.config.scale_height = 50
+  gantt.config.row_height = 40
+
+
+  gantt.config.scales = [
+    { unit: "month", step: 1, format: "%F %Y" },
+    { unit: "week", step: 1, format: "Week #%W" },
+    { unit: "day", step: 1, format: "%d %D" }
+  ]
+  gantt.config.columns = [
+    { name: "text", label: "Requirement Name", width: 200, tree: true, tooltip: "需求名称" },
+    { name: "start_date", label: "Start Date", align: "center", width: 100, tooltip: "开始日期" },
+    { name: "end_date", label: "End Date", align: "center", width: 100, tooltip: "结束日期" },
+    {
+      name: "progress",
+      label: "Progress",
+      align: "center",
+      width: 80,
+      tooltip: "Progress",
+      template: (obj) => (obj.progress * 100).toFixed(0) + "%"
+    },
+    {
+      name: "status",
+      label: "Status",
+      align: "center",
+      width: 80,
+      tooltip: "status",
+      template: (obj) => {
+        const status = obj.status 
+        const statusMap = {
+          'completed': '<span style="color: #67C23A">Completed</span>',
+          'processing': '<span style="color: #409EFF">In Progress</span>',
+          'pending': '<span style="color: #909399">Pending</span>'
+        }
+        return statusMap[status] || status
+      }
+    }
+  ]
+  gantt.templates.task_class = (start, end, task) => {
+    switch (task.status) {
+      case 'completed': return 'completed-task'
+      case 'processing': return 'progress-task'
+      default: return 'pending-task'
+    }
+  }
+  
+  gantt.templates.tooltip_text = (start, end, task) => {
+    return `<b>Name:</b> ${task.text}<br/>
+            <b>Start:</b> ${gantt.date.date_to_str("%Y-%m-%d")(start)}<br/>
+            <b>End:</b> ${gantt.date.date_to_str("%Y-%m-%d")(end)}<br/>
+            <b>Progress:</b> ${(task.progress * 100).toFixed(0)}%<br/>
+            <b>Status:</b> ${task.status}`
+  }
+}
+const loadData = (requirements) => {
+  const tasks = {
+    data: requirements.map(req => ({
+      id: req.requirementId,
+      text: req.title,
+      start_date: new Date(req.createTime),
+      end_date: new Date(req.endTime || new Date().setDate(new Date(req.createTime).getDate() + 7)),
+      progress: req.status === '已完成' ? 1 :
+          req.status === '进行中' ? 0.5 : 0,
+      status: req.status
+    }))
+  }
+  gantt.parse(tasks)
+}
 const rules = {
   title: [{ required: true, message: '请输入标题', trigger: 'blur' }],
   priority: [{ required: true, message: '请选择优先级', trigger: 'change' }],
   status: [{ required: true, message: '请选择状态', trigger: 'change' }],
-  // 添加其他需要验证的字段
+
 }
 const  gettheUser = async () => {
   const res = await getUser(id)
@@ -273,7 +327,7 @@ const  gettheUser = async () => {
 const getReqs = async () => {
   loading.value = true
     const a = await listRequirement(Params.value)
-    requirementsList.value = a.rows
+    reqList.value = a.rows
     total.value = a.total
     loading.value = false
 }
@@ -293,11 +347,11 @@ const clearAll = () => {
   getReqs()
 }
 const addReq = () => {
-  addDialogVisible.value = true
+  addButten.value = true
   reqForm.value = {
     title: '',
     priority: '',
-    status: '待处理',
+    status: 'pending',
     type: '',
     assignedTo: '',
     description: '',
@@ -310,96 +364,81 @@ const addReq = () => {
 // 提交新增
 const submitAdd = async () => {
   if (!addFormRef.value) return
-
-  try {
+  
+  
     await addFormRef.value.validate()
     loading.value = true
     await addRequirement(reqForm.value)
-
-    ElMessage.success('添加成功')
-    addDialogVisible.value = false
+    addButten.value = false
     await getReqs() // 刷新列表
-  } catch (error) {
-    ElMessage.error('添加失败')
-  } finally {
     loading.value = false
-  }
+  
 }
 
 
-const handleView = async (row) => {
-  try {
+const clickV = async (row) => {
+
     loading.value = true
 
     const res = await getRequirementDetail(row.requirementId)
-    console.log(res)
-    currentRequirement.value = res.data
-    originalData.value = JSON.parse(JSON.stringify(res.data)) // 保存原始数据的副本
+    // console.log(res)
+    curReq.value = res.data
+    firstData.value = JSON.parse(JSON.stringify(res.data)) 
     isEdit.value = false
-    if(currentRequirement.value.createBy === username.value){
-      deleteVisible.value = true
-    }
+    if(curReq.value.createBy === username.value){delButten.value = true}
     dialogVisible.value = true
-  } catch (error) {
-    ElMessage.error('获取详情失败')
-  } finally {
+
+
     loading.value = false
-  }
+
 }
-// 修改
-const handleEdit = () => {
+
+const ISEDITT = () => {
   isEdit.value = true
 }
-const cancelEdit = () => {
-  currentRequirement.value = JSON.parse(JSON.stringify(originalData.value))
+const donotEDITT = () => {
+  curReq.value = structuredClone(firstData.value)
   isEdit.value = false
 }
-const submitEdit = async () => {
-  if (!formRef.value) return
+const showGantt = () => {
+  ganttDialogVisible.value = true
 
-  try {
+  nextTick(() => {
+    if (ganttContainer.value) {
+      initGantt()
+      gantt.init(ganttContainer.value)
+      loadData(reqList.value)
+    }
+  })
+}
+const submitEdit = async () => {
+
     await formRef.value.validate()
 
     loading.value = true
-    await updateRequirement(currentRequirement.value)
+    await updateRequirement(curReq.value)
 
-    ElMessage.success('更新成功')
     isEdit.value = false
     dialogVisible.value = false
     await getReqs() // 刷新列表
-  } catch (error) {
-    ElMessage.error('更新失败')
-  } finally {
     loading.value = false
-  }
+
 }
-// 删除
-const handleDelete = (row) => {
-  ElMessageBox.confirm(
-      '确认要删除这个需求吗？',
-      '警告',
-      {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-      }
-  )
-      .then(async () => {
-        try {
+
+const delReq = (row) => {
+
+      then(async () => {
+
           loading.value = true
           await delRequirement(row.requirementId)
-          ElMessage.success('删除成功')
+
           dialogVisible.value = false
           await getReqs() // 刷新列表
-        } catch (error) {
-          ElMessage.error('删除失败')
-        } finally {
+
           loading.value = false
-        }
+
       })
-      .catch(() => {
-        ElMessage.info('已取消删除')
-      })
+
 }
 const sizeP = (val) => {
   Params.value.pageSize = val
@@ -415,6 +454,11 @@ onMounted(() => {
   getReqs()
   gettheUser()
 })
+onUnmounted(() => {
+  if (gantt) {
+    gantt.destructor();
+  }
+});
 </script>
 
 <style scoped>
@@ -479,5 +523,14 @@ onMounted(() => {
 
 :deep(.el-card__body) {
   padding: 20px;
+}
+.completed-task {
+  background-color: #67C23A;
+}
+.progress-task {
+  background-color: #409EFF;
+}
+.pending-task {
+  background-color: #909399;
 }
 </style>
