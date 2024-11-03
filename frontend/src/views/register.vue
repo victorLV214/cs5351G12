@@ -64,7 +64,7 @@
           <span v-else>waiting......</span>
         </el-button>
         <div style="float: right;">
-          <router-link class="link-type" :to="'/login'">log in</router-link>
+          <router-link class="link-type" :to="'/login'">Already have an account? log in</router-link>
         </div>
       </el-form-item>
     </el-form>
