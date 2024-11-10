@@ -1,10 +1,10 @@
 <template>
   <div>
     <h1>Project Plan</h1>
-
+    <div class="task-form">
     <el-form :model="taskForm" ref="taskForm" label-width="120px" class="task-form">
       <el-form-item label="Task Name" required>
-        <el-input v-model="taskForm.name" placeholder="Enter task name" />
+        <el-input v-model="taskForm.name" placeholder="Enter task name" type="text"  clearable style="width: 200px"/>
       </el-form-item>
       <el-form-item label="Assigned To" required>
         <el-select v-model="taskForm.assignedTo" placeholder="Select assignee">
@@ -23,7 +23,7 @@
         <el-button type="primary" @click="addTask">Add Task</el-button>
       </el-form-item>
     </el-form>
-
+      </div>
     <el-table :data="tasks" style="width: 100%">
       <el-table-column prop="name" label="Task Name" />
       <el-table-column prop="assignedTo" label="Assigned To">
@@ -69,12 +69,21 @@
   </div>
 </template>
 
-<script setup>
+
+<script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { getProject, addProject, delProject } from "@/api/project"; // Project API functions
 import { listProjectMember, addProjectMember, delProjectMember } from "@/api/project/member";
 import {getUser} from "@/api/system/user.js"; // Member API functions
+import{useRoute} from "vue-router";
+import {listRequirement} from "@/api/project/requirements.js";
+import * as echarts from 'echarts'
 
+
+const projectInfo = ref({})
+const route = useRoute()
+const projectId=route.params.id
+const memberList = ref([])
 const taskForm = ref({
   name: '',
   assignedTo: '',
@@ -86,9 +95,7 @@ const memberForm = ref({
   email: '',
 });
 
-const tasks = ref([]);
-const memberList = ref([]);
-const projectId=1 /* insert logic to retrieve project ID */;
+const tasks = ref([]);/* insert logic to retrieve project ID */
 
 // Fetch project details and associated tasks
 const fetchProjectDetails = async () => {
@@ -130,7 +137,7 @@ const addTask = async () => {
       projectId,
     };
     await addProject(newTask); // Adjust according to your API structure
-    fetchProjectDetails(); // Refresh task list
+    await fetchProjectDetails(); // Refresh task list
     resetTaskForm();
   } catch (error) {
     console.error("Failed to add task:", error);
@@ -150,7 +157,7 @@ const resetTaskForm = () => {
 const deleteTask = async (taskId) => {
   try {
     await delProject(taskId); // Adjust delete method if necessary
-    fetchProjectDetails(); // Refresh task list
+    await fetchProjectDetails(); // Refresh task list
   } catch (error) {
     console.error("Failed to delete task:", error);
   }
