@@ -133,3 +133,21 @@ export function deptTreeSelect() {
     method: 'get'
   })
 }
+
+// 查询对应用户收到的通知列表
+export function userNoticeList(userId){
+  return request({
+    url: '/system/user/notice/list' + userId,
+    method: 'get'
+  })
+}
+
+// 设置用户的通知阅读状态
+export function setUserNoticeStatus(data){
+  return request({
+    url: '/system/user/notice/status',
+    method: 'put',
+    params: data
+  })
+}
+
