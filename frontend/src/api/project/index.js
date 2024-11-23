@@ -51,3 +51,9 @@ export function exportProject(query) {
         params: query
     })
 }
+export function getProjectStatistics(projectId) {
+    return request({
+        url: `/dev-api/project/statistics/${projectId}`,
+        method: 'get'
+    })
+}
