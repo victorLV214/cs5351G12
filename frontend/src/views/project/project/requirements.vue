@@ -85,7 +85,10 @@
         <el-input v-model="reqForm.title" placeholder="title"/>
       </el-form-item><el-form-item label="priority" prop="priority"><el-select v-model="reqForm.priority" placeholder="priority"><el-option label="high" value="1" /><el-option label="medium" value="2" />         <el-option label="low" value="3" /></el-select>
     </el-form-item>
-
+      <el-form-item label="DueDate" prop="dueDate">
+        <el-date-picker v-model="reqForm.dueDate" type="datetime" placeholder="Select due date" format="YYYY-MM-DD HH:mm:ss" value-format="YYYY-MM-DD HH:mm:ss"
+        />
+      </el-form-item>
       <el-form-item label="type" prop="type"><el-input v-model="reqForm.type" placeholder="type"/></el-form-item>
 
       <el-form-item label="assignedTo" prop="assignedTo"><el-input v-model="reqForm.assignedTo" placeholder="assignedTo"/></el-form-item>
@@ -148,6 +151,7 @@ const reqForm = ref({
   type: '',
   assignedTo: '',
   description: '',
+  dueDate: '',
   remarks: '',
   projectId: projectId,
   delFlag: 1,
