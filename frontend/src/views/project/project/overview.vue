@@ -1,73 +1,43 @@
 <template>
   <div class="cards-container">  <el-card class="project-info-card">
-    <template #header>
-      <div class="card-header">
-        <span class="title">basic info</span>
-        <span class="status-tag">{{ projectInfo.status }}</span>
+    <template #header><div class="card-header"><span class="title">basic info</span><span class="status-tag">{{ projectInfo.status }}</span>
       </div>
     </template>
-    <div class="info-content">
-      <div class="info-row">
-        <div class="info-item">
-          <span class="label">projectName:</span>
-          <span class="value">{{ projectInfo.projectName }}</span>
-        </div>
-        <div class="info-item">
-          <span class="label">projectCode:</span>
-          <span class="value">{{ projectInfo.projectCode }}</span>
-        </div>
+    <div class="info-content"><div class="info-row"><div class="info-item">
+        <span class="label">projectName:</span><span class="value">{{ projectInfo.projectName }}</span>
+    </div>
+        <div class="info-item"><span class="label">projectCode:</span><span class="value">{{ projectInfo.projectCode }}</span></div>
+      </div><div class="info-row"><div class="info-item"><span class="label">startDate:</span><span class="value">{{ projectInfo.startDate }}</span>
+        </div><div class="info-item"><span class="label">expectedEndDate:</span><span class="value">{{ projectInfo.expectedEndDate }}</span></div>
       </div>
       <div class="info-row">
-        <div class="info-item">
-          <span class="label">startDate:</span>
-          <span class="value">{{ projectInfo.startDate }}</span>
-        </div>
-        <div class="info-item">
-          <span class="label">expectedEndDate:</span>
-          <span class="value">{{ projectInfo.expectedEndDate }}</span>
-        </div>
-      </div>
-      <div class="info-row">
-        <div class="info-item">
-          <span class="label">completionPercentage:</span>
-          <el-progress
-              :percentage="projectInfo.completionPercentage"
+        <div class="info-item"><span class="label">completionPercentage:</span>
+          <el-progress :percentage="projectInfo.completionPercentage"
 
           />
         </div>
       </div>
 
-      <div class="info-row">
-        <div class="info-item full-width">
-          <span class="label">description:</span>
-          <span class="value">{{ projectInfo.description }}</span>
-        </div>
+      <div class="info-row"><div class="info-item full-width">
+        <span class="label">description:</span><span class="value">{{ projectInfo.description }}</span>
+      </div>
       </div>
     </div>
   </el-card>
     <el-card class="chart-card">
       <template #header>
         <div class="card-header">
-          <span class="title">static</span>
-        </div>
-      </template>
+          <span class="title">static</span></div></template>
       <div ref="chart1" style="height: 300px;"></div>
     </el-card></div>
   <div class="cards-container">
   <el-card class="countdown-card">
     <template #header>
-      <div class="card-header">
-        <span class="title">Time remaining</span>
-      </div>
+      <div class="card-header"><span class="title">Time remaining</span></div>
     </template>
     <div class="Timer">
-      <div class="Timerinfo">
-        <div class="time-remaining">
-          <span class="days">{{ times1 }}</span>
-        </div>
-        <div class="calendar-container">
-          <el-calendar v-model="currentDate" />
-        </div>
+      <div class="Timerinfo"><div class="time-remaining"><span class="days">{{ times1 }}</span></div><div class="calendar-container">
+        <el-calendar v-model="currentDate" /></div>
       </div>
     </div>
 
@@ -135,7 +105,7 @@ const getInfo =  async () => {
     times1=day
   }
 }
-const getRequirementList = async () => {
+const getRList = async () => {
   const requirementListGet = await listRequirement(
       {projectId:projectId}
   )
@@ -157,9 +127,11 @@ const getRequirementList = async () => {
 }
 const getMembers = async () => {
 
-
-    const res = await listProjectMember(projectId)
-  // console.log(res)
+console.log(projectId)
+  const res = await listProjectMember({
+    projectId: projectId
+  })
+  console.log(res)
     memberList.value = res.rows
 
   const details = []
@@ -199,11 +171,11 @@ const initChart = (statsData) => {
     },
     yAxis: {
       type: 'value',
-      name: '需求数量'
+      name: 'requirments'
     },
     series: [
       {
-        name: '需求数量',
+        name: 'requirments',
         type: 'bar',
         data: Object.values(statsData),
         itemStyle: {
@@ -222,85 +194,12 @@ const initChart = (statsData) => {
 
 onMounted(() => {
   getInfo()
-  getRequirementList()
+  getRList()
   getMembers()
 })
 
 </script>
 
 <style scoped>
-
-.countdown-card{
-  flex: 0 0 45%; /* 设置固定宽度为50% */
-  max-width: 50%;
-
-}
-.member-card{
-  flex: 0 0 45%; /* 设置固定宽度为50% */
-  max-width: 50%;
-}
-.project-info-card, .chart-card {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.cards-container {
-  display: flex;
-  gap: 20px;
-  margin-bottom: 20px;
-  align-items: stretch;
-}
-
-.title {
-  font-size: 16px;
-  font-weight: bold;
-}
-
-.status-tag {
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 12px;
-}
-
-
-
-.info-content {
-  padding: 10px 0;
-}
-
-.info-row {
-  display: flex;
-  margin-bottom: 15px;
-}
-
-.info-item {
-  flex: 1;
-  display: flex;
-  align-items: center;
-}
-
-.info-item.full-width {
-  flex: 2;
-}
-
-.label {
-  color: #606266;
-  margin-right: 10px;
-  min-width: 80px;
-}
-
-.value {
-  color: #303133;
-}
-
-
-
-:deep(.el-progress) {
-  width: 200px;
-}
+@import "over.scss";
 </style>

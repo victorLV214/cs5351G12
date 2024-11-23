@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container home">
+  <div class="app-container design1">
     <el-row :gutter="20"><el-col :xs="24" :sm="4" :md="4" :lg="4.8" :xl="4.8" v-for="(item, index) in projectDaat" :key="index">
         <el-card class="box-card">
           <div class="card-header"><span>{{ item.title }}</span></div><div class="ss">{{ item.value }}</div></el-card>
@@ -8,12 +8,10 @@
     <el-row :gutter="20" style="margin-top: 20px;">
       <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
         <el-card class="box-card">
-          <template #header><div class="card-header">
-              <span>Team member activity level</span>
+          <template #header><div class="card-header"><span>Team member activity level</span>
           </div>
           </template><div ref="chartR" style="height: 300px;"></div></el-card>
-      </el-col><el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12"><el-card class="box-card"><template #header>
-            <div class="card-header"><span>Complete task statistics this week</span>
+      </el-col><el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12"><el-card class="box-card"><template #header><div class="card-header"><span>Complete task statistics this week</span>
             </div>
     </template>
         <div ref="weekChart" style="height: 300px;"></div></el-card></el-col></el-row><el-row :gutter="20" style="margin-top: 20px;">
@@ -45,10 +43,6 @@ import { ref, onMounted, onUnmounted, computed } from 'vue'
 import * as echarts from 'echarts'
 import { ElMessage } from 'element-plus'
 import { listItem } from '@/api/project/item'
-import { listProject } from '@/api/project/index'
-import {listProjectMember} from "@/api/project/member.js";
-import useUserStore from "@/store/modules/user.js";
-import {listUser} from "@/api/system/user.js";
 
 let activeChart1 = null
 let taskChart1 = null
@@ -57,11 +51,15 @@ let projectChart = null
 const myWorkItems = ref([])
 const projectDaat = ref([])
 const projects = ref([])
+
+
+import { listProject } from '@/api/project/index'
+import {listProjectMember} from "@/api/project/member.js";
+import useUserStore from "@/store/modules/user.js";
+import {listUser} from "@/api/system/user.js";
 const chartR = ref(null)
 const weekChart = ref(null)
 const projectC = ref(null)
-
-
 
 const getData = async () => {
     const allList = await listProject({
@@ -72,23 +70,25 @@ const getData = async () => {
       const projectList = allList.rows
 
     let ongoingProjects = 0
-    for (let i = 0; i < projectList.length; i++) {
-    if (projectList[i].status === '进行中') {
+  let endProject = 0
+  let planProjects = 0
+
+  for (let i = 0; i < projectList.length; i++) {
+    if (projectList[i].status === '进行中' || projectList[i].status === 'ongoing') {
       ongoingProjects++
     }
   }
-    let planProjects = 0
-    for (let i = 0; i < projectList.length; i++) {
-    if (projectList[i].status === '规划中') {
+  for (let i = 0; i < projectList.length; i++) {
+    if (projectList[i].status === '规划中' || projectList[i].status === 'planning') {
       planProjects++
-    }}
-
-      let endProject = 0
-    for (let i = 0; i < projectList.length; i++) {
-    if (projectList[i].status === '已完成') {
-      endProject++
-      }
     }
+  }
+  for (let i = 0; i < projectList.length; i++) {
+    if (projectList[i].status === '已完成' || projectList[i].status === 'completed') {
+      endProject++
+    }
+  }
+
 
 
 
@@ -113,7 +113,7 @@ const getData = async () => {
   for (let i = 0; i < allTasks.rows.length; i++) {
     const deadline = new Date(allTasks.rows[i].dueDate)
 
-    if (allTasks.rows[i].status === '已完成') {
+    if (allTasks.rows[i].status === '已完成' || allTasks.rows[i].status === 'completed') {
       continue
     }
     if (deadline <= oneWeek && deadline >= now) {
@@ -123,8 +123,8 @@ const getData = async () => {
 
 
   projectDaat.value = [
-    { title: '进行中的项目', value: ongoingProjects }, { title: '规划中项目', value: planProjects }, { title: '已完成项目', value: endProject },
-    { title: '未完成任务', value: notFinishT },{ title: '近期任务', value: nearT }
+    { title: 'running', value: ongoingProjects }, { title: 'planning', value: planProjects }, { title: 'completed', value: endProject },
+    { title: 'unfinish', value: notFinishT },{ title: 'recently', value: nearT }
   ]
 
   projects.value = projectList
@@ -336,8 +336,8 @@ const getWeeklyTasksData = async () => {
       }
 
   } catch (error) {
-    ElMessage.error('获取周任务统计失败')
-    console.error('获取周任务统计失败:', error)
+    ElMessage.error('1', error)
+    console.error('2', error)
   }
 }
 
@@ -367,7 +367,7 @@ const calFun = async (project) => {
     const progress = Math.round((completedTasks.length / allTasks.length) * 100)
     return progress
   } catch (error) {
-    console.error('计算项目进度失败:', error)
+    console.error('', error)
     return 0
   }
 }
@@ -543,118 +543,6 @@ onUnmounted(() => {
 })
 </script>
 
-<style scoped lang="scss">
-.home {
-  .box-card {
-    margin-bottom: 20px;
-  }
-
-  .card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .ss {
-    font-size: 24px;
-    font-weight: bold;
-    color: #409EFF;
-    text-align: center;
-    margin-top: 10px;
-  }
-
-  .project-item {
-    margin-bottom: 20px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #eee;
-
-    &:last-child {
-      border-bottom: none;
-      margin-bottom: 0;
-      padding-bottom: 0;
-    }
-
-    h3 {
-      margin: 0 0 15px 0;
-      font-size: 16px;
-    }
-
-    .project-metrics {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 10px;
-      flex-wrap: wrap;
-      gap: 10px;
-
-      span {
-        font-size: 14px;
-        color: #606266;
-      }
-    }
-  }
-}
-.project-overview-card {
-  margin-bottom: 20px;
-}
-
-.project-overview-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.project-overview-switcher {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.project-overview-switcher .el-icon {
-  cursor: pointer;
-}
-
-.project-overview-switcher .switcher-disabled {
-  color: var(--el-text-color-placeholder);
-  cursor: not-allowed;
-}
-
-.project-overview-content {
-  padding: 10px 0;
-}
-
-.project-overview-title {
-  margin-bottom: 15px;
-  font-size: 16px;
-  font-weight: bold;
-}
-
-.project-overview-progress {
-  margin: 20px 0;
-}
-
-.project-overview-metrics {
-  margin-top: 20px;
-  display: flex;
-  justify-content: space-between;
-}
-
-.project-metric-item {
-  text-align: center;
-  flex: 1;
-}
-
-.metric-label {
-  display: block;
-  font-size: 14px;
-  color: var(--el-text-color-secondary);
-}
-
-.metric-value {
-  display: block;
-  font-size: 20px;
-  font-weight: bold;
-  margin-top: 5px;
-  color: var(--el-color-primary);
-}
-
+<style lang="scss">
+@import 'design1.scss';
 </style>

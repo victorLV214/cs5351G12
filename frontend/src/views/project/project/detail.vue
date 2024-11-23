@@ -23,6 +23,12 @@
           <span>需求管理</span>
         </el-menu-item>
 
+        <el-menu-item index="iterations">
+          <el-icon><Refresh /></el-icon>
+          <span>迭代管理</span>
+        </el-menu-item>
+
+
         <el-menu-item index="defects">
           <el-icon><Warning /></el-icon>
           <span>缺陷管理</span>
@@ -33,10 +39,7 @@
           <span>工作项</span>
         </el-menu-item>
 
-        <el-menu-item index="iterations">
-          <el-icon><Refresh /></el-icon>
-          <span>迭代管理</span>
-        </el-menu-item>
+
 
         <el-menu-item index="releases">
           <el-icon><Upload /></el-icon>
