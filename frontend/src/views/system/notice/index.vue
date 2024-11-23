@@ -95,6 +95,7 @@
          </el-table-column>
          <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
             <template #default="scope">
+               <el-button link type="primary" icon="View" @click="handleView(scope.row)" v-hasPermi="['system:notice:query']">查看</el-button>
                <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:notice:edit']">修改</el-button>
                <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:notice:remove']" >删除</el-button>
             </template>
@@ -108,6 +109,26 @@
          v-model:limit="queryParams.pageSize"
          @pagination="getList"
       />
+
+      <!--     查看公告对话框
+          1. 显示标题
+          2. 显示内容
+      -->
+     <el-dialog
+         v-model="dialogVisible"
+         :title= "noticeTitle"
+         width="500"
+         :before-close="handleClose"
+     >
+       <div v-html="noticeContent"></div>
+       <template #footer>
+         <div class="dialog-footer">
+           <el-button type="" @click="handleNoticeConfirm()">
+             我已阅读
+           </el-button>
+         </div>
+       </template>
+     </el-dialog>
 
       <!-- 添加或修改公告对话框 -->
       <el-dialog :title="title" v-model="open" width="780px" append-to-body>
@@ -160,7 +181,7 @@
 
 <script setup name="Notice">
 import { listNotice, getNotice, delNotice, addNotice, updateNotice } from "@/api/system/notice";
-
+import {userNoticeList, setUserNoticeStatus} from "@/api/system/user";
 const { proxy } = getCurrentInstance();
 const { sys_notice_status, sys_notice_type } = proxy.useDict("sys_notice_status", "sys_notice_type");
 
@@ -173,6 +194,12 @@ const single = ref(true);
 const multiple = ref(true);
 const total = ref(0);
 const title = ref("");
+const dialogVisible = ref(false)
+const noticeTitle = ref("")
+const noticeContent = ref("")
+const digNoticeId = ref()
+const digType = ref()
+
 
 const data = reactive({
   form: {},
@@ -278,6 +305,40 @@ function handleDelete(row) {
     proxy.$modal.msgSuccess("删除成功");
   }).catch(() => {});
 }
+
+function handleView(row){
+  const noticeIds = row.noticeId || ids.value
+  digNoticeId.value = noticeIds.value;
+  digType.value = row.noticeType;
+  getNotice(noticeIds).then(response =>{
+    dialogVisible.value = true;
+    noticeContent.value = response.data.noticeContent;
+    noticeTitle.value = response.data.noticeTitle;
+  }).catch(() => {});
+}
+import  useUserStore  from '@/store/modules/user';
+function handleNoticeConfirm(){
+  // 1. 获取此通知公告的类型
+  console.log("1111" + digNoticeId.toString());
+  console.log("2222" + digType.toString());
+  // 2. 如果是通知，则查询用户的通知列表
+  // 现在的问题是userId获取不了
+  if(digType.value === 1 || digType.value === "1"){
+    const userStore = useUserStore();
+    const userId = userStore.id;
+    console.log("333" + userId);
+    // 可以获取到了
+    // 2.1 查询所有 该用户的通知列表
+    // 2.2 遍历找到对应的列表
+    // 2.3 如果没有读，则把他设为已读
+    // 2.4 然后更新红点的数量
+  }
+  // 3. 已读后，红圈中的数量应该重新计算, 这个如何实现呢
+  // last. 关闭窗口
+  dialogVisible.value = false
+}
+
+
 
 getList();
 </script>
