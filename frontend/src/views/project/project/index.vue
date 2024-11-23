@@ -30,11 +30,14 @@
               </el-button>
               <template #dropdown>
                 <el-dropdown-menu>
+                  <el-dropdown-item @click="handleDetails(scope.row)">
+                    <el-icon><Document /></el-icon> detail
+                  </el-dropdown-item>
                   <el-dropdown-item @click="handleEdit(scope.row)">
                     <el-icon><EditPen /></el-icon> edit
                   </el-dropdown-item>
-                  <el-dropdown-item @click="handleDetails(scope.row)">
-                    <el-icon><Document /></el-icon> detail
+                  <el-dropdown-item @click="handleDelete(scope.row)">
+                    <el-icon><Delete /></el-icon> delete
                   </el-dropdown-item>
                 </el-dropdown-menu>
               </template>
@@ -44,7 +47,7 @@
       </el-table>
     </el-card>
     <el-dialog v-model="projectFormVisible" :title="projectFormTitle" width="600px" :close-on-click-modal="false">
-      <el-form ref="formRef" :model="formDataForAddProject" :rules="rulesForForm" label-width="120px">
+      <el-form ref="formRef" :model="formDataForAddProject" :rules="rulesForForm" label-width="150px">
         <el-form-item label="projectName" prop="projectName">
           <el-input v-model="formDataForAddProject.projectName" placeholder="projectName"/>
         </el-form-item>
@@ -105,7 +108,7 @@
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button @click="projectFormVisible = false">cancle</el-button>
+          <el-button @click="projectFormVisible = false">cancel</el-button>
           <el-button type="primary" @click="submitForm">confirm</el-button>
         </div>
       </template>
@@ -177,7 +180,98 @@
       </div>
     </el-dialog>
 
-
+    <el-dialog v-model="projectUpdateFormVisible" :title="projectUpdateFormTitle" width="600px" :close-on-click-modal="false">
+      <el-form ref="updateFormRef" :model="formDataForUpdateProject" :rules="rulesForUpdateForm" label-width="150px">
+        <el-form-item label="projectName" prop="projectName">
+          <el-input v-model="formDataForUpdateProject.projectName" placeholder="projectName"/>
+        </el-form-item>
+        <el-form-item label="projectCode" prop="projectCode">
+          <el-input v-model="formDataForUpdateProject.projectCode" placeholder="projectCode"/>
+        </el-form-item>
+        <el-form-item label="description" prop="description">
+          <el-input
+              v-model="formDataForUpdateProject.description"
+              type="textarea"
+              placeholder="description"/>
+        </el-form-item>
+        <el-form-item label="startDate" prop="startDate">
+          <el-date-picker
+              v-model="formDataForUpdateProject.startDate"
+              type="date"
+              placeholder="choose startDate"
+              format="YYYY-MM-DD"
+              value-format="YYYY-MM-DD"/>
+        </el-form-item>
+        <el-form-item label="expectedEndDate" prop="expectedEndDate">
+          <el-date-picker
+              v-model="formDataForUpdateProject.expectedEndDate"
+              type="date"
+              placeholder="expectedEndDate"
+              format="YYYY-MM-DD"
+              value-format="YYYY-MM-DD"/>
+        </el-form-item>
+        <el-form-item label="actualEndDate" prop="actualEndDate">
+          <el-date-picker
+              v-model="formDataForUpdateProject.actualEndDate"
+              type="date"
+              placeholder="actualEndDate"
+              format="YYYY-MM-DD"
+              value-format="YYYY-MM-DD"/>
+        </el-form-item>
+        <el-form-item label="priority" prop="priority">
+          <el-select v-model="formDataForUpdateProject.priority" placeholder="priority">
+            <el-option label="low" :value="1"/>
+            <el-option label="medium" :value="2"/>
+            <el-option label="high" :value="3"/>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="status" prop="status">
+          <el-select v-model="formDataForUpdateProject.status" placeholder="status">
+            <el-option label="未开始" value="未开始"/>
+            <el-option label="进行中" value="进行中"/>
+            <el-option label="已完成" value="已完成"/>
+            <el-option label="已暂停" value="已暂停"/>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="completionPercentage" prop="completionPercentage">
+          <el-input-number
+              v-model="formDataForUpdateProject.completionPercentage"
+              :precision="1"
+              :step="5"
+              :min="0"
+              :max="100"
+              placeholder="input the completionPercentage"/>
+        </el-form-item>
+        <el-form-item label="budget" prop="budget">
+          <el-input-number
+              v-model="formDataForUpdateProject.budget"
+              :precision="2"
+              :step="1000"
+              :min="0"
+              placeholder="input the budget"/>
+        </el-form-item>
+        <el-form-item label="actualCost" prop="actualCost">
+          <el-input-number
+              v-model="formDataForUpdateProject.actualCost"
+              :precision="2"
+              :step="1000"
+              :min="0"
+              placeholder="input the actualCost"/>
+        </el-form-item>
+        <el-form-item label="remark" prop="remark">
+          <el-input
+              v-model="formDataForUpdateProject.remark"
+              type="textarea"
+              placeholder="remark"/>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="projectUpdateFormVisible = false">cancel</el-button>
+          <el-button type="primary" @click="updateForm">confirm</el-button>
+        </div>
+      </template>
+    </el-dialog>
 
   </div>
 </template>
@@ -186,7 +280,7 @@
 import { ref, onMounted ,reactive} from 'vue'
 
 import { ElMessage } from 'element-plus'
-import { listProject, addProject, getProject } from '@/api/project/index.js'
+import {listProject, addProject, getProject, delProject, updateProject} from '@/api/project/index.js'
 import useUserStore from "@/store/modules/user.js";
 import { listProjectMember } from '@/api/project/member.js'
 import {  EditPen, Delete, InfoFilled, Document, ChatLineSquare, User, Plus, MoreFilled,
@@ -197,8 +291,11 @@ import {getUser} from "@/api/system/user.js";
 
 const currentRow = ref(null)
 const projectFormVisible = ref(false)
+const projectUpdateFormVisible = ref(false)
 const projectFormTitle = ref('')
+const projectUpdateFormTitle = ref('')
 const formRef = ref(null)
+const updateFormRef = ref(null)
 const detailV = ref(false)
 const currentProject = ref(null)
 const currentProjectMembers = ref([])
@@ -213,6 +310,23 @@ const formDataForAddProject = reactive({
   budget: 0,
   remark: '',
   projectManagerId: '',// 项目经理
+})
+const formDataForUpdateProject = reactive({
+  actualCost: 0,
+  actualEndDate: '',
+  budget: 0,
+  completionPercentage: 0.0,
+  delFlag: '0',//0代表存在，2代表删除
+  description: '',
+  expectedEndDate: '',
+  priority: 2,//优先级（1=低，2=中，3=高）
+  projectCode: '',
+  projectId: 0,
+  projectManagerId: '',// 项目经理
+  projectName: '',
+  remark: '',
+  startDate: '',
+  status: '',
 })
 
 
@@ -317,6 +431,7 @@ const getPriorityLabel = (priority) => {
   }
   return priorityMap[priority] || 'unknown'
 }
+
 const rulesForForm = {
   projectName: [
     { required: true, message: '请输入项目名称', trigger: 'blur' }
@@ -333,6 +448,10 @@ const rulesForForm = {
   priority: [
     { required: true, message: '请选择优先级', trigger: 'change' }
   ]
+}
+
+const rulesForUpdateForm = {
+
 }
 
 const projectList = ref([])
@@ -383,9 +502,54 @@ const submitForm = async () => {
   })
 }
 
-const handleEdit = (row) => {
+const updateForm = async () => {
+  if (!updateFormRef.value) return
+  await updateFormRef.value.validate(async (valid) => {
+    if (valid) {
+      try {
+        await updateProject(formDataForUpdateProject)
 
-  console.log('编辑:', row)
+        ElMessage.success('编辑成功')
+        projectUpdateFormVisible.value = false
+        getList() // 刷新列表
+      } catch (error) {
+        ElMessage.error('编辑失败')
+      }
+    }
+  })
+}
+
+const handleEdit = async (row) => {
+  try {
+    const id = row.projectId
+    const projectRes = await getProject(id)
+    formDataForUpdateProject.projectId = id
+
+    projectUpdateFormVisible.value = true
+    projectUpdateFormTitle.value = '编辑项目'
+
+    // 重置表单
+    if (updateFormRef.value) {
+      updateFormRef.value.resetFields()
+    }
+    
+    Object.assign(formDataForUpdateProject, projectRes.data);
+
+  } catch (error) {
+    console.error('获取项目详情失败:', error)
+    ElMessage.error('获取项目详情失败')
+  }
+}
+
+const handleDelete = async (row) => {
+  try {
+    await delProject(row.projectId)
+
+    ElMessage.success('删除成功')
+    getList() // 刷新列表
+  } catch (error) {
+    ElMessage.error('删除失败')
+  }
 }
 
 

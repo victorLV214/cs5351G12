@@ -97,7 +97,32 @@ export const constantRoutes = [
       }
     ]
   },
-
+  {
+    path: '/noticee',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/noticee/index.vue'),
+        name: 'Noticee',
+      }
+    ]
+  },
+  {
+    path: '/dashboard',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/dashboard/index.vue'),
+        name: 'Dashboard',
+        meta: {
+          title: '仪表盘',
+          icon: 'dashboard',
+        }
+      }
+    ]
+  },
   {
     path: '/project',
     component: Layout,
@@ -200,7 +225,8 @@ export const constantRoutes = [
         ]
       }
     ]
-  }
+  },
+
 
 ]
 

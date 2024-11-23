@@ -1,7 +1,7 @@
 <template>
   <el-card class="r-cards">
     <template #header><div class="card-header">
-      <div class="header-left"><span class="title">DEFECTS LIST</span><el-tag class="count-tag" type="info">total {{ total }} defectId</el-tag>
+      <div class="header-left"><span class="title">Defects List</span><el-tag class="count-tag" type="info">total {{ total }} defectId</el-tag>
       </div>
       <div class="addR">
         <el-button type="primary" :icon="Plus" @click="addReq"></el-button>
@@ -12,7 +12,7 @@
     </el-form-item>
 
       <el-form-item>
-        <el-button type="primary" :icon="Search" @click="getReqs">select</el-button><el-button :icon="Refresh" @click="clearAll">Refresh</el-button>
+        <el-button type="primary" :icon="Search" @click="getReqs">Select</el-button><el-button :icon="Refresh" @click="clearAll">Refresh</el-button>
       </el-form-item>
     </el-form>
     </div>
@@ -44,37 +44,37 @@
   </el-card>
 
   <el-dialog
-      v-model="dialogVisible" title="requirement details" width="60%"
+      v-model="dialogVisible" title="Requirement Details" width="60%"
   >
     <el-form ref="formRef" :model="curReq"  label-width="120px">
-      <el-form-item label="requirement ID" prop="requirementId"><span>{{ curReq?.defectId }}</span></el-form-item>
-      <el-form-item label="title" prop="title"><el-input v-model="curReq.title" :disabled="!isEdit"/>
-      </el-form-item><el-form-item label="priority" prop="priority">
+      <el-form-item label="Requirement ID" prop="requirementId"><span>{{ curReq?.defectId }}</span></el-form-item>
+      <el-form-item label="Title" prop="title"><el-input v-model="curReq.title" :disabled="!isEdit"/>
+      </el-form-item><el-form-item label="Priority" prop="priority">
       <el-select v-model="curReq.priority" :disabled="!isEdit">
-        <el-option label="high" value="1" /><el-option label="medium" value="2" /><el-option label="low" value="3" /></el-select>
-    </el-form-item><el-form-item label="status" prop="status">
+        <el-option label="High - 1" value="1" /><el-option label="Medium - 2" value="2" /><el-option label="Low - 3" value="3" /></el-select>
+    </el-form-item><el-form-item label="Status" prop="status">
       <el-select v-model="curReq.status" :disabled="!isEdit"><el-option label="pending" value="待处理" /><el-option label="processing" value="进行中" /><el-option label="fixed" value="已修复" />
       </el-select>
     </el-form-item>
-      <el-form-item label="type" prop="type"><el-input v-model="curReq.type" :disabled="!isEdit"/></el-form-item>
-      <el-form-item label="assignedTo" prop="assignedTo"><el-input v-model="curReq.assignedTo" :disabled="!isEdit"/>
+      <el-form-item label="Type" prop="type"><el-input v-model="curReq.type" :disabled="!isEdit"/></el-form-item>
+      <el-form-item label="Assigned To" prop="assignedTo"><el-input v-model="curReq.assignedTo" :disabled="!isEdit"/>
       </el-form-item>
-      <el-form-item label="description" prop="description"><el-input v-model="curReq.description" type="textarea" :rows="3":disabled="!isEdit"/>
+      <el-form-item label="Description" prop="description"><el-input v-model="curReq.description" type="textarea" :rows="3":disabled="!isEdit"/>
       </el-form-item>
-      <el-form-item label="remarks" prop="remarks">
+      <el-form-item label="Remarks" prop="remarks">
         <el-input v-model="curReq.remarks" type="textarea" :rows="3" :disabled="!isEdit"
         /></el-form-item>
     </el-form><template #footer>
   <span class="dialog-footer">
-    <el-button @click="dialogVisible  = false">cancel</el-button>
-    <el-button v-if="curReq?.createBy === username" type="danger" @click="delReq(curReq)">DEL</el-button>
-    <el-button v-if="!isEdit" type="primary" @click="ISEDITT">EDit</el-button><template v-else><el-button @click="donotEDITT">CALCEL</el-button>
-    <el-button type="primary" @click="submitEdit">SAVE</el-button></template>
+    <el-button @click="dialogVisible  = false">Exit</el-button>
+    <el-button v-if="curReq?.createBy === username" type="danger" @click="delReq(curReq)">Delete</el-button>
+    <el-button v-if="!isEdit" type="primary" @click="ISEDITT">Edit</el-button><template v-else><el-button @click="donotEDITT">Cancel</el-button>
+    <el-button type="primary" @click="submitEdit">Save</el-button></template>
   </span></template>
   </el-dialog>
 
-  <el-dialog v-model="addButten" title="add new requirements" width="60%">
-    <el-form ref="addFormRef" :model="reqForm"  label-width="120px">
+  <el-dialog v-model="addButten" title="Add New Requirements" width="60%">
+    <el-form ref="addFormRef" :model="reqForm" :rules="rulesForAdd" label-width="120px">
       <el-form-item label="Title" prop="title">
         <el-input v-model="reqForm.title" placeholder="Please input defect title"/>
       </el-form-item>
@@ -115,8 +115,8 @@
     </el-form>
 
     <template #footer>
-    <span class="dialog-footer"><el-button @click="addButten = false">cancel</el-button>
-      <el-button type="primary" @click="submitAdd">ADD</el-button>
+    <span class="dialog-footer"><el-button @click="addButten = false">Cancel</el-button>
+      <el-button type="primary" @click="submitAdd">Add</el-button>
     </span>
     </template>
   </el-dialog>
@@ -327,7 +327,21 @@ onMounted(() => {
   gettheUser()
 })
 
+const rulesForAdd = {
+  severity: [
+    { required: true, message: '请选择严重程度', trigger: 'change' }
+  ],
+  status: [
+    { required: true, message: '请选择缺陷状态', trigger: 'change' }
+  ],
+  priority: [
+    { required: true, message: '请选择缺陷优先级', trigger: 'change' }
+  ],
+  title: [
+    { required: true, message: '请输入缺陷标题', trigger: 'blur' }
+  ]
 
+}
 
 </script>
 
