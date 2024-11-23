@@ -42,7 +42,6 @@ public class SysTaskController extends BaseController {
      * 查询任务列表
      */
     @ApiOperation("任务列表")
-    @PreAuthorize("@ss.hasPermi('dev-api:project:task:list')")
     @GetMapping("/list")
     public TableDataInfo list(SysTask sysTask) {
         startPage();
@@ -54,7 +53,6 @@ public class SysTaskController extends BaseController {
      * 导出任务列表
      */
     @ApiOperation("导出任务")
-    @PreAuthorize("@ss.hasPermi('dev-api:project:task:export')")
     @Log(title = "任务", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, SysTask sysTask) {
@@ -67,7 +65,6 @@ public class SysTaskController extends BaseController {
      * 获取任务详细信息
      */
     @ApiOperation("查询任务")
-    @PreAuthorize("@ss.hasPermi('dev-api:project:task:query')")
     @GetMapping(value = "/{taskId}")
     public AjaxResult getInfo(@PathVariable("taskId") Long taskId) {
         return success(sysTaskService.selectSysTaskByTaskId(taskId));

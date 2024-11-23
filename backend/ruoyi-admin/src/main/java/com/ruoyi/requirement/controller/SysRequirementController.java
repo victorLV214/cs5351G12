@@ -44,7 +44,6 @@ public class SysRequirementController extends BaseController
      * 查询需求列表
      * GET /dev-api/project/requirement/list
      */
-    @PreAuthorize("@ss.hasPermi('system:requirement:list')")
     @GetMapping("/list")
     @ApiOperation(value = "查询需求列表")
     public TableDataInfo list(SysRequirement sysRequirement)
@@ -59,7 +58,6 @@ public class SysRequirementController extends BaseController
      * 导出需求列表
      * GET /dev-api/project/requirement/export
      */
-    @PreAuthorize("@ss.hasPermi('system:requirement:export')")
     @Log(title = "需求", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ApiOperation(value = "导出需求列表")
@@ -74,7 +72,6 @@ public class SysRequirementController extends BaseController
      * 获取需求详细信息
      * GET /dev-api/project/requirement/{reqId}
      */
-    @PreAuthorize("@ss.hasPermi('system:requirement:query')")
     @GetMapping(value = "/{reqId}")
     @ApiOperation(value = "获取需求详细信息")
     public AjaxResult getInfo(@PathVariable("reqId") Long requirementId)
@@ -86,7 +83,6 @@ public class SysRequirementController extends BaseController
      * 新增需求
      * POST /dev-api/project/requirement
      */
-    @PreAuthorize("@ss.hasPermi('system:requirement:add')")
     @Log(title = "需求", businessType = BusinessType.INSERT)
     @PostMapping
     @ApiOperation(value = "新增需求")
@@ -102,7 +98,6 @@ public class SysRequirementController extends BaseController
      * 修改需求
      *  PUT  /dev-api/project/requirement
      */
-    @PreAuthorize("@ss.hasPermi('system:requirement:edit')")
     @Log(title = "需求", businessType = BusinessType.UPDATE)
     @PutMapping
     @ApiOperation(value = "修改需求")
@@ -115,7 +110,6 @@ public class SysRequirementController extends BaseController
      * 删除需求
      * DELETE  /dev-api/project/{id}/requirement/{requirementIds}
      */
-    @PreAuthorize("@ss.hasPermi('system:requirement:remove')")
     @Log(title = "需求", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{requirementIds}")
     @ApiOperation(value = "删除需求")

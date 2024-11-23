@@ -42,7 +42,6 @@ public class SysProjectController extends BaseController {
      * 查询项目列表
      */
     @ApiOperation("项目列表")
-    @PreAuthorize("@ss.hasPermi('dev-api:project:list')")
     @GetMapping("/list")
     public TableDataInfo list(SysProject sysProject) {
         startPage();
@@ -54,7 +53,6 @@ public class SysProjectController extends BaseController {
      * 导出项目列表
      */
     @ApiOperation("导出项目")
-    @PreAuthorize("@ss.hasPermi('dev-api:project:export')")
     @Log(title = "项目管理", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, SysProject sysProject) {
@@ -67,7 +65,6 @@ public class SysProjectController extends BaseController {
      * 获取项目详细信息
      */
     @ApiOperation("查询项目")
-    @PreAuthorize("@ss.hasPermi('dev-api:project:query')")
     @GetMapping(value = "/{projectId}")
     public AjaxResult getInfo(@PathVariable("projectId") Long projectId) {
         return success(sysProjectService.selectSysProjectByProjectId(projectId));
@@ -77,7 +74,6 @@ public class SysProjectController extends BaseController {
      * 新增项目
      */
     @ApiOperation("新增项目")
-    @PreAuthorize("@ss.hasPermi('dev-api:project:add')")
     @Log(title = "项目管理", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody SysProject sysProject) {
@@ -91,7 +87,6 @@ public class SysProjectController extends BaseController {
      * 修改项目
      */
     @ApiOperation("修改项目")
-    @PreAuthorize("@ss.hasPermi('dev-api:project:edit')")
     @Log(title = "项目管理", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody SysProject sysProject) {
@@ -105,7 +100,6 @@ public class SysProjectController extends BaseController {
      * 删除项目
      */
     @ApiOperation("删除项目")
-    @PreAuthorize("@ss.hasPermi('dev-api:project:remove')")
     @Log(title = "项目管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{projectIds}")
     public AjaxResult remove(@PathVariable Long[] projectIds) {
@@ -116,7 +110,6 @@ public class SysProjectController extends BaseController {
      * 获取指定项目ID的统计信息
      */
     @ApiOperation("获取项目统计信息")
-    @PreAuthorize("@ss.hasPermi('dev-api:project:statistics')")
     @GetMapping("/statistics/{projectId}")
     public AjaxResult getProjectStatistics(@PathVariable("projectId") Long projectId) {
         return success(sysProjectService.getProjectStatisticsByProjectId(projectId));

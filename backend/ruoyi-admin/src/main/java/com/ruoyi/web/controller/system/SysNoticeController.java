@@ -45,7 +45,6 @@ public class SysNoticeController extends BaseController
      * 获取通知公告列表
      * GET /system/notice/list
      */
-    @PreAuthorize("@ss.hasPermi('system:notice:list')")
     @GetMapping("/list")
     @ApiOperation(value = "获取通知公告列表")
     public TableDataInfo list(SysNotice notice)
@@ -59,7 +58,6 @@ public class SysNoticeController extends BaseController
      * 根据通知公告编号获取详细信息
      * GET /system/notice/{noticeId}
      */
-    @PreAuthorize("@ss.hasPermi('system:notice:query')")
     @GetMapping(value = "/{noticeId}")
     @ApiOperation(value = "获取通知公告详细信息")
     public AjaxResult getInfo(@PathVariable Long noticeId)
@@ -73,7 +71,6 @@ public class SysNoticeController extends BaseController
      *
      * @param sysNoticeDTO 通知数据传输对象，包含通知内容和接收通知的用户ID列表
      */
-    @PreAuthorize("@ss.hasPermi('system:notice:add')")
     @Log(title = "通知公告", businessType = BusinessType.INSERT)
     @PostMapping
     @ApiOperation(value = "新增通知公告")
@@ -118,7 +115,6 @@ public class SysNoticeController extends BaseController
      * 修改通知公告
      * PUT /system/notice
      */
-    @PreAuthorize("@ss.hasPermi('system:notice:edit')")
     @Log(title = "通知公告", businessType = BusinessType.UPDATE)
     @PutMapping
     @ApiOperation(value = "修改通知公告")
@@ -132,7 +128,6 @@ public class SysNoticeController extends BaseController
      * 删除通知公告
      * DELETE /system/notice/{noticeIds}
      */
-    @PreAuthorize("@ss.hasPermi('system:notice:remove')")
     @Log(title = "通知公告", businessType = BusinessType.DELETE)
     @DeleteMapping("/{noticeIds}")
     @ApiOperation(value = "删除通知公告")

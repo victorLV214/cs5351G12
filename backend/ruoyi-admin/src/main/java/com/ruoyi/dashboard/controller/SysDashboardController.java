@@ -26,7 +26,6 @@ public class SysDashboardController extends BaseController {
     private ISysDashboardService dashboardService;
 
     @ApiOperation("获取仪表盘数据")
-    @PreAuthorize("@ss.hasPermi('dev-api:dashboard')")
     @GetMapping("/dashboard")
     public AjaxResult getDashboard() {
         return success(dashboardService.getDashboardData());

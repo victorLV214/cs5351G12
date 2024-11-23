@@ -43,7 +43,6 @@ public class SysIterationController extends BaseController
     /**
      * 查询迭代列表
      */
-    @PreAuthorize("@ss.hasPermi('dev-api:project:iteration:list')")
     @GetMapping("/list")
     @ApiOperation(value = "查询迭代列表")
     public TableDataInfo list(SysIteration sysIteration)
@@ -56,7 +55,6 @@ public class SysIterationController extends BaseController
     /**
      * 导出迭代列表
      */
-    @PreAuthorize("@ss.hasPermi('dev-api:project:iteration:export')")
     @Log(title = "迭代", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ApiOperation(value = "导出迭代列表")
@@ -70,7 +68,6 @@ public class SysIterationController extends BaseController
     /**
      * 获取迭代详细信息
      */
-    @PreAuthorize("@ss.hasPermi('dev-api:project:iteration:query')")
     @GetMapping(value = "/{iterationId}")
     @ApiOperation(value = "获取迭代详细信息")
     public AjaxResult getInfo(@PathVariable("iterationId") Long iterationId)
@@ -81,7 +78,6 @@ public class SysIterationController extends BaseController
     /**
      * 新增迭代
      */
-    @PreAuthorize("@ss.hasPermi('dev-api:project:iteration:add')")
     @Log(title = "迭代", businessType = BusinessType.INSERT)
     @PostMapping
     @ApiOperation(value = "新增迭代")
@@ -96,7 +92,6 @@ public class SysIterationController extends BaseController
     /**
      * 修改迭代
      */
-    @PreAuthorize("@ss.hasPermi('dev-api:project:iteration:edit')")
     @Log(title = "迭代", businessType = BusinessType.UPDATE)
     @PutMapping
     @ApiOperation(value = "修改迭代")
@@ -108,7 +103,6 @@ public class SysIterationController extends BaseController
     /**
      * 删除迭代
      */
-    @PreAuthorize("@ss.hasPermi('dev-api:project:iteration:remove')")
     @Log(title = "迭代", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{iterationIds}")
     @ApiOperation(value = "删除迭代")

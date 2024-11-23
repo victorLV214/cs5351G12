@@ -42,7 +42,6 @@ public class SysWorkItemController extends BaseController {
      * 查询工作项列表
      */
     @ApiOperation("工作项列表")
-    @PreAuthorize("@ss.hasPermi('dev-api:project:item:list')")
     @GetMapping("/list")
     public TableDataInfo list(SysWorkItem sysWorkItem) {
         startPage();
@@ -54,7 +53,6 @@ public class SysWorkItemController extends BaseController {
      * 导出工作项列表
      */
     @ApiOperation("导出工作项")
-    @PreAuthorize("@ss.hasPermi('dev-api:project:item:export')")
     @Log(title = "工作项", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, SysWorkItem sysWorkItem) {
@@ -67,7 +65,6 @@ public class SysWorkItemController extends BaseController {
      * 获取工作项详细信息
      */
     @ApiOperation("查询工作项")
-    @PreAuthorize("@ss.hasPermi('dev-api:project:item:query')")
     @GetMapping(value = "/{workItemId}")
     public AjaxResult getInfo(@PathVariable("workItemId") Long workItemId) {
         return success(sysWorkItemService.selectSysWorkItemByWorkItemId(workItemId));
@@ -77,7 +74,6 @@ public class SysWorkItemController extends BaseController {
      * 新增工作项
      */
     @ApiOperation("新增工作项")
-    @PreAuthorize("@ss.hasPermi('dev-api:project:item:add')")
     @Log(title = "工作项", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody SysWorkItem sysWorkItem) {
@@ -91,7 +87,6 @@ public class SysWorkItemController extends BaseController {
      * 修改工作项
      */
     @ApiOperation("修改工作项")
-    @PreAuthorize("@ss.hasPermi('dev-api:project:item:edit')")
     @Log(title = "工作项", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody SysWorkItem sysWorkItem) {
@@ -105,7 +100,6 @@ public class SysWorkItemController extends BaseController {
      * 删除工作项
      */
     @ApiOperation("删除工作项")
-    @PreAuthorize("@ss.hasPermi('dev-api:project:item:remove')")
     @Log(title = "工作项", businessType = BusinessType.DELETE)
     @DeleteMapping("/{workItemIds}")
     public AjaxResult remove(@PathVariable Long[] workItemIds) {
