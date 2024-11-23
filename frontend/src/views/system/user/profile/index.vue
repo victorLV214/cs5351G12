@@ -14,34 +14,34 @@
                   </div>
                   <ul class="list-group list-group-striped">
                      <li class="list-group-item">
-                        <svg-icon icon-class="user" />username
+                        <svg-icon icon-class="user" /> username
                         <div class="pull-right">{{ state.user.userName }}</div>
                      </li>
                      <li class="list-group-item">
-                        <svg-icon icon-class="phone" />phone number
+                        <svg-icon icon-class="phone"/> phone number
                         <div class="pull-right">{{ state.user.phonenumber }}</div>
                      </li>
                      <li class="list-group-item">
-                        <svg-icon icon-class="email" />email
+                        <svg-icon icon-class="email"/> email
                         <div class="pull-right">{{ state.user.email }}</div>
                      </li>
                       <li class="list-group-item">
-                        <svg-icon icon-class="time" />last login time
+                        <svg-icon icon-class="time"/> last login time
                         <div class="pull-right">{{ state.user.loginDate }}</div>
                       </li>
 
 
 
                      <li class="list-group-item">
-                        <svg-icon icon-class="tree" />department
+                        <svg-icon icon-class="tree"/> department
                         <div class="pull-right" v-if="state.user.dept">{{ state.user.dept.deptName }} / {{ state.postGroup }}</div>
                      </li>
                      <li class="list-group-item">
-                        <svg-icon icon-class="peoples" />role
+                        <svg-icon icon-class="peoples"/> role
                         <div class="pull-right">{{ state.roleGroup }}</div>
                      </li>
                      <li class="list-group-item">
-                        <svg-icon icon-class="date" />create-time
+                        <svg-icon icon-class="date" /> create-time
                         <div class="pull-right">{{ state.user.createTime }}</div>
                      </li>
                   </ul>

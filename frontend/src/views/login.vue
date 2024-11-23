@@ -1,7 +1,12 @@
 <template>
   <div class="login">
     <el-form ref="loginRef" :model="loginForm" :rules="loginRules" class="login-form">
-      <h3 class="title">Agile Innovators</h3>
+
+      <h3 class="title">
+        <img v-if="logo" :src="logo" class="sidebar-logo" alt="" width="30"
+             style="position: relative; top: 5px;"/>
+        Agile Innovators
+      </h3>
       <el-form-item prop="username">
         <el-input v-model="loginForm.username" type="text" size="large" auto-complete="off" placeholder="username"
         >
@@ -47,6 +52,7 @@ import { getCodeImg } from "@/api/login";
 import Cookies from "js-cookie";
 import { encrypt, decrypt } from "@/utils/jsencrypt";
 import useUserStore from '@/store/modules/user'
+import logo from "@/assets/logo/logo.png";
 
 const userStore = useUserStore()
 const route = useRoute();

@@ -3,13 +3,30 @@
     <el-card class="project-card">
       <template #header>
         <div class="card-header">
-          <span class="header-title">Project List</span>
-          <el-button type="primary" @click="addP" class="add-button">New Project</el-button></div>
+          <span class="header-title">
+            <img src="@/assets/icons/png/project-list.png" style="width: 25px;
+                vertical-align: middle; position: relative; top: -2px;">
+            Project List
+          </span>
+          <el-button type="primary" @click="handleAddProjects" class="add-button">
+            <img src="@/assets/icons/png/plus.png" style="width: 15px;
+                vertical-align: middle; position: relative; right: 5px;">
+            New Project
+          </el-button>
+        </div>
       </template>
-      <el-table :data="projectList" style="width: 100%" class="project-table" :row-class-name="tableRowClassName" @row-click="doRCS">
+      <el-table
+          :data="projectList" style="width: 100%" class="project-table" :row-class-name="tableRowClassName" @row-click="doRCS">
         <el-table-column prop="projectName" label="Project Name">
           <template #default="scope">
-            <a href="javascript:;" @click="checkProjectAccess(scope.row)" class="project-link">{{ scope.row.projectName }}</a></template>
+            <a
+                href="javascript:;"
+                @click="checkProjectAccess(scope.row)"
+                class="project-link"
+            >
+              {{ scope.row.projectName }}
+            </a>
+          </template>
         </el-table-column>
         <el-table-column prop="projectCode" label="Project Code" />
         <el-table-column prop="createTime" label="Create Time" />
@@ -18,30 +35,23 @@
               <el-button type="primary" link class="action-button">
                 <el-icon><MoreFilled /></el-icon>
               </el-button>
-
-
               <template #dropdown><el-dropdown-menu>
                   <el-dropdown-item @click="getDetail(scope.row)"><el-icon><Document /></el-icon> detail
                   </el-dropdown-item>
-                <el-dropdown-item @click="doEdit(scope.row)">
+                <el-dropdown-item @click="handleEdit(scope.row)">
                     <el-icon><EditPen /></el-icon> edit
                   </el-dropdown-item>
-                <el-dropdown-item @click="doDelete(scope.row)">
+                <el-dropdown-item @click="handleDelete(scope.row)">
                     <el-icon><Delete /></el-icon> delete
                   </el-dropdown-item>
                 </el-dropdown-menu>
               </template>
-
-
             </el-dropdown>
           </template>
         </el-table-column>
       </el-table>
     </el-card>
-
-
-
-    <el-dialog v-model="pFormVisi" :title="projectFormTitle" width="800px" :close-on-click-modal="false">
+    <el-dialog v-model="pFormVisi" :title="projectFormTitle" width="600px" :close-on-click-modal="false">
       <el-form ref="formRef" :model="formDataForAddProject" :rules="rulesForForm" label-width="150px">
         <el-form-item label="projectName" prop="projectName">
           <el-input v-model="formDataForAddProject.projectName" placeholder="projectName"/>
@@ -49,13 +59,21 @@
         <el-form-item label="projectCode" prop="projectCode"><el-input v-model="formDataForAddProject.projectCode" placeholder="projectCode"/>
         </el-form-item>
         <el-form-item label="description" prop="description">
-          <el-input v-model="formDataForAddProject.description" type="textarea" placeholder="description"/>
+          <el-input v-model="formDataForAddProject.description" type="textarea"
+              placeholder="description"/>
         </el-form-item>
         <el-form-item label="startDate" prop="startDate">
-          <el-date-picker v-model="formDataForAddProject.startDate" type="date" placeholder="choose startDate" format="YYYY-MM-DD" value-format="YYYY-MM-DD"/>
+          <el-date-picker
+              v-model="formDataForAddProject.startDate"
+              type="date" placeholder="choose startDate"
+              format="YYYY-MM-DD" value-format="YYYY-MM-DD"/>
         </el-form-item>
         <el-form-item label="expectedEndDate" prop="expectedEndDate">
-          <el-date-picker v-model="formDataForAddProject.expectedEndDate" type="date" placeholder="expectedEndDate" format="YYYY-MM-DD" value-format="YYYY-MM-DD"/>
+          <el-date-picker
+              v-model="formDataForAddProject.expectedEndDate"
+              type="date" placeholder="expectedEndDate"
+              format="YYYY-MM-DD"
+              value-format="YYYY-MM-DD"/>
         </el-form-item>
         <el-form-item label="priority" prop="priority">
           <el-select v-model="formDataForAddProject.priority" placeholder="priority">
@@ -72,42 +90,44 @@
           </el-select>
         </el-form-item>
         <el-form-item label="budget" prop="budget">
-          <el-input-number v-model="formDataForAddProject.budget" :precision="2" :step="1000" :min="0" placeholder="input the budget"/>
+          <el-input-number
+              v-model="formDataForAddProject.budget"
+              :precision="2"
+              :step="1000"
+              :min="0"
+              placeholder="input the budget"/>
         </el-form-item>
         <el-form-item label="remark" prop="remark">
-          <el-input v-model="formDataForAddProject.remark" type="textarea" placeholder="remark"/>
+          <el-input
+              v-model="formDataForAddProject.remark"
+              type="textarea"
+              placeholder="remark"/>
         </el-form-item>
       </el-form>
-      
-      
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="pFormVisi = false">cancel</el-button>
-          <el-button type="primary" @click="subF">confirm</el-button>
+          <el-button type="primary" @click="submitForm">confirm</el-button>
         </div>
       </template>
     </el-dialog>
-    
-    
-    
-    
     <el-dialog v-model="detailV" title="details" width="800px">
       <div class="detail-container" v-if="cPro">
         <div class="detail-section">
           <h3 class="section-title">
-            <el-icon><InfoFilled /></el-icon>info</h3>
-          
+            <el-icon><InfoFilled /></el-icon>
+           info</h3>
           <el-descriptions :column="2" border>
             <el-descriptions-item label="projectName">{{ cPro.projectName }}</el-descriptions-item>
             <el-descriptions-item label="projectCode">{{ cPro.projectCode }}</el-descriptions-item>
             <el-descriptions-item label="createTime">{{ cPro.createTime }}</el-descriptions-item>
             <el-descriptions-item label="status">
-              <el-tag :type="setS(cPro.status)">{{ cPro.status }}</el-tag>
+              <el-tag :type="setStatusType(cPro.status)">{{ cPro.status }}</el-tag>
             </el-descriptions-item>
             <el-descriptions-item label="startDate">{{ cPro.startDate }}</el-descriptions-item>
             <el-descriptions-item label="expectedEndDate">{{ cPro.expectedEndDate }}</el-descriptions-item>
             <el-descriptions-item label="priority">
-              <el-tag :type="getPP(cPro.priority)">
+              <el-tag :type="getPriorityType(cPro.priority)">
                 {{ showPriority(cPro.priority) }}
               </el-tag>
             </el-descriptions-item>
@@ -118,7 +138,8 @@
 
         <div class="detail-section">
           <h3 class="section-title">
-            <el-icon><Document /></el-icon>description
+            <el-icon><Document /></el-icon>
+            description
           </h3>
           <div class="description-content">{{ cPro.description}}</div>
         </div>
@@ -126,7 +147,8 @@
 
         <div class="detail-section">
           <h3 class="section-title">
-            <el-icon><ChatLineSquare /></el-icon>remark
+            <el-icon><ChatLineSquare /></el-icon>
+            remark
           </h3>
           <div class="description-content">{{ cPro.remark }}</div>
         </div>
@@ -134,7 +156,8 @@
 
         <div class="detail-section">
           <h3 class="section-title">
-            <el-icon><User /></el-icon>member
+            <el-icon><User /></el-icon>
+            member
 
           </h3>
           <el-table :data="cPMember" style="width: 100%">
@@ -159,41 +182,41 @@
         <el-form-item label="projectName" prop="projectName">
           <el-input v-model="theBiggsetForm.projectName" placeholder="projectName"/>
         </el-form-item>
-          <el-form-item label="projectCode" prop="projectCode">
-            <el-input v-model="theBiggsetForm.projectCode" placeholder="projectCode"/>
-          </el-form-item>
-            <el-form-item label="description" prop="description">
-              <el-input v-model="theBiggsetForm.description" type="textarea" placeholder="description"/>
-            </el-form-item>
-              <el-form-item label="startDate" prop="startDate">
-                <el-date-picker v-model="theBiggsetForm.startDate" type="date" placeholder="choose startDate" format="YYYY-MM-DD" value-format="YYYY-MM-DD"/>
-              </el-form-item>
-                <el-form-item label="expectedEndDate" prop="expectedEndDate">
-                  <el-date-picker v-model="theBiggsetForm.expectedEndDate" type="date" placeholder="expectedEndDate" format="YYYY-MM-DD" value-format="YYYY-MM-DD"/>
-                </el-form-item>
-                  <el-form-item label="actualEndDate" prop="actualEndDate">
-                    <el-date-picker v-model="theBiggsetForm.actualEndDate" type="date" placeholder="actualEndDate" format="YYYY-MM-DD" value-format="YYYY-MM-DD"/>
-                  </el-form-item>
-                    <el-form-item label="priority" prop="priority">
-                      <el-select v-model="theBiggsetForm.priority" placeholder="priority">
-                        <el-option label="low" :value="1"/><el-option label="medium" :value="2"/><el-option label="high" :value="3"/>
-                      </el-select>
-                      </el-form-item>
-                      <el-form-item label="status" prop="status">
-                        <el-select v-model="theBiggsetForm.status" placeholder="Status">
-                          <el-option label="Not Started" value="Not Started"/>
-                          <el-option label="In Progress" value="In Progress"/>
-                          <el-option label="Completed" value="Completed"/>
-                          <el-option label="Paused" value="Paused"/>
-                        </el-select>
-                          </el-form-item>
-                          <el-form-item label="completionPercentage" prop="completionPercentage">
-                            <el-input-number
-                                v-model="theBiggsetForm.completionPercentage" :precision="1" :step="5" :min="0" :max="100" placeholder="input the completionPercentage"/>
-                          </el-form-item>
-          <el-form-item label="budget" prop="budget">
-            <el-input-number
-                v-model="theBiggsetForm.budget" :precision="2" :step="1000" :min="0" placeholder="input the budget"/></el-form-item>
+        <el-form-item label="projectCode" prop="projectCode">
+          <el-input v-model="theBiggsetForm.projectCode" placeholder="projectCode"/>
+        </el-form-item>
+        <el-form-item label="description" prop="description">
+          <el-input v-model="theBiggsetForm.description" type="textarea" placeholder="description"/>
+        </el-form-item>
+        <el-form-item label="startDate" prop="startDate">
+          <el-date-picker v-model="theBiggsetForm.startDate" type="date" placeholder="choose startDate" format="YYYY-MM-DD" value-format="YYYY-MM-DD"/>
+        </el-form-item>
+        <el-form-item label="expectedEndDate" prop="expectedEndDate">
+          <el-date-picker v-model="theBiggsetForm.expectedEndDate" type="date" placeholder="expectedEndDate" format="YYYY-MM-DD" value-format="YYYY-MM-DD"/>
+        </el-form-item>
+        <el-form-item label="actualEndDate" prop="actualEndDate">
+          <el-date-picker v-model="theBiggsetForm.actualEndDate" type="date" placeholder="actualEndDate" format="YYYY-MM-DD" value-format="YYYY-MM-DD"/>
+        </el-form-item>
+        <el-form-item label="priority" prop="priority">
+          <el-select v-model="theBiggsetForm.priority" placeholder="priority">
+            <el-option label="low" :value="1"/><el-option label="medium" :value="2"/><el-option label="high" :value="3"/>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="status" prop="status">
+          <el-select v-model="theBiggsetForm.status" placeholder="Status">
+            <el-option label="Not Started" value="Not Started"/>
+            <el-option label="In Progress" value="In Progress"/>
+            <el-option label="Completed" value="Completed"/>
+            <el-option label="Paused" value="Paused"/>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="completionPercentage" prop="completionPercentage">
+          <el-input-number
+              v-model="theBiggsetForm.completionPercentage" :precision="1" :step="5" :min="0" :max="100" placeholder="input the completionPercentage"/>
+        </el-form-item>
+        <el-form-item label="budget" prop="budget">
+          <el-input-number
+              v-model="theBiggsetForm.budget" :precision="2" :step="1000" :min="0" placeholder="input the budget"/></el-form-item>
         <el-form-item label="actualCost" prop="actualCost">
           <el-input-number v-model="theBiggsetForm.actualCost" :precision="2" :step="1000" :min="0" placeholder="input the actualCost"/>
         </el-form-item>
@@ -203,7 +226,7 @@
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button @click="booleanForVis = false">cancel</el-button><el-button type="primary" @click="reloadFprm">confirm</el-button>
+          <el-button @click="booleanForVis = false">cancel</el-button><el-button type="primary" @click="updateForm">confirm</el-button>
         </div>
       </template>
     </el-dialog>
@@ -307,6 +330,7 @@ const doRCS = (row) => {
 
 
 const getDetail = async (row) => {
+
     const id = row.projectId
     const projectRes = await getProject(id)
     // console.log('projectRes:', projectRes)
@@ -325,8 +349,6 @@ const showPriority = (priority) => {
   }
   return priorityMap[priority] || 'unknown'
 }
-
-
 
 const myGetMembers = async (projectId) => {
 
@@ -361,7 +383,7 @@ const myGetMembers = async (projectId) => {
 
 }
 
-const setS = (status) => {
+const setStatusType = (status) => {
   const statusMap = {
     'Not Started': 'info',
     'In Progress': '',//error!!!
@@ -436,7 +458,7 @@ const subF = async () => {
         const userStore = useUserStore()
         const userId = userStore.id
         formDataForAddProject.projectManagerId = userId
-      
+
         const projectResponse = await addProject(formDataForAddProject)
         const theData = {
           projectId: projectResponse.data.projectId, // Assuming the response includes the new project ID

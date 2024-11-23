@@ -66,7 +66,7 @@ export const constantRoutes = [
         path: '/index',
         component: () => import('@/views/index'),
         name: 'Index',
-        meta: { title: 'home page', icon: 'dashboard', affix: true }
+        meta: { title: 'Home', icon: 'home', affix: true }
       }
     ]
   },
@@ -117,7 +117,7 @@ export const constantRoutes = [
         component: () => import('@/views/dashboard/index.vue'),
         name: 'Dashboard',
         meta: {
-          title: 'dashboard',
+          title: 'Dashboard',
           icon: 'dashboard',
         }
       }
@@ -132,7 +132,7 @@ export const constantRoutes = [
         path: 'index',
         component: () => import('@/views/project/project/index.vue'),
         name: 'ProjectList',
-        meta: { title: 'ProjectList', icon: 'tree', affix: false }
+        meta: { title: 'Projects', icon: 'project', affix: false }
       },
       {
         path: 'detail/:id',
