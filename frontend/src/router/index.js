@@ -236,6 +236,14 @@ export const constantRoutes = [
       icon: 'message'
     }
   },
+    { path:'/download',
+        component: () => import('@/views/project/downloadReport/downloadReport.vue'),
+        name: 'Download',
+        meta: {
+            title: 'Download',
+            icon: 'download'
+        }
+        },
 ]
 
 // 动态路由，基于用户权限动态去加载
