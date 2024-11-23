@@ -97,7 +97,33 @@ export const constantRoutes = [
       }
     ]
   },
-
+  {
+    path: '/notice',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/notice/index.vue'),
+        name: 'Notice',
+        meta: { title: '通知公告', icon: 'message' }
+      }
+    ]
+  },
+  {
+    path: '/dashboard',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/dashboard/index.vue'),
+        name: 'Dashboard',
+        meta: {
+          title: '仪表盘',
+          icon: 'dashboard',
+        }
+      }
+    ]
+  },
   {
     path: '/project',
     component: Layout,
@@ -200,7 +226,8 @@ export const constantRoutes = [
         ]
       }
     ]
-  }
+  },
+
 
 ]
 

@@ -256,10 +256,6 @@ const clearAll = () => {
 const addReq = () => {
   addButten.value = true
   reqForm.value = {
-    title: '',
-    priority: '',
-    status: 'pending',
-    severity: '',
     assignedTo: '',
     description: '',
     remarks: '',
@@ -267,7 +263,12 @@ const addReq = () => {
     reportedBy: id,
     actualFixVersion: '',
     expectedFixVersion: '',
-    relatedRequirementId: ''
+    relatedRequirementId: '',
+    title: '',
+    priority: '',
+    status: 'pending',
+    severity: '',
+
   }
 }
 
