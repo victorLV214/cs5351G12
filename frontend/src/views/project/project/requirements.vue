@@ -5,7 +5,7 @@
         </div>
       <div class="addR">
         <el-button type="primary" :icon="Plus" @click="addReq"></el-button>
-        <el-button type="primary" :icon="Download" @click="showGantt"></el-button>
+        <el-button type="primary" @click="showGantt">Gantt Chart</el-button>
       </div></div></template>
 
     <div class="search"><el-form :inline="true" :model="Params" class="sF"><el-form-item label="requirements">
@@ -32,21 +32,13 @@
         </el-table-column>
         <el-table-column label="title" align="center" prop="title" /><el-table-column label="description" align="center" prop="description" show-overflow-tooltip /><el-table-column label="priority" align="center" prop="priority"></el-table-column><el-table-column label="status" align="center" prop="status"></el-table-column>
         <el-table-column label="createTime" align="center" prop="createTime" width="180" />
-
-
-
-
-        
-        
-
       </el-table>
 
 
       <div class="pagination-container">
         <el-pagination :page-sizes="[10, 20, 50, 100]" :total="total" v-model:current-page="Params.pageNum" v-model:page-size="Params.pageSize"
 
-            layout="total, sizes, prev, pager, next, jumper" @size-change="sizeP" @current-change="cP"
-        />
+            layout="total, sizes, prev, pager, next, jumper" @size-change="sizeP" @current-change="cP"/>
       </div>
     </div>
   </el-card>
