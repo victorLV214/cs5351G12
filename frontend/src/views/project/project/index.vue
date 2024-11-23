@@ -301,7 +301,7 @@ const checkProjectAccess = async (project) => {
       pageNum: 1,
       pageSize: 999
     })
-  console.log('response:', response)
+  // console.log('response:', response)
     const cID = userStore.id
     const isMember = response.rows.some(member => member.userId === cID)
     if (isMember) {
@@ -358,19 +358,19 @@ const myGetMembers = async (projectId) => {
       pageSize: 999
     })
     // console.log('members:', members)
-    const membersWithUserInfo = []
+    const inf = []
     for (const member of members.rows) {
       try {
-        const userInfo = await getUser(member.userId)
-        membersWithUserInfo.push({
+        const u1 = await getUser(member.userId)
+        inf.push({
           ...member,
-          userName: userInfo.data.userName,
-          nickName: userInfo.data.nickName,
-          email: userInfo.data.email
+          userName: u1.data.userName,
+          nickName: u1.data.nickName,
+          email: u1.data.email
         })
       } catch (error) {
         console.error('error:', error)
-        membersWithUserInfo.push({
+        inf.push({
           ...member,
           userName: 'unknown',
           nickName: '-',
@@ -378,7 +378,7 @@ const myGetMembers = async (projectId) => {
         })
       }
     }
-    cPMember.value = membersWithUserInfo
+    cPMember.value = inf
     
 
 }
@@ -394,7 +394,7 @@ const setStatusType = (status) => {
 }
 
 
-const getPriorityType = (priority) => {
+const getPP = (priority) => {
   const priorityMap = {
     1: 'info',
     2: 'warning',
@@ -429,7 +429,7 @@ const rulesForUpdateForm = {
 
 const projectList = ref([])
 
-const handleAddProjects = () => {
+const addP = () => {
   pFormVisi.value = true
   projectFormTitle.value = 'add project'
   if (formRef.value) {
@@ -450,20 +450,17 @@ const getList = async () => {
     projectList.value = allProject.rows
 }
 
-const submitForm = async () => {
+const subF = async () => {
   if (!formRef.value) return
   await formRef.value.validate(async (valid) => {
     if (valid) {
-      try {
+
         const userStore = useUserStore()
         const userId = userStore.id
         formDataForAddProject.projectManagerId = userId
 
-
         const projectResponse = await addProject(formDataForAddProject)
-
-
-        const memberData = {
+        const theData = {
           projectId: projectResponse.data.projectId, // Assuming the response includes the new project ID
           userId: userId,
           role: 'creator',
@@ -474,60 +471,44 @@ const submitForm = async () => {
           notes: 'Creator',
           remark: 'creator'
         }
-
-        await addProjectMember(memberData)
-
+        await addProjectMember(theData)
         ElMessage.success('Project created successfully')
         pFormVisi.value = false
         getList() // Refresh the list
-      } catch (error) {
-        ElMessage.error('Failed to create project: ' + error.message)
-      }
     }
   })
 }
 
-const updateForm = async () => {
+const reloadFprm = async () => {
   if (!updateFormRef.value) return
   await updateFormRef.value.validate(async (valid) => {
     if (valid) {
         await updateProject(theBiggsetForm)
-
         ElMessage.success('编辑成功')
         booleanForVis.value = false
         getList() // 刷新列表
-
     }
   })
 }
 
-const handleEdit = async (row) => {
+const doEdit = async (row) => {
 
     const id = row.projectId
     const projectRes = await getProject(id)
     theBiggsetForm.projectId = id
-
     booleanForVis.value = true
     projectUpdateFormTitle.value = 'edit'
-
-
     if (updateFormRef.value) {
       updateFormRef.value.resetFields()
     }
-    
     Object.assign(theBiggsetForm, projectRes.data);
 
 }
 
-const handleDelete = async (row) => {
-  try {
+const doDelete = async (row) => {
     await delProject(row.projectId)
-
     ElMessage.success('false')
     getList() // 刷新列表
-  } catch (error) {
-    ElMessage.error('false')
-  }
 }
 
 

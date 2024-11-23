@@ -17,35 +17,22 @@
     </el-form>
     </div>
     <div class="rList">
-      <el-table v-loading="loading" :data="reqList" style="width: 100%"
-      >
+      <el-table v-loading="loading" :data="reqList" style="width: 100%">
         <el-table-column label="ID" align="center">
           <template #default="{ row }"><el-link type="primary" @click="clickV(row)">{{ row.defectId }}</el-link>
           </template>
                          </el-table-column><el-table-column label="title" align="center" prop="title" /><el-table-column label="description" align="center" prop="description" show-overflow-tooltip /><el-table-column label="priority" align="center" prop="priority"></el-table-column><el-table-column label="status" align="center" prop="status"></el-table-column>
         <el-table-column label="createTime" align="center" prop="createTime" width="180" />
-
-
-
-
-
-
-
       </el-table>
-
-
       <div class="pagination-container">
         <el-pagination :page-sizes="[10, 20, 50, 100]" :total="total" v-model:current-page="Params.pageNum" v-model:page-size="Params.pageSize"
-
-                       layout="total, sizes, prev, pager, next, jumper" @size-change="sizeP" @current-change="cP"
-        />
+                       layout="total, sizes, prev, pager, next, jumper" @size-change="sizeP" @current-change="cP"/>
       </div>
     </div>
   </el-card>
 
   <el-dialog
-      v-model="dialogVisible" title="Requirement Details" width="60%"
-  >
+      v-model="boolVis1" title="Requirement Details" width="60%">
     <el-form ref="formRef" :model="curReq"  label-width="120px">
       <el-form-item label="Requirement ID" prop="requirementId"><span>{{ curReq?.defectId }}</span></el-form-item>
       <el-form-item label="Title" prop="title"><el-input v-model="curReq.title" :disabled="!isEdit"/>
@@ -53,7 +40,7 @@
       <el-select v-model="curReq.priority" :disabled="!isEdit">
         <el-option label="High - 1" value="1" /><el-option label="Medium - 2" value="2" /><el-option label="Low - 3" value="3" /></el-select>
     </el-form-item><el-form-item label="Status" prop="status">
-      <el-select v-model="curReq.status" :disabled="!isEdit"><el-option label="pending" value="待处理" /><el-option label="processing" value="进行中" /><el-option label="fixed" value="已修复" />
+      <el-select v-model="curReq.status" :disabled="!isEdit"><el-option label="pending" value="pending" /><el-option label="processing" value="processing" /><el-option label="fixed" value="fixed" />
       </el-select>
     </el-form-item>
       <el-form-item label="Type" prop="type"><el-input v-model="curReq.type" :disabled="!isEdit"/></el-form-item>
@@ -66,27 +53,27 @@
         /></el-form-item>
     </el-form><template #footer>
   <span class="dialog-footer">
-    <el-button @click="dialogVisible  = false">Exit</el-button>
+    <el-button @click="boolVis1  = false">Exit</el-button>
     <el-button v-if="curReq?.createBy === username" type="danger" @click="delReq(curReq)">Delete</el-button>
     <el-button v-if="!isEdit" type="primary" @click="ISEDITT">Edit</el-button><template v-else><el-button @click="donotEDITT">Cancel</el-button>
-    <el-button type="primary" @click="submitEdit">Save</el-button></template>
+    <el-button type="primary" @click="doEDIT">Save</el-button></template>
   </span></template>
   </el-dialog>
 
-  <el-dialog v-model="addButten" title="Add New Requirements" width="60%">
-    <el-form ref="addFormRef" :model="reqForm" :rules="rulesForAdd" label-width="120px">
+  <el-dialog v-model="addButten" title="Add New Defeat" width="60%">
+    <el-form ref="addFormRef" :model="reqForm" :rules="rule1" label-width="120px">
       <el-form-item label="Title" prop="title">
-        <el-input v-model="reqForm.title" placeholder="Please input defect title"/>
+        <el-input v-model="reqForm.title" placeholder="title"/>
       </el-form-item>
       <el-form-item label="Priority" prop="priority">
-        <el-select v-model="reqForm.priority" placeholder="Select priority">
+        <el-select v-model="reqForm.priority" placeholder="priority">
           <el-option label="High" value="1" />
           <el-option label="Medium" value="2" />
           <el-option label="Low" value="3" />
         </el-select>
       </el-form-item>
       <el-form-item label="Severity" prop="severity">
-        <el-select v-model="reqForm.severity" placeholder="Select severity">
+        <el-select v-model="reqForm.severity" placeholder="severity">
           <el-option label="Critical" value="4" /><el-option label="Major" value="3" /><el-option label="Minor" value="2" />
           <el-option label="Trivial" value="1" />
         </el-select>
@@ -96,16 +83,16 @@
           <el-option label="Reopened" value="reopened" /><el-option label="Rejected" value="rejected" />
         </el-select>
       </el-form-item>
-      <el-form-item label="Assigned To" prop="assignedTo"><el-input v-model="reqForm.assignedTo" placeholder="Assign to"/></el-form-item>
+      <el-form-item label="Assigned To" prop="assignedTo"><el-input v-model="reqForm.assignedTo" placeholder="Assignto"/></el-form-item>
 
       <el-form-item label="Description" prop="description">
-        <el-input v-model="reqForm.description" type="textarea" :rows="3" placeholder="Detailed description of the defect"
+        <el-input v-model="reqForm.description" type="textarea" :rows="3" placeholder="description"
         />
       </el-form-item>
 
-      <el-form-item label="Expected Version" prop="expectedFixVersion"><el-input v-model="reqForm.expectedFixVersion" placeholder="Expected fix version"/></el-form-item>
+      <el-form-item label="Expected Version" prop="expectedFixVersion"><el-input v-model="reqForm.expectedFixVersion" placeholder="expectedFixVersion"/></el-form-item>
 
-      <el-form-item label="Related Req ID" prop="relatedRequirementId"><el-input v-model="reqForm.relatedRequirementId" placeholder="Related requirement ID"/>
+      <el-form-item label="Related Req ID" prop="relatedRequirementId"><el-input v-model="reqForm.relatedRequirementId" placeholder="relatedRequirementId"/>
       </el-form-item>
 
       <el-form-item label="Remarks" prop="remarks">
@@ -116,7 +103,7 @@
 
     <template #footer>
     <span class="dialog-footer"><el-button @click="addButten = false">Cancel</el-button>
-      <el-button type="primary" @click="submitAdd">Add</el-button>
+      <el-button type="primary" @click="doAdd">Add</el-button>
     </span>
     </template>
   </el-dialog>
@@ -171,7 +158,7 @@ const Params = ref({
   expectedFixVersion: '',
   relatedRequirementId: ''
 })
-const dialogVisible = ref(false)
+const boolVis1 = ref(false)
 const curReq = ref(null)
 const formRef = ref(null)
 const reqForm = ref({
@@ -191,10 +178,6 @@ const reqForm = ref({
 })
 const addFormRef = ref(null)
 const delButten = ref(false)
-let ganttInstance = null
-
-
-
 
 
 
@@ -209,16 +192,14 @@ const gettheUser = async () => {
 
 const getReqs = async () => {
   loading.value = true
-
   const a = await listDefect(Params.value)
   console.log("Defects", a)
   reqList.value = a.rows
   total.value = a.total
-
-
   loading.value = false
-
 }
+
+
 
 const clearAll = () => {
   Params.value = {
@@ -235,9 +216,7 @@ const clearAll = () => {
     assignedTo: '',
     projectId: projectId,
     severity: '',
-
   }
-
   getReqs()
 }
 
@@ -260,7 +239,8 @@ const addReq = () => {
   }
 }
 
-const submitAdd = async () => {
+
+const doAdd = async () => {
   if (!addFormRef.value) return
   await addFormRef.value.validate()
   loading.value = true
@@ -271,6 +251,7 @@ const submitAdd = async () => {
 
 }
 
+
 const clickV = async (row) => {
   loading.value = true
   const res = await getDefect(row.defectId)
@@ -278,7 +259,7 @@ const clickV = async (row) => {
   firstData.value = JSON.parse(JSON.stringify(res.data))
   isEdit.value = false
   delButten.value = curReq.value.createBy === username.value
-  dialogVisible.value = true
+  boolVis1.value = true
   loading.value = false
 }
 
@@ -291,13 +272,13 @@ const donotEDITT = () => {
   isEdit.value = false
 }
 
-const submitEdit = async () => {
+const doEDIT = async () => {
   if (!formRef.value) return
   await formRef.value.validate()
   loading.value = true
   await updateDefect(curReq.value)
   isEdit.value = false
-  dialogVisible.value = false
+  boolVis1.value = false
   await getReqs()
   loading.value = false
 
@@ -306,7 +287,7 @@ const submitEdit = async () => {
 const delReq = async (row) => {
   loading.value = true
   await delDefect(row.defectId)
-  dialogVisible.value = false
+  boolVis1.value = false
   await getReqs()
   loading.value = false
 }
@@ -327,18 +308,18 @@ onMounted(() => {
   gettheUser()
 })
 
-const rulesForAdd = {
+const rule1 = {
   severity: [
-    { required: true, message: '请选择严重程度', trigger: 'change' }
+    { required: true, message: 'severity', trigger: 'change' }
   ],
   status: [
-    { required: true, message: '请选择缺陷状态', trigger: 'change' }
+    { required: true, message: 'status', trigger: 'change' }
   ],
   priority: [
-    { required: true, message: '请选择缺陷优先级', trigger: 'change' }
+    { required: true, message: 'priority', trigger: 'change' }
   ],
   title: [
-    { required: true, message: '请输入缺陷标题', trigger: 'blur' }
+    { required: true, message: 'title', trigger: 'blur' }
   ]
 
 }
@@ -346,75 +327,5 @@ const rulesForAdd = {
 </script>
 
 <style scoped>
-.r-cards {
-  margin: 16px;
-  min-height: calc(100vh - 150px);
-}
-
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.header-left {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.title {
-  font-size: 18px;
-  font-weight: bold;
-}
-
-.count-tag {
-  font-size: 13px;
-}
-
-.search {
-  margin-bottom: 16px;
-  padding: 16px;
-  background-color: #f5f7fa;
-  border-radius: 4px;
-}
-
-.sF {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-}
-
-.rList {
-  margin-top: 16px;
-}
-@media screen and (max-width: 768px) {
-  .sF {
-    :deep(.el-form-item) {
-      margin-bottom: 16px;
-    }
-  }
-}
-
-:deep(.el-form-item__label) {
-  font-weight: normal;
-}
-
-:deep(.el-card__header) {
-  padding: 16px 20px;
-  border-bottom: 1px solid #e4e7ed;
-}
-
-:deep(.el-card__body) {
-  padding: 20px;
-}
-.completed-task {
-  background-color: #67C23A;
-}
-.progress-task {
-  background-color: #409EFF;
-}
-.pending-task {
-  background-color: #909399;
-}
+@import "./scss/defect.scss";
 </style>

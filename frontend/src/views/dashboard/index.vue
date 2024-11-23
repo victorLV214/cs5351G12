@@ -1,6 +1,7 @@
 <template>
   <div class="dashboard" v-loading="loading">
     <el-row :gutter="20">
+
       <el-col :span="8">
         <el-card class="box-card">
           <template #header>
@@ -14,8 +15,7 @@
           </template>
           <div class="statistics"><div class="stat-item">
             <div class="label">Planned Projects</div><div class="value">{{ dDataD.plannedProjects.length }}</div></div>
-            <div class="stat-item"><div class="label">Ongoing Projects</div><div class="value">{{ dDataD.ongoingProjects.length }}</div>
-            </div>
+            <div class="stat-item"><div class="label">Ongoing Projects</div><div class="value">{{ dDataD.ongoingProjects.length }}</div></div>
             <div class="stat-item"><div class="label">Completed Projects</div><div class="value">{{ dDataD.completedProjects.length }}</div></div></div>
         </el-card>
       </el-col>
@@ -68,9 +68,7 @@ const dDataD = ref({
 const getDataD = async () => {
   loading.value = true
   const res = await getDashboardData()
-  if (res.code === 200) {
     dDataD.value = res.data
-  }
   loading.value = false
 }
 

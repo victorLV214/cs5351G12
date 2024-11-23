@@ -15,8 +15,8 @@
             <el-option label="medium" value="2" /><el-option label="low" value="3" /></el-select>
         </el-form-item>
         <el-form-item label="status">
-          <el-select v-model="Params.status" placeholder="status" clearable style="width: 200px"><el-option label="pending" value="待处理" />
-            <el-option label="processing" value="进行中" /><el-option label="completed" value="已完成" /></el-select></el-form-item>
+          <el-select v-model="Params.status" placeholder="status" clearable style="width: 200px"><el-option label="pending" value="pending" />
+            <el-option label="processing" value="processing" /><el-option label="completed" value="completed" /></el-select></el-form-item>
         <el-form-item>
           <el-button type="primary" :icon="Search" @click="getReqs">select</el-button><el-button :icon="Refresh" @click="clearAll">Refresh</el-button>
         </el-form-item>
@@ -51,9 +51,7 @@
     </div>
   </el-card>
 
-  <el-dialog
-      v-model="dialogVisible" title="requirement details" width="60%"
-  >
+  <el-dialog v-model="visibButten" title="requirement details" width="60%">
     <el-form ref="formRef" :model="curReq" :rules="rules" label-width="120px">
       <el-form-item label="requirement ID" prop="requirementId"><span>{{ curReq?.requirementId }}</span></el-form-item>
       <el-form-item label="title" prop="title"><el-input v-model="curReq.title" :disabled="!isEdit"/>
@@ -61,7 +59,7 @@
         <el-select v-model="curReq.priority" :disabled="!isEdit">
           <el-option label="high" value="1" /><el-option label="medium" value="2" /><el-option label="low" value="3" /></el-select>
       </el-form-item><el-form-item label="status" prop="status">
-        <el-select v-model="curReq.status" :disabled="!isEdit"><el-option label="pending" value="待处理" /><el-option label="processing" value="进行中" /><el-option label="completed" value="已完成" />
+        <el-select v-model="curReq.status" :disabled="!isEdit"><el-option label="pending" value="pending" /><el-option label="processing" value="processing" /><el-option label="completed" value="completed" />
         </el-select>
       </el-form-item>
       <el-form-item label="type" prop="type"><el-input v-model="curReq.type" :disabled="!isEdit"/></el-form-item>
@@ -74,10 +72,10 @@
         /></el-form-item>
     </el-form><template #footer>
   <span class="dialog-footer">
-    <el-button @click="dialogVisible  = false">cancel</el-button>
+    <el-button @click="visibButten  = false">cancel</el-button>
     <el-button v-if="curReq?.createBy === username" type="danger" @click="delReq(curReq)">DEL</el-button>
     <el-button v-if="!isEdit" type="primary" @click="ISEDITT">EDit</el-button><template v-else><el-button @click="donotEDITT">CALCEL</el-button>
-    <el-button type="primary" @click="submitEdit">SAVE</el-button></template>
+    <el-button type="primary" @click="doEdit">SAVE</el-button></template>
   </span></template>
   </el-dialog>
 
@@ -86,13 +84,11 @@
       <el-form-item label="title" prop="title">
         <el-input v-model="reqForm.title" placeholder="title"/>
       </el-form-item><el-form-item label="priority" prop="priority"><el-select v-model="reqForm.priority" placeholder="priority"><el-option label="high" value="1" /><el-option label="medium" value="2" />         <el-option label="low" value="3" /></el-select>
-      </el-form-item>
+    </el-form-item>
 
-      <el-form-item label="type" prop="type"><el-input v-model="reqForm.type" placeholder="type"/>
-      </el-form-item>
+      <el-form-item label="type" prop="type"><el-input v-model="reqForm.type" placeholder="type"/></el-form-item>
 
-      <el-form-item label="assignedTo" prop="assignedTo"><el-input v-model="reqForm.assignedTo" placeholder="assignedTo"/>
-      </el-form-item>
+      <el-form-item label="assignedTo" prop="assignedTo"><el-input v-model="reqForm.assignedTo" placeholder="assignedTo"/></el-form-item>
 
       <el-form-item label="description" prop="description">
         <el-input v-model="reqForm.description" type="textarea"placeholder="description"/>
@@ -105,15 +101,11 @@
 
     <template #footer>
     <span class="dialog-footer"><el-button @click="addButten = false">cancel</el-button>
-      <el-button type="primary" @click="submitAdd">ADD</el-button>
+      <el-button type="primary" @click="doAdd">ADD</el-button>
     </span>
     </template>
   </el-dialog>
-  <el-dialog
-      v-model="ganttDialogVisible" title="需求甘特图"
-      width="90%" :destroy-on-close="true" :close-on-click-modal="false"
-      :close-on-press-escape="false"
-      @opened="showGantt" @close="destroyGantt">
+  <el-dialog v-model="ganttButten" title="gantt" width="90%" :destroy-on-close="true" :close-on-click-modal="false" :close-on-press-escape="false" @opened="showGantt" @close="destroyGantt">
     <div ref="ganttContainer" style="height: 600px; width: 100%;"></div>
   </el-dialog>
 
@@ -132,7 +124,8 @@ import {
   listRequirement,
   updateRequirement
 } from "@/api/project/requirements.js"
-import { ElMessage, ElMessageBox } from "element-plus"
+
+
 import useUserStore from "@/store/modules/user.js"
 import { getUser } from "@/api/system/user.js"
 import { gantt } from "dhtmlx-gantt"
@@ -140,7 +133,7 @@ const userStore = useUserStore()
 const route = useRoute()
 const projectId = route.params.id
 const ganttContainer = ref(null)
-const ganttDialogVisible = ref(false)
+const ganttButten = ref(false)
 const reqList = ref([])
 const total = ref(0)
 const isEdit = ref(false)
@@ -173,7 +166,7 @@ const Params = ref({
   projectId: projectId,
   delFlag: 1,
 })
-const dialogVisible = ref(false)
+const visibButten = ref(false)
 const curReq = ref(null)
 const formRef = ref(null)
 
@@ -187,7 +180,6 @@ const initGantt = () => {
   gantt.config.autosize = "y"
   gantt.config.date_format = "%Y-%m-%d"
   gantt.config.task_height = 20
-
   gantt.config.scale_height = 50
   gantt.config.row_height = 40
   gantt.config.scales = [
@@ -196,10 +188,12 @@ const initGantt = () => {
     { unit: "day", step: 1, format: "%d %D" }
   ]
 
+
+
   gantt.config.columns = [
-    { name: "text", label: "Requirement Name", width: 200, tree: true },
-    { name: "start_date", label: "Start Date", align: "center", width: 100 },
-    { name: "end_date", label: "End Date", align: "center", width: 100 },
+    { name: "text", label: "RequirementName", width: 200, tree: true },
+    { name: "start_date", label: "StartDate", align: "center", width: 100 },
+    { name: "end_date", label: "EndDate", align: "center", width: 100 },
     {
 
       name: "progress",
@@ -224,10 +218,10 @@ const initGantt = () => {
       }
     }
   ]
+
   gantt.templates.task_class = (start, end, task) => {
     switch (task.status) {
       case 'completed': return 'completed-task'
-
       case 'processing': return 'progress-task'
       default: return 'pending-task'
     }
@@ -239,31 +233,37 @@ const initGantt = () => {
             <b>Start:</b> ${gantt.date.date_to_str("%Y-%m-%d")(start)}<br/>
             <b>End:</b> ${gantt.date.date_to_str("%Y-%m-%d")(end)}<br/>
             <b>Progress:</b> ${(task.progress * 100).toFixed(0)}%<br/>
-
             <b>Status:</b> ${task.status}`
   }
 }
 
 
-const showGantt = async () => {
 
-    ganttDialogVisible.value = true
+
+
+const showGantt = async () => {
+    ganttButten.value = true
     await nextTick()
     if (ganttContainer.value) {
       gantt.clearAll()
       initGantt()
       gantt.init(ganttContainer.value)
       loadGanttData()}
-
-
+    
+  
 }
+
+
+
+
+
+
 const rules = {
-  title: [{ required: true, message: '请输入标题', trigger: 'blur' }],
-  priority: [{ required: true, message: '请选择优先级', trigger: 'change' }],
-  status: [{ required: true, message: '请选择状态', trigger: 'change' }],
-
-
+  title: [{ required: true, message: 'Please input title', trigger: 'blur' }],
+  priority: [{ required: true, message: 'Please select priority', trigger: 'change' }],
+  status: [{ required: true, message: 'Please select status', trigger: 'change' }],
 }
+
 
 const gettheUser = async () => {
   const res = await getUser(id)
@@ -272,13 +272,10 @@ const gettheUser = async () => {
 }
 
 const getReqs = async () => {
-  loading.value = true
-
+    loading.value = true
     const a = await listRequirement(Params.value)
     reqList.value = a.rows
     total.value = a.total
-
-
     loading.value = false
 
 }
@@ -304,11 +301,9 @@ const loadGanttData = () => {
     data: reqList.value.map(req => ({
       id: req.requirementId,
       text: req.title,
-
       start_date: req.createTime ? new Date(req.createTime) : new Date(),
       end_date: req.endTime ? new Date(req.endTime) : new Date(new Date().setDate(new Date().getDate() + 7)),
       progress: req.status === 'completed' ? 1 :
-
           req.status === 'processing' ? 0.5 : 0,
       status: req.status
 
@@ -317,12 +312,17 @@ const loadGanttData = () => {
   }
   gantt.parse(tasks)
 }
+
+
 const destroyGantt = () => {
   if (ganttInstance) {
     ganttInstance.clearAll()
     ganttInstance = null
   }
 }
+
+
+
 const addReq = () => {
   addButten.value = true
   reqForm.value = {
@@ -339,7 +339,7 @@ const addReq = () => {
   }
 }
 
-const submitAdd = async () => {
+const doAdd = async () => {
   if (!addFormRef.value) return
   await addFormRef.value.validate()
   loading.value = true
@@ -347,17 +347,17 @@ const submitAdd = async () => {
   addButten.value = false
   await getReqs()
   loading.value = false
-
 }
 
+
 const clickV = async (row) => {
-    loading.value = true
-    const res = await getRequirementDetail(row.requirementId)
-    curReq.value = res.data
-    firstData.value = JSON.parse(JSON.stringify(res.data))
+  loading.value = true
+  const res = await getRequirementDetail(row.requirementId)
+  curReq.value = res.data
+  firstData.value = JSON.parse(JSON.stringify(res.data))
   isEdit.value = false
-     delButten.value = curReq.value.createBy === username.value
-  dialogVisible.value = true
+  delButten.value = curReq.value.createBy === username.value
+  visibButten.value = true
   loading.value = false
 }
 
@@ -370,13 +370,13 @@ const donotEDITT = () => {
   isEdit.value = false
 }
 
-const submitEdit = async () => {
+const doEdit = async () => {
   if (!formRef.value) return
     await formRef.value.validate()
     loading.value = true
     await updateRequirement(curReq.value)
     isEdit.value = false
-    dialogVisible.value = false
+    visibButten.value = false
     await getReqs()
     loading.value = false
 
@@ -385,7 +385,7 @@ const submitEdit = async () => {
 const delReq = async (row) => {
   loading.value = true
   await delRequirement(row.defectId)
-  dialogVisible.value = false
+  visibButten.value = false
   await getReqs()
   loading.value = false
 }
@@ -406,7 +406,7 @@ onMounted(() => {
   gettheUser()
 })
 
-watch(ganttDialogVisible, (newVal) => {
+watch(ganttButten, (newVal) => {
   if (!newVal) {
     nextTick(() => {
       destroyGantt()
@@ -422,75 +422,5 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.r-cards {
-  margin: 16px;
-  min-height: calc(100vh - 150px);
-}
-
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.header-left {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.title {
-  font-size: 18px;
-  font-weight: bold;
-}
-
-.count-tag {
-  font-size: 13px;
-}
-
-.search {
-  margin-bottom: 16px;
-  padding: 16px;
-  background-color: #f5f7fa;
-  border-radius: 4px;
-}
-
-.sF {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-}
-
-.rList {
-  margin-top: 16px;
-}
-@media screen and (max-width: 768px) {
-  .sF {
-    :deep(.el-form-item) {
-      margin-bottom: 16px;
-    }
-  }
-}
-
-:deep(.el-form-item__label) {
-  font-weight: normal;
-}
-
-:deep(.el-card__header) {
-  padding: 16px 20px;
-  border-bottom: 1px solid #e4e7ed;
-}
-
-:deep(.el-card__body) {
-  padding: 20px;
-}
-.completed-task {
-  background-color: #67C23A;
-}
-.progress-task {
-  background-color: #409EFF;
-}
-.pending-task {
-  background-color: #909399;
-}
+@import "req.scss";
 </style>

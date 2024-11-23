@@ -8,36 +8,19 @@
         Agile Innovators
       </h3>
       <el-form-item prop="username">
-        <el-input
-          v-model="loginForm.username"
-          type="text"
-          size="large"
-          auto-complete="off"
-          placeholder="username"
+        <el-input v-model="loginForm.username" type="text" size="large" auto-complete="off" placeholder="username"
         >
           <template #prefix><svg-icon icon-class="user" class="el-input__icon input-icon" /></template>
         </el-input>
       </el-form-item>
       <el-form-item prop="password">
-        <el-input
-          v-model="loginForm.password"
-          type="password"
-          size="large"
-          auto-complete="off"
-          placeholder="password"
-          @keyup.enter="handleLogin"
+        <el-input v-model="loginForm.password" type="password" size="large" auto-complete="off" placeholder="password" @keyup.enter="handleLogin"
         >
           <template #prefix><svg-icon icon-class="password" class="el-input__icon input-icon" /></template>
         </el-input>
       </el-form-item>
       <el-form-item prop="code" v-if="captchaEnabled">
-        <el-input
-          v-model="loginForm.code"
-          size="large"
-          auto-complete="off"
-          placeholder="Verification code"
-          style="width: 63%"
-          @keyup.enter="handleLogin"
+        <el-input v-model="loginForm.code" size="large" auto-complete="off" placeholder="Verification code" style="width: 63%" @keyup.enter="handleLogin"
         >
           <template #prefix><svg-icon icon-class="validCode" class="el-input__icon input-icon" /></template>
         </el-input>
@@ -47,12 +30,7 @@
       </el-form-item>
       <el-checkbox v-model="loginForm.rememberMe" style="margin:0px 0px 25px 0px;">remember</el-checkbox>
       <el-form-item style="width:100%;">
-        <el-button
-          :loading="loading"
-          size="large"
-          type="primary"
-          style="width:100%;"
-          @click.prevent="handleLogin"
+        <el-button :loading="loading" size="large" type="primary" style="width:100%;" @click.prevent="handleLogin"
         >
           <span v-if="!loading">login</span>
           <span v-else>logging...</span>
@@ -62,7 +40,7 @@
         </div>
       </el-form-item>
     </el-form>
-    <!--  底部  -->
+
     <div class="el-login-footer">
       <span>Copyright © 2024 Agile Innovators</span>
     </div>
@@ -169,66 +147,5 @@ getCookie();
 </script>
 
 <style lang='scss' scoped>
-.login {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  height: 100%;
-  background-image: url("../assets/images/background.jpg");
-  background-size: cover;
-}
-.title {
-  margin: 0px auto 30px auto;
-  text-align: center;
-  color: #707070;
-}
-
-.login-form {
-  border-radius: 6px;
-  background: #ffffff;
-  width: 400px;
-  padding: 25px 25px 5px 25px;
-  margin-right: 15%;
-  .el-input {
-    height: 40px;
-    input {
-      height: 40px;
-    }
-  }
-  .input-icon {
-    height: 39px;
-    width: 14px;
-    margin-left: 0px;
-  }
-}
-.login-tip {
-  font-size: 13px;
-  text-align: center;
-  color: #bfbfbf;
-}
-.login-code {
-  width: 33%;
-  height: 40px;
-  float: right;
-  img {
-    cursor: pointer;
-    vertical-align: middle;
-  }
-}
-.el-login-footer {
-  height: 40px;
-  line-height: 40px;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  text-align: center;
-  color: #fff;
-  font-family: Arial;
-  font-size: 12px;
-  letter-spacing: 1px;
-}
-.login-code-img {
-  height: 40px;
-  padding-left: 12px;
-}
+@import "log";
 </style>

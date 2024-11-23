@@ -3,69 +3,58 @@
     <el-card class="box-card">
       <template #header>
         <div class="card-header">
-          <el-button type="primary" @click="handleAdd">Add Task</el-button>
+          <el-button type="primary" @click="doAdd">Add Task</el-button>
         </div>
       </template>
 
-      <el-table
-          v-loading="loading"
-          :data="taskTreeData"
-          row-key="taskId"
-          :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+      <el-table v-loading="loading" :data="treeD" row-key="taskId" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
       >
         <el-table-column prop="title" label="Title" min-width="200">
           <template #default="{ row }">
             <span>{{ row.title }}</span>
           </template>
         </el-table-column>
-
         <el-table-column prop="status" label="Status" width="100" align="center">
           <template #default="{ row }">
-            <el-tag :type="getStatusType(row.status)">
-              {{ row.status }}
-            </el-tag>
+            <el-tag :type="row.status">{{ row.status }}</el-tag>
           </template>
         </el-table-column>
 
         <el-table-column prop="priority" label="Priority" width="100" align="center">
           <template #default="{ row }">
-            <el-tag :type="getPriorityType(row.priority)">
-              {{ getPriorityLabel(row.priority) }}
-            </el-tag>
+            <el-tag :type="row.priority">{{ row.priority }}</el-tag>
           </template>
         </el-table-column>
-
         <el-table-column prop="assignedTo" label="Assignee" width="120" align="center" />
-
         <el-table-column prop="dueDate" label="Due Date" width="120" align="center">
           <template #default="{ row }">
             <span>{{ row.dueDate }}</span>
           </template>
         </el-table-column>
-
         <el-table-column label="Hours" width="150" align="center">
           <template #default="{ row }">
             <span>{{ row.estimatedHours || 0 }}/{{ row.actualHours || 0 }}</span>
           </template>
         </el-table-column>
-
         <el-table-column prop="complexity" label="Complexity" width="100" align="center">
           <template #default="{ row }">
-            {{ getComplexityLabel(row.complexity) }}
+            {{ row.complexity }}
           </template>
         </el-table-column>
-
         <el-table-column label="Operations" align="center" width="150">
           <template #default="{ row }">
-            <el-button type="text" @click="handleEdit(row)">Edit</el-button>
-            <el-button type="text" style="color: red" @click="handleDelete(row)">Delete</el-button>
+            <el-button type="text" @click="doEDIT(row)">Edit</el-button>
+           
           </template>
         </el-table-column>
       </el-table>
     </el-card>
 
-    <!-- Add/Edit Dialog -->
-    <el-dialog :title="dialogTitle" v-model="dialogVisible" width="500px" append-to-body>
+
+
+
+
+    <el-dialog :title="butTit" v-model="buttonVis" width="500px" append-to-body>
       <el-form ref="taskForm" :model="taskForm" :rules="rules" label-width="100px">
         <el-form-item label="Title" prop="title">
           <el-input v-model="taskForm.title" placeholder="Please input title" />
@@ -90,21 +79,13 @@
           </el-select>
         </el-form-item>
         <el-form-item label="Parent Task">
-          <el-select v-model="taskForm.parentTaskId" placeholder="Select parent task" clearable>
-            <el-option
-                v-for="task in taskList"
-                :key="task.taskId"
-                :label="task.title"
-                :value="task.taskId"
+          <el-select v-model="taskForm.parentTaskId" placeholder="parentTaskId" clearable>
+            <el-option v-for="task in taskD" :key="task.taskId" :label="task.title" :value="task.taskId"
             />
           </el-select>
         </el-form-item>
         <el-form-item label="Due Date">
-          <el-date-picker
-              v-model="taskForm.dueDate"
-              type="date"
-              placeholder="Select date"
-              value-format="YYYY-MM-DD"
+          <el-date-picker v-model="taskForm.dueDate" type="date" placeholder="Select date" value-format="YYYY-MM-DD"
           />
         </el-form-item>
         <el-form-item label="Hours">
@@ -120,174 +101,144 @@
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button @click="dialogVisible = false">Cancel</el-button>
-          <el-button type="primary" @click="submitForm">Confirm</el-button>
+          <el-button @click="buttonVis = false">Cancel</el-button>
+          <el-button type="primary" @click="subF">Confirm</el-button>
         </div>
       </template>
     </el-dialog>
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref, reactive, onMounted } from 'vue'
 import { listTask, getTask, addTask, updateTask, delTask } from '@/api/project/tasks'
+import { useRoute } from 'vue-router'
+import { ElMessage, ElMessageBox } from 'element-plus'
 
-export default {
-  name: 'ProjectTaskList',
-  data() {
-    return {
-      loading: false,
-      taskList: [],
-      taskTreeData: [],
-      queryParams: {
-        projectId: this.$route.params.id
-      },
-      dialogVisible: false,
-      dialogTitle: '',
-      taskForm: {
-        taskId: undefined,
-        projectId: this.$route.params.id,
-        title: '',
-        description: '',
-        status: 'To Do',
-        priority: 0,
-        parentTaskId: undefined,
-        dueDate: '',
-        estimatedHours: 0,
-        complexity: 0
-      },
-      rules: {
-        title: [{ required: true, message: 'Please input title', trigger: 'blur' }],
-        status: [{ required: true, message: 'Please select status', trigger: 'change' }],
-        priority: [{ required: true, message: 'Please select priority', trigger: 'change' }]
-      }
-    }
-  },
-  created() {
-    this.getList()
-  },
-  methods: {
-    getList() {
-      this.loading = true
-      listTask(this.queryParams).then(response => {
-        this.taskList = response.rows
-        this.taskTreeData = this.convertToTree(this.taskList)
-        this.loading = false
-      })
-    },
-    convertToTree(list) {
-      const map = {}
-      const result = []
 
-      list.forEach(item => {
-        map[item.taskId] = { ...item, children: [] }
-      })
+const route = useRoute()
+const taskFormRef = ref(null)
 
-      list.forEach(item => {
-        const node = map[item.taskId]
-        if (item.parentTaskId) {
-          const parent = map[item.parentTaskId]
-          if (parent) {
-            parent.children.push(node)
-          } else {
-            result.push(node)
-          }
-        } else {
-          result.push(node)
-        }
-      })
 
-      return result
-    },
-    handleAdd() {
-      this.dialogTitle = 'Add Task'
-      this.taskForm = {
-        projectId: this.$route.params.id,
-        title: '',
-        description: '',
-        status: 'To Do',
-        priority: 0,
-        parentTaskId: undefined,
-        dueDate: '',
-        estimatedHours: 0,
-        complexity: 0
-      }
-      this.dialogVisible = true
-    },
-    handleEdit(row) {
-      this.dialogTitle = 'Edit Task'
-      getTask(row.taskId).then(response => {
-        this.taskForm = response.data
-        this.dialogVisible = true
-      })
-    },
-    handleDelete(row) {
-      this.$confirm('Are you sure to delete this task?', 'Warning', {
-        confirmButtonText: 'Confirm',
-        cancelButtonText: 'Cancel',
-        type: 'warning'
-      }).then(() => {
-        delTask(row.taskId).then(() => {
-          this.$message.success('Delete successful')
-          this.getList()
-        })
-      }).catch(() => {})
-    },
-    submitForm() {
-      this.$refs.taskForm.validate(valid => {
-        if (valid) {
-          if (this.taskForm.taskId) {
-            updateTask(this.taskForm).then(() => {
-              this.$message.success('Update successful')
-              this.dialogVisible = false
-              this.getList()
-            })
-          } else {
-            addTask(this.taskForm).then(() => {
-              this.$message.success('Add successful')
-              this.dialogVisible = false
-              this.getList()
-            })
-          }
-        }
-      })
-    },
-    getStatusType(status) {
-      const statusMap = {
-        'To Do': 'info',
-        'In Progress': 'warning',
-        'Done': 'success',
-        'Blocked': 'danger'
-      }
-      return statusMap[status] || 'info'
-    },
-    getPriorityType(priority) {
-      const priorityMap = {
-        0: 'info',    // Low
-        1: 'warning', // Medium
-        2: 'success', // High
-        3: 'danger'   // Urgent
-      }
-      return priorityMap[priority] || 'info'
-    },
-    getPriorityLabel(priority) {
-      const priorityMap = {
-        0: 'Low',
-        1: 'Medium',
-        2: 'High',
-        3: 'Urgent'
-      }
-      return priorityMap[priority] || 'Unknown'
-    },
-    getComplexityLabel(complexity) {
-      const complexityMap = {
-        0: 'Simple',
-        1: 'Medium',
-        2: 'Complex'
-      }
-      return complexityMap[complexity] || 'Unknown'
-    }
-  }
+const loading = ref(false)
+const taskD = ref([])
+const treeD = ref([])
+const buttonVis = ref(false)
+const butTit = ref('')
+
+
+
+
+const queryParams = reactive({
+  projectId: route.params.id
+})
+
+
+
+const taskForm = reactive({
+  taskId: undefined,
+  projectId: route.params.id,
+  title: '',
+  description: '',
+  status: 'To Do',
+  priority: 0,
+  parentTaskId: undefined,
+  dueDate: '',
+  estimatedHours: 0,
+  complexity: 0
+})
+
+const rules = {
+  title: [{ required: true, message: 'title', trigger: 'blur' }],
+  status: [{ required: true, message: 'status', trigger: 'change' }],
+  priority: [{ required: true, message: 'priority', trigger: 'change' }]
 }
+
+
+
+const getList = async () => {
+    loading.value = true
+    const response = await listTask(queryParams)
+    taskD.value = response.rows
+    treeD.value = doEleTree(taskD.value)
+    loading.value = false
+
+}
+
+
+const doEleTree = (list) => {
+  const map = {}
+  const result = []
+
+  list.forEach(item => {
+    map[item.taskId] = { ...item, children: [] }
+  })
+
+  list.forEach(item => {
+    const node = map[item.taskId]
+    if (item.parentTaskId && map[item.parentTaskId]) {
+      map[item.parentTaskId].children.push(node)
+    } else {
+      result.push(node)
+    }
+  })
+
+  return result
+}
+
+
+
+const doAdd = () => {
+  butTit.value = 'ADD'
+  Object.assign(taskForm, {
+    taskId: undefined,
+    projectId: route.params.id,
+    title: '',
+    description: '',
+    status: 'To Do',
+    priority: 0,
+    parentTaskId: undefined,
+    dueDate: '',
+    estimatedHours: 0,
+    complexity: 0
+  })
+  buttonVis.value = true
+}
+
+
+const doEDIT = async (row) => {
+  butTit.value = 'Edit'
+  const response = await getTask(row.taskId)
+  Object.assign(taskForm, response.data)
+  buttonVis.value = true
+}
+
+
+
+
+
+const subF = async () => {
+  if (!taskFormRef.value) return
+  await taskFormRef.value.validate(async (valid) => {
+    if (valid) {
+      if (taskForm.taskId) {
+        await updateTask(taskForm)
+        ElMessage.success('Update successful')
+      } else {
+        await addTask(taskForm)
+        ElMessage.success('Add successful')
+      }
+      buttonVis.value = false
+      getList()
+    }
+  })
+}
+
+
+// 页面加载时获取列表
+onMounted(() => {
+  getList()
+})
 </script>
 
 <style scoped>
