@@ -80,7 +80,7 @@ export const constantRoutes = [
         path: 'profile',
         component: () => import('@/views/system/user/profile/index'),
         name: 'Profile',
-        meta: { title: '个人中心', icon: 'user' }
+        meta: { title: 'center', icon: 'user' }
       }
     ]
   },
@@ -117,7 +117,7 @@ export const constantRoutes = [
         component: () => import('@/views/dashboard/index.vue'),
         name: 'Dashboard',
         meta: {
-          title: '仪表盘',
+          title: 'dashboard',
           icon: 'dashboard',
         }
       }
@@ -132,7 +132,7 @@ export const constantRoutes = [
         path: 'index',
         component: () => import('@/views/project/project/index.vue'),
         name: 'ProjectList',
-        meta: { title: '项目管理', icon: 'tree', affix: false }
+        meta: { title: 'ProjectList', icon: 'tree', affix: false }
       },
       {
         path: 'detail/:id',
@@ -142,85 +142,85 @@ export const constantRoutes = [
         component: () => import('@/views/project/project/detail.vue'),
         name: 'ProjectDetail',
         hidden: true,
-        meta: { title: '项目详情' },
+        meta: { title: 'ProjectDetail' },
         props: true ,
         children: [ {
           path: 'overview',
           component: () => import('@/views/project/project/overview.vue'),
           name: 'ProjectOverview',
-          meta: { title: '项目概览' }
+          meta: { title: 'ProjectOverview' }
         },
           {
             path: 'plan',
             component: () => import('@/views/project/project/plan.vue'),
             name: 'ProjectPlan',
-            meta: { title: '项目规划' }
+            meta: { title: 'ProjectPlan' }
           },
           {
             path: 'requirements',
             component: () => import('@/views/project/project/requirements.vue'),
             name: 'ProjectRequirements',
-            meta: { title: '需求管理' }
+            meta: { title: 'ProjectRequirements' }
           },
           {
             path: 'defects',
             component: () => import('@/views/project/project/defects.vue'),
             name: 'ProjectDefects',
-            meta: { title: '缺陷管理' }
+            meta: { title: 'ProjectDefects' }
           },
           {
             path: 'tasks',
             component: () => import('@/views/project/project/tasks.vue'),
             name: 'ProjectTasks',
-            meta: { title: '工作项' }
+            meta: { title: 'ProjectTasks' }
           },
           {
             path: 'iterations',
             component: () => import('@/views/project/project/iterations.vue'),
             name: 'ProjectIterations',
-            meta: { title: '迭代管理' }
+            meta: { title: 'ProjectIterations' }
           },
           {
             path: 'releases',
             component: () => import('@/views/project/project/releases.vue'),
             name: 'ProjectReleases',
-            meta: { title: '发布管理' }
+            meta: { title: 'ProjectReleases' }
           },
           {
             path: 'baseline',
             component: () => import('@/views/project/project/baseline.vue'),
             name: 'ProjectBaseline',
-            meta: { title: '基线管理' }
+            meta: { title: 'ProjectBaseline' }
           },
           {
             path: 'reviews',
             component: () => import('@/views/project/project/reviews.vue'),
             name: 'ProjectReviews',
-            meta: { title: '评审管理' }
+            meta: { title: 'ProjectReviews' }
           },
           {
             path: 'testing',
             component: () => import('@/views/project/project/testing.vue'),
             name: 'ProjectTesting',
-            meta: { title: '测试管理' }
+            meta: { title: 'ProjectTesting' }
           },
           {
             path: 'documents',
             component: () => import('@/views/project/project/documents.vue'),
             name: 'ProjectDocuments',
-            meta: { title: '文档管理' }
+            meta: { title: 'ProjectDocuments' }
           },
           {
             path: 'resources',
             component: () => import('@/views/project/project/resources.vue'),
             name: 'ProjectResources',
-            meta: { title: '资源管理' }
+            meta: { title: 'ProjectResources' }
           },
           {
             path: 'reports',
             component: () => import('@/views/project/project/reports.vue'),
             name: 'ProjectReports',
-            meta: { title: '统计报表' }
+            meta: { title: 'ProjectReports' }
           }
         ]
       }

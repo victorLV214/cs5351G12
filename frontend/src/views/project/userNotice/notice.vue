@@ -32,7 +32,6 @@ const userStore = useUserStore()
 const getMA = async () => {
     const r = await getUserNoticeList(userStore.id)
       allM.value = r.rows
-  
 
 }
 
