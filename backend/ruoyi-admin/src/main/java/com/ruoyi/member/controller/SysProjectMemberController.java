@@ -42,7 +42,6 @@ public class SysProjectMemberController extends BaseController {
      * 查询项目成员列表
      */
     @ApiOperation("项目成员列表")
-    @PreAuthorize("@ss.hasPermi('dev-api:project:member:list')")
     @GetMapping("/list")
     public TableDataInfo list(SysProjectMember sysProjectMember) {
         startPage();
@@ -54,7 +53,6 @@ public class SysProjectMemberController extends BaseController {
      * 导出项目成员列表
      */
     @ApiOperation("导出项目成员")
-    @PreAuthorize("@ss.hasPermi('dev-api:project:member:export')")
     @Log(title = "项目成员", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, SysProjectMember sysProjectMember) {
@@ -67,7 +65,6 @@ public class SysProjectMemberController extends BaseController {
      * 获取项目成员详细信息
      */
     @ApiOperation("查询项目成员")
-    @PreAuthorize("@ss.hasPermi('dev-api:project:member:query')")
     @GetMapping(value = "/{projectMemberId}")
     public AjaxResult getInfo(@PathVariable("projectMemberId") Long projectMemberId) {
         return success(sysProjectMemberService.selectSysProjectMemberByProjectMemberId(projectMemberId));
@@ -77,7 +74,6 @@ public class SysProjectMemberController extends BaseController {
      * 新增项目成员
      */
     @ApiOperation("新增项目成员")
-    @PreAuthorize("@ss.hasPermi('dev-api:project:member:add')")
     @Log(title = "项目成员", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody SysProjectMember sysProjectMember) {
@@ -91,7 +87,6 @@ public class SysProjectMemberController extends BaseController {
      * 修改项目成员
      */
     @ApiOperation("修改项目成员")
-    @PreAuthorize("@ss.hasPermi('dev-api:project:member:edit')")
     @Log(title = "项目成员", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody SysProjectMember sysProjectMember) {
@@ -105,7 +100,6 @@ public class SysProjectMemberController extends BaseController {
      * 删除项目成员
      */
     @ApiOperation("删除项目成员")
-    @PreAuthorize("@ss.hasPermi('dev-api:project:member:remove')")
     @Log(title = "项目成员", businessType = BusinessType.DELETE)
     @DeleteMapping("/{projectMemberIds}")
     public AjaxResult remove(@PathVariable Long[] projectMemberIds) {

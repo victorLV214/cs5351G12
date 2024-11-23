@@ -30,7 +30,6 @@ import com.ruoyi.common.core.page.TableDataInfo;
  * @date 2024-10-28
  */
 @RestController
-@RequestMapping("/system/user/notice")
 @Api(tags = "用户通知管理")
 public class SysUserNoticeController extends BaseController
 {
@@ -42,7 +41,7 @@ public class SysUserNoticeController extends BaseController
     /**
      * 查询当前用户收到的通知列表
      */
-    @PreAuthorize("@ss.hasPermi('system:notice:list')")
+
     @GetMapping("/list")
     @ApiOperation(value = "查询对应用户收到的通知列表")
     public TableDataInfo list(SysNotice sysNotice, @RequestParam Long userId)
@@ -67,7 +66,6 @@ public class SysUserNoticeController extends BaseController
      * 设置用户的通知阅读状态
      * is_read: 0:未读 1:已读
      */
-    @PreAuthorize("@ss.hasPermi('system:notice:read')")
     @Log(title = "通知公告的用户阅读状态", businessType = BusinessType.UPDATE)
     @PutMapping("/status")
     @ApiOperation(value = "设置用户的通知阅读状态")

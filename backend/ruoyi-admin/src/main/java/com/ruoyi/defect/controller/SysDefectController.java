@@ -42,7 +42,6 @@ public class SysDefectController extends BaseController {
      * 查询缺陷列表
      */
     @ApiOperation("缺陷列表")
-    @PreAuthorize("@ss.hasPermi('dev-api:project:defect:list')")
     @GetMapping("/list")
     public TableDataInfo list(SysDefect sysDefect) {
         startPage();
@@ -54,7 +53,6 @@ public class SysDefectController extends BaseController {
      * 导出缺陷列表
      */
     @ApiOperation("导出缺陷")
-    @PreAuthorize("@ss.hasPermi('dev-api:project:defect:export')")
     @Log(title = "缺陷管理", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, SysDefect sysDefect) {
@@ -67,7 +65,6 @@ public class SysDefectController extends BaseController {
      * 获取缺陷详细信息
      */
     @ApiOperation("查询缺陷")
-    @PreAuthorize("@ss.hasPermi('dev-api:project:defect:query')")
     @GetMapping(value = "/{defectId}")
     public AjaxResult getInfo(@PathVariable("defectId") Long defectId) {
         return success(sysDefectService.selectSysDefectByDefectId(defectId));
@@ -77,7 +74,6 @@ public class SysDefectController extends BaseController {
      * 新增缺陷
      */
     @ApiOperation("新增缺陷")
-    @PreAuthorize("@ss.hasPermi('dev-api:project:defect:add')")
     @Log(title = "缺陷管理", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody SysDefect sysDefect) {
@@ -91,7 +87,6 @@ public class SysDefectController extends BaseController {
      * 修改缺陷
      */
     @ApiOperation("修改缺陷")
-    @PreAuthorize("@ss.hasPermi('dev-api:project:defect:edit')")
     @Log(title = "缺陷管理", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody SysDefect sysDefect) {
@@ -105,7 +100,6 @@ public class SysDefectController extends BaseController {
      * 删除缺陷
      */
     @ApiOperation("删除缺陷")
-    @PreAuthorize("@ss.hasPermi('dev-api:project:defect:remove')")
     @Log(title = "缺陷管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{defectIds}")
     public AjaxResult remove(@PathVariable Long[] defectIds) {
