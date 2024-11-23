@@ -34,11 +34,7 @@
       <el-form ref="formRef" :model="form" :ruleX="ruleX" label-width="100px">
         <el-form-item label="user" prop="userId">
           <el-select v-model="form.userId" placeholder="userId" filterable>
-            <el-option
-                v-for="item in usersss"
-                :key="item.userId"
-                :label="item.userName"
-                :value="item.userId"
+            <el-option v-for="item in usersss" :key="item.userId" :label="item.userName" :value="item.userId"
             />
           </el-select>
         </el-form-item>
@@ -71,7 +67,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
-
+import { listUser } from '@/api/system/user'
 
 const route = useRoute()
 const formRef = ref(null)
@@ -117,6 +113,7 @@ const doADD = async () => {
   buttenVis.value = true
   const response = await listUser()
   usersss.value = response.rows
+  console.log(usersss)
 }
 
 const subF = async () => {
