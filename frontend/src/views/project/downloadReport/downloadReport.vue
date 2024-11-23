@@ -3,8 +3,12 @@
     <el-card>
       <el-table :data="p">
         <el-table-column prop="projectName" label="Project Name" />
-        <el-table-column ><el-button @click="downloadProject">download</el-button></el-table-column>
-        <el-table-column ><el-button @click="downloadMember">downloadMember</el-button></el-table-column>
+        <el-table-column >
+          <el-button type="primary" :icon="Download" @click="downloadProject">Project</el-button>
+        </el-table-column>
+        <el-table-column >
+          <el-button type="primary" :icon="Download" @click="downloadMember">Members</el-button>
+        </el-table-column>
 
       </el-table>
     </el-card>
@@ -18,6 +22,7 @@ import { ref, onMounted } from 'vue'
 import { listProject } from '@/api/project/index.js'
 import { ElMessage } from 'element-plus'
 import {exportProject,exportname} from '@/api/download.js'
+import {Download, Plus} from "@element-plus/icons-vue";
 const p = ref([])
 const getList = async () => {
   const r = await listProject({
@@ -40,7 +45,7 @@ const downloadProject = async (row) => {
   const herf = window.URL.createObjectURL(blob)
   const link = document.createElement('a')
   link.href = window.URL.createObjectURL(blob)
-  link.download = `1.xlsx`
+  link.download = `projects.xlsx`
   link.click()
 
 
@@ -57,7 +62,7 @@ const downloadMember = async (row) => {
   const herf = window.URL.createObjectURL(blob)
   const link = document.createElement('a')
   link.href = window.URL.createObjectURL(blob)
-  link.download = `1.xlsx`
+  link.download = `project_members.xlsx`
   link.click()
 
 
