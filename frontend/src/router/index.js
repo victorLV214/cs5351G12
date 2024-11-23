@@ -98,14 +98,13 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/notice',
+    path: '/noticee',
     component: Layout,
     children: [
       {
         path: 'index',
-        component: () => import('@/views/notice/index.vue'),
-        name: 'Notice',
-        meta: { title: '通知公告', icon: 'message' }
+        component: () => import('@/views/noticee/index.vue'),
+        name: 'Noticee',
       }
     ]
   },

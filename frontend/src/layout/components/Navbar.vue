@@ -57,6 +57,8 @@
 </template>
 
 <script setup>
+import { useRouter } from 'vue-router'
+const router = useRouter()
 import { ElMessageBox } from 'element-plus'
 import Breadcrumb from '@/components/Breadcrumb'
 import TopNav from '@/components/TopNav'
@@ -92,7 +94,9 @@ const getUnreadCount = async () => {
 
 }
 
-
+const handleNoticeClick = () => {
+  router.push('/userNotice/notice')  // 跳转到通知页面
+}
 function handleCommand(command) {
   switch (command) {
     case "setLayout":

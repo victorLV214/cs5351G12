@@ -12,7 +12,7 @@ import { useRouter } from 'vue-router'
 import { Message } from '@element-plus/icons-vue'
 
 const router = useRouter()
-const url = ref('/system/notice')
+const url = ref('/system/noticee')
 const noticeCount = ref(0)
 
 function goto() {
