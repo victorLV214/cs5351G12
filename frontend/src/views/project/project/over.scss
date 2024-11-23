@@ -1,0 +1,74 @@
+
+.countdown-card{
+  flex: 0 0 45%; /* 设置固定宽度为50% */
+  max-width: 50%;
+
+}
+.member-card{
+  flex: 0 0 45%; /* 设置固定宽度为50% */
+  max-width: 50%;
+}
+.project-info-card, .chart-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.cards-container {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+  align-items: stretch;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.status-tag {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+
+
+.info-content {
+  padding: 10px 0;
+}
+
+.info-row {
+  display: flex;
+  margin-bottom: 15px;
+}
+
+.info-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.info-item.full-width {
+  flex: 2;
+}
+
+.label {
+  color: #606266;
+  margin-right: 10px;
+  min-width: 80px;
+}
+
+.value {
+  color: #303133;
+}
+
+
+
+:deep(.el-progress) {
+  width: 200px;
+}

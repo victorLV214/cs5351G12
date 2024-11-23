@@ -8,35 +8,32 @@
         </div>
       </template>
       <el-table
-          :data="projectList" style="width: 100%" class="project-table" :row-class-name="tableRowClassName" @row-click="handleRowsClickSingleProject">
+          :data="projectList" style="width: 100%" class="project-table" :row-class-name="tableRowClassName" @row-click="doRCS">
         <el-table-column prop="projectName" label="Project Name">
           <template #default="scope">
-            <router-link
-                :to="`/project/detail/${scope.row.projectId}`"
+            <a
+                href="javascript:;"
+                @click="checkProjectAccess(scope.row)"
                 class="project-link"
             >
               {{ scope.row.projectName }}
-            </router-link>
+            </a>
           </template>
         </el-table-column>
         <el-table-column prop="projectCode" label="Project Code" />
         <el-table-column prop="createTime" label="Create Time" />
         <el-table-column label="Action" width="180">
-          <template #default="scope">
-
-            <el-dropdown trigger="click">
+          <template #default="scope"><el-dropdown trigger="click">
               <el-button type="primary" link class="action-button">
                 <el-icon><MoreFilled /></el-icon>
               </el-button>
-              <template #dropdown>
-                <el-dropdown-menu>
-                  <el-dropdown-item @click="handleDetails(scope.row)">
-                    <el-icon><Document /></el-icon> detail
+              <template #dropdown><el-dropdown-menu>
+                  <el-dropdown-item @click="getDetail(scope.row)"><el-icon><Document /></el-icon> detail
                   </el-dropdown-item>
-                  <el-dropdown-item @click="handleEdit(scope.row)">
+                <el-dropdown-item @click="handleEdit(scope.row)">
                     <el-icon><EditPen /></el-icon> edit
                   </el-dropdown-item>
-                  <el-dropdown-item @click="handleDelete(scope.row)">
+                <el-dropdown-item @click="handleDelete(scope.row)">
                     <el-icon><Delete /></el-icon> delete
                   </el-dropdown-item>
                 </el-dropdown-menu>
@@ -46,49 +43,42 @@
         </el-table-column>
       </el-table>
     </el-card>
-    <el-dialog v-model="projectFormVisible" :title="projectFormTitle" width="600px" :close-on-click-modal="false">
+    <el-dialog v-model="pFormVisi" :title="projectFormTitle" width="600px" :close-on-click-modal="false">
       <el-form ref="formRef" :model="formDataForAddProject" :rules="rulesForForm" label-width="150px">
         <el-form-item label="projectName" prop="projectName">
           <el-input v-model="formDataForAddProject.projectName" placeholder="projectName"/>
         </el-form-item>
-        <el-form-item label="projectCode" prop="projectCode">
-          <el-input v-model="formDataForAddProject.projectCode" placeholder="projectCode"/>
+        <el-form-item label="projectCode" prop="projectCode"><el-input v-model="formDataForAddProject.projectCode" placeholder="projectCode"/>
         </el-form-item>
         <el-form-item label="description" prop="description">
-          <el-input
-              v-model="formDataForAddProject.description"
-              type="textarea"
+          <el-input v-model="formDataForAddProject.description" type="textarea"
               placeholder="description"/>
         </el-form-item>
         <el-form-item label="startDate" prop="startDate">
           <el-date-picker
               v-model="formDataForAddProject.startDate"
-              type="date"
-              placeholder="choose startDate"
-              format="YYYY-MM-DD"
-              value-format="YYYY-MM-DD"/>
+              type="date" placeholder="choose startDate"
+              format="YYYY-MM-DD" value-format="YYYY-MM-DD"/>
         </el-form-item>
         <el-form-item label="expectedEndDate" prop="expectedEndDate">
           <el-date-picker
               v-model="formDataForAddProject.expectedEndDate"
-              type="date"
-              placeholder="expectedEndDate"
+              type="date" placeholder="expectedEndDate"
               format="YYYY-MM-DD"
               value-format="YYYY-MM-DD"/>
         </el-form-item>
         <el-form-item label="priority" prop="priority">
           <el-select v-model="formDataForAddProject.priority" placeholder="priority">
             <el-option label="low" :value="1"/>
-            <el-option label="medium" :value="2"/>
-            <el-option label="high" :value="3"/>
+            <el-option label="medium" :value="2"/><el-option label="high" :value="3"/>
           </el-select>
         </el-form-item>
         <el-form-item label="status" prop="status">
-          <el-select v-model="formDataForAddProject.status" placeholder="status">
-            <el-option label="未开始" value="未开始"/>
-            <el-option label="进行中" value="进行中"/>
-            <el-option label="已完成" value="已完成"/>
-            <el-option label="已暂停" value="已暂停"/>
+          <el-select v-model="formDataForAddProject.status" placeholder="Status">
+            <el-option label="Not Started" value="Not Started"/>
+            <el-option label="In Progress" value="In Progress"/>
+            <el-option label="Completed" value="Completed"/>
+            <el-option label="Paused" value="Paused"/>
           </el-select>
         </el-form-item>
         <el-form-item label="budget" prop="budget">
@@ -108,62 +98,61 @@
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button @click="projectFormVisible = false">cancel</el-button>
+          <el-button @click="pFormVisi = false">cancel</el-button>
           <el-button type="primary" @click="submitForm">confirm</el-button>
         </div>
       </template>
     </el-dialog>
     <el-dialog v-model="detailV" title="details" width="800px">
-      <div class="detail-container" v-if="currentProject">
+      <div class="detail-container" v-if="cPro">
         <div class="detail-section">
           <h3 class="section-title">
             <el-icon><InfoFilled /></el-icon>
-            基本信息
-          </h3>
+           info</h3>
           <el-descriptions :column="2" border>
-            <el-descriptions-item label="projectName">{{ currentProject.projectName }}</el-descriptions-item>
-            <el-descriptions-item label="projectCode">{{ currentProject.projectCode }}</el-descriptions-item>
-            <el-descriptions-item label="createTime">{{ currentProject.createTime }}</el-descriptions-item>
+            <el-descriptions-item label="projectName">{{ cPro.projectName }}</el-descriptions-item>
+            <el-descriptions-item label="projectCode">{{ cPro.projectCode }}</el-descriptions-item>
+            <el-descriptions-item label="createTime">{{ cPro.createTime }}</el-descriptions-item>
             <el-descriptions-item label="status">
-              <el-tag :type="setStatusType(currentProject.status)">{{ currentProject.status }}</el-tag>
+              <el-tag :type="setStatusType(cPro.status)">{{ cPro.status }}</el-tag>
             </el-descriptions-item>
-            <el-descriptions-item label="startDate">{{ currentProject.startDate }}</el-descriptions-item>
-            <el-descriptions-item label="expectedEndDate">{{ currentProject.expectedEndDate }}</el-descriptions-item>
+            <el-descriptions-item label="startDate">{{ cPro.startDate }}</el-descriptions-item>
+            <el-descriptions-item label="expectedEndDate">{{ cPro.expectedEndDate }}</el-descriptions-item>
             <el-descriptions-item label="priority">
-              <el-tag :type="getPriorityType(currentProject.priority)">
-                {{ getPriorityLabel(currentProject.priority) }}
+              <el-tag :type="getPriorityType(cPro.priority)">
+                {{ showPriority(cPro.priority) }}
               </el-tag>
             </el-descriptions-item>
-            <el-descriptions-item label="budget">{{ currentProject.budget }}</el-descriptions-item>
+            <el-descriptions-item label="budget">{{ cPro.budget }}</el-descriptions-item>
           </el-descriptions>
         </div>
 
-        <!-- 项目描述部分 -->
+
         <div class="detail-section">
           <h3 class="section-title">
             <el-icon><Document /></el-icon>
             description
           </h3>
-          <div class="description-content">{{ currentProject.description}}</div>
+          <div class="description-content">{{ cPro.description}}</div>
         </div>
 
-        <!-- 备注部分 -->
+
         <div class="detail-section">
           <h3 class="section-title">
             <el-icon><ChatLineSquare /></el-icon>
             remark
           </h3>
-          <div class="description-content">{{ currentProject.remark }}</div>
+          <div class="description-content">{{ cPro.remark }}</div>
         </div>
 
-        <!-- 项目成员部分 -->
+
         <div class="detail-section">
           <h3 class="section-title">
             <el-icon><User /></el-icon>
             member
 
           </h3>
-          <el-table :data="currentProjectMembers" style="width: 100%">
+          <el-table :data="cPMember" style="width: 100%">
             <el-table-column prop="userName" label="userName" />
             <el-table-column prop="nickName" label="Name" />
             <el-table-column prop="role" label="role" />
@@ -180,95 +169,56 @@
       </div>
     </el-dialog>
 
-    <el-dialog v-model="projectUpdateFormVisible" :title="projectUpdateFormTitle" width="600px" :close-on-click-modal="false">
-      <el-form ref="updateFormRef" :model="formDataForUpdateProject" :rules="rulesForUpdateForm" label-width="150px">
+    <el-dialog v-model="booleanForVis" :title="projectUpdateFormTitle" width="600px" :close-on-click-modal="false">
+      <el-form ref="updateFormRef" :model="theBiggsetForm" :rules="rulesForUpdateForm" label-width="150px">
         <el-form-item label="projectName" prop="projectName">
-          <el-input v-model="formDataForUpdateProject.projectName" placeholder="projectName"/>
+          <el-input v-model="theBiggsetForm.projectName" placeholder="projectName"/>
         </el-form-item>
         <el-form-item label="projectCode" prop="projectCode">
-          <el-input v-model="formDataForUpdateProject.projectCode" placeholder="projectCode"/>
+          <el-input v-model="theBiggsetForm.projectCode" placeholder="projectCode"/>
         </el-form-item>
         <el-form-item label="description" prop="description">
-          <el-input
-              v-model="formDataForUpdateProject.description"
-              type="textarea"
-              placeholder="description"/>
+          <el-input v-model="theBiggsetForm.description" type="textarea" placeholder="description"/>
         </el-form-item>
         <el-form-item label="startDate" prop="startDate">
-          <el-date-picker
-              v-model="formDataForUpdateProject.startDate"
-              type="date"
-              placeholder="choose startDate"
-              format="YYYY-MM-DD"
-              value-format="YYYY-MM-DD"/>
+          <el-date-picker v-model="theBiggsetForm.startDate" type="date" placeholder="choose startDate" format="YYYY-MM-DD" value-format="YYYY-MM-DD"/>
         </el-form-item>
         <el-form-item label="expectedEndDate" prop="expectedEndDate">
-          <el-date-picker
-              v-model="formDataForUpdateProject.expectedEndDate"
-              type="date"
-              placeholder="expectedEndDate"
-              format="YYYY-MM-DD"
-              value-format="YYYY-MM-DD"/>
+          <el-date-picker v-model="theBiggsetForm.expectedEndDate" type="date" placeholder="expectedEndDate" format="YYYY-MM-DD" value-format="YYYY-MM-DD"/>
         </el-form-item>
         <el-form-item label="actualEndDate" prop="actualEndDate">
-          <el-date-picker
-              v-model="formDataForUpdateProject.actualEndDate"
-              type="date"
-              placeholder="actualEndDate"
-              format="YYYY-MM-DD"
-              value-format="YYYY-MM-DD"/>
+          <el-date-picker v-model="theBiggsetForm.actualEndDate" type="date" placeholder="actualEndDate" format="YYYY-MM-DD" value-format="YYYY-MM-DD"/>
         </el-form-item>
         <el-form-item label="priority" prop="priority">
-          <el-select v-model="formDataForUpdateProject.priority" placeholder="priority">
-            <el-option label="low" :value="1"/>
-            <el-option label="medium" :value="2"/>
-            <el-option label="high" :value="3"/>
+          <el-select v-model="theBiggsetForm.priority" placeholder="priority">
+            <el-option label="low" :value="1"/><el-option label="medium" :value="2"/><el-option label="high" :value="3"/>
           </el-select>
         </el-form-item>
         <el-form-item label="status" prop="status">
-          <el-select v-model="formDataForUpdateProject.status" placeholder="status">
-            <el-option label="未开始" value="未开始"/>
-            <el-option label="进行中" value="进行中"/>
-            <el-option label="已完成" value="已完成"/>
-            <el-option label="已暂停" value="已暂停"/>
+          <el-select v-model="theBiggsetForm.status" placeholder="Status">
+            <el-option label="Not Started" value="Not Started"/>
+            <el-option label="In Progress" value="In Progress"/>
+            <el-option label="Completed" value="Completed"/>
+            <el-option label="Paused" value="Paused"/>
           </el-select>
         </el-form-item>
         <el-form-item label="completionPercentage" prop="completionPercentage">
           <el-input-number
-              v-model="formDataForUpdateProject.completionPercentage"
-              :precision="1"
-              :step="5"
-              :min="0"
-              :max="100"
-              placeholder="input the completionPercentage"/>
+              v-model="theBiggsetForm.completionPercentage" :precision="1" :step="5" :min="0" :max="100" placeholder="input the completionPercentage"/>
         </el-form-item>
         <el-form-item label="budget" prop="budget">
           <el-input-number
-              v-model="formDataForUpdateProject.budget"
-              :precision="2"
-              :step="1000"
-              :min="0"
-              placeholder="input the budget"/>
-        </el-form-item>
+              v-model="theBiggsetForm.budget" :precision="2" :step="1000" :min="0" placeholder="input the budget"/></el-form-item>
         <el-form-item label="actualCost" prop="actualCost">
-          <el-input-number
-              v-model="formDataForUpdateProject.actualCost"
-              :precision="2"
-              :step="1000"
-              :min="0"
-              placeholder="input the actualCost"/>
+          <el-input-number v-model="theBiggsetForm.actualCost" :precision="2" :step="1000" :min="0" placeholder="input the actualCost"/>
         </el-form-item>
         <el-form-item label="remark" prop="remark">
-          <el-input
-              v-model="formDataForUpdateProject.remark"
-              type="textarea"
-              placeholder="remark"/>
+          <el-input v-model="theBiggsetForm.remark" type="textarea" placeholder="remark"/>
         </el-form-item>
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button @click="projectUpdateFormVisible = false">cancel</el-button>
-          <el-button type="primary" @click="updateForm">confirm</el-button>
+          <el-button @click="booleanForVis = false">cancel</el-button><el-button type="primary" @click="updateForm">confirm</el-button>
         </div>
       </template>
     </el-dialog>
@@ -281,55 +231,78 @@ import { ref, onMounted ,reactive} from 'vue'
 
 import { ElMessage } from 'element-plus'
 import {listProject, addProject, getProject, delProject, updateProject} from '@/api/project/index.js'
-import useUserStore from "@/store/modules/user.js";
+
 import { listProjectMember } from '@/api/project/member.js'
 import {  EditPen, Delete, InfoFilled, Document, ChatLineSquare, User, Plus, MoreFilled,
   } from '@element-plus/icons-vue'
-import {getUser} from "@/api/system/user.js";
-
-
-
-const currentRow = ref(null)
-const projectFormVisible = ref(false)
-const projectUpdateFormVisible = ref(false)
 const projectFormTitle = ref('')
 const projectUpdateFormTitle = ref('')
 const formRef = ref(null)
 const updateFormRef = ref(null)
+import {getUser} from "@/api/system/user.js";
+import { useRouter } from 'vue-router'
+const router = useRouter()
+const userStore = useUserStore()
+import { addProjectMember, } from '@/api/project/member.js'
+
+const currentRow = ref(null)
+const pFormVisi = ref(false)
+const booleanForVis = ref(false)
+
+import useUserStore from "@/store/modules/user.js"
+
+
 const detailV = ref(false)
-const currentProject = ref(null)
-const currentProjectMembers = ref([])
+const cPro = ref(null)
+const cPMember = ref([])
 const formDataForAddProject = reactive({
   projectName: '',
-  projectCode: '',//  项目编码
+  projectCode: '',
   description: '',
   startDate: '',
   expectedEndDate: '',
-  priority: 2,//优先级（1=低，2=中，3=高）
-  status: '未开始',
+  priority: 2,
+  status: 'Not Started',
   budget: 0,
   remark: '',
-  projectManagerId: '',// 项目经理
+  projectManagerId: '',
 })
-const formDataForUpdateProject = reactive({
+const theBiggsetForm = reactive({
   actualCost: 0,
   actualEndDate: '',
   budget: 0,
   completionPercentage: 0.0,
-  delFlag: '0',//0代表存在，2代表删除
+  delFlag: '0',
   description: '',
   expectedEndDate: '',
-  priority: 2,//优先级（1=低，2=中，3=高）
+  priority: 2,
   projectCode: '',
   projectId: 0,
-  projectManagerId: '',// 项目经理
+  projectManagerId: '',
   projectName: '',
   remark: '',
   startDate: '',
   status: '',
 })
 
+const checkProjectAccess = async (project) => {
 
+
+    const response = await listProjectMember({
+      projectId: project.projectId,
+      pageNum: 1,
+      pageSize: 999
+    })
+  console.log('response:', response)
+    const cID = userStore.id
+    const isMember = response.rows.some(member => member.userId === cID)
+    if (isMember) {
+      router.push(`/project/detail/${project.projectId}`)
+    } else {
+      ElMessage.error('You do not have permission to access this project')
+    }
+
+}
 
 
 
@@ -339,35 +312,38 @@ const tableRowClassName = ({ row }) => {
     return 'selected-row'
   }
   return ''
-} // for select the row
+}
 
 
 
-const handleRowsClickSingleProject = (row) => {
+const doRCS = (row) => {
   currentRow.value = row
 }
 
 
-const handleDetails = async (row) => {
-  try {
+const getDetail = async (row) => {
+
     const id = row.projectId
     const projectRes = await getProject(id)
     // console.log('projectRes:', projectRes)
-    currentProject.value = projectRes.data
+    cPro.value = projectRes.data
     await myGetMembers(id)
-    
     detailV.value = true
-  } catch (error) {
-    console.error('获取项目详情失败:', error)
-    ElMessage.error('获取项目详情失败')
-  }
+
 }
 
 
-
+const showPriority = (priority) => {
+  const priorityMap = {
+    1: 'Low',
+    2: 'Medium',
+    3: 'High'
+  }
+  return priorityMap[priority] || 'unknown'
+}
 
 const myGetMembers = async (projectId) => {
-  try {
+
     const members = await listProjectMember({
       projectId: projectId,
       pageNum: 1,
@@ -385,35 +361,31 @@ const myGetMembers = async (projectId) => {
           email: userInfo.data.email
         })
       } catch (error) {
-        console.error('获取用户信息失败:', error)
+        console.error('error:', error)
         membersWithUserInfo.push({
           ...member,
-          userName: '未知用户',
+          userName: 'unknown',
           nickName: '-',
           email: '-'
         })
       }
     }
-    currentProjectMembers.value = membersWithUserInfo
+    cPMember.value = membersWithUserInfo
     
-  } catch (error) {
-    
-    console.error('获取项目成员列表失败:', error)
-    ElMessage.error('获取项目成员列表失败')
-  }
+
 }
 
 const setStatusType = (status) => {
   const statusMap = {
-    '未开始': 'info',
-    '进行中': '',//error!!!
-    '已完成': 'success',
-    '已暂停': 'warning'
+    'Not Started': 'info',
+    'In Progress': '',//error!!!
+    'Completed': 'success',
+    'Paused': 'warning'
   }
   return statusMap[status] || ''
 }
 
-// 获取优先级对应的类型和标签
+
 const getPriorityType = (priority) => {
   const priorityMap = {
     1: 'info',
@@ -423,30 +395,23 @@ const getPriorityType = (priority) => {
   return priorityMap[priority]
 }
 
-const getPriorityLabel = (priority) => {
-  const priorityMap = {
-    1: '低',
-    2: '中',
-    3: '高'
-  }
-  return priorityMap[priority] || 'unknown'
-}
+
 
 const rulesForForm = {
   projectName: [
-    { required: true, message: '请输入项目名称', trigger: 'blur' }
+    { required: true, message: 'Please enter project name', trigger: 'blur' }
   ],
   projectCode: [
-    { required: true, message: '请输入项目编码', trigger: 'blur' }
+    { required: true, message: 'Please enter project code', trigger: 'blur' }
   ],
   startDate: [
-    { required: true, message: '请选择开始日期', trigger: 'change' }
+    { required: true, message: 'Please select start date', trigger: 'change' }
   ],
   status: [
-    { required: true, message: '请选择项目状态', trigger: 'change' }
+    { required: true, message: 'Please select project status', trigger: 'change' }
   ],
   priority: [
-    { required: true, message: '请选择优先级', trigger: 'change' }
+    { required: true, message: 'Please select priority', trigger: 'change' }
   ]
 }
 
@@ -457,9 +422,8 @@ const rulesForUpdateForm = {
 const projectList = ref([])
 
 const handleAddProjects = () => {
-  projectFormVisible.value = true
-  projectFormTitle.value = '新增项目'
-  // 重置表单
+  pFormVisi.value = true
+  projectFormTitle.value = 'add project'
   if (formRef.value) {
     formRef.value.resetFields()
   }
@@ -468,7 +432,7 @@ const handleAddProjects = () => {
 const getList = async () => {
   const userStore = useUserStore()
   const userId = userStore.id
-  try {
+
     const allProject = await listProject({
       pageNum: 1,
       pageSize: 999,
@@ -476,10 +440,6 @@ const getList = async () => {
     })
     // console.log('allProject:', allProject)
     projectList.value = allProject.rows
-  } catch (error) {
-    console.error('获取项目列表失败:', error)
-    ElMessage.error('获取项目列表失败')
-  }
 }
 
 const submitForm = async () => {
@@ -490,13 +450,30 @@ const submitForm = async () => {
         const userStore = useUserStore()
         const userId = userStore.id
         formDataForAddProject.projectManagerId = userId
-        await addProject(formDataForAddProject)
 
-        ElMessage.success('新增成功')
-        projectFormVisible.value = false
-        getList() // 刷新列表
+
+        const projectResponse = await addProject(formDataForAddProject)
+
+
+        const memberData = {
+          projectId: projectResponse.data.projectId, // Assuming the response includes the new project ID
+          userId: userId,
+          role: 'creator',
+          joinDate: formDataForAddProject.startDate,
+          allocationPercentage: 100,
+          isActive: 1,
+          permissions: 'read,write,admin',
+          notes: 'Creator',
+          remark: 'creator'
+        }
+
+        await addProjectMember(memberData)
+
+        ElMessage.success('Project created successfully')
+        pFormVisi.value = false
+        getList() // Refresh the list
       } catch (error) {
-        ElMessage.error('新增失败')
+        ElMessage.error('Failed to create project: ' + error.message)
       }
     }
   })
@@ -506,49 +483,42 @@ const updateForm = async () => {
   if (!updateFormRef.value) return
   await updateFormRef.value.validate(async (valid) => {
     if (valid) {
-      try {
-        await updateProject(formDataForUpdateProject)
+        await updateProject(theBiggsetForm)
 
         ElMessage.success('编辑成功')
-        projectUpdateFormVisible.value = false
+        booleanForVis.value = false
         getList() // 刷新列表
-      } catch (error) {
-        ElMessage.error('编辑失败')
-      }
+
     }
   })
 }
 
 const handleEdit = async (row) => {
-  try {
+
     const id = row.projectId
     const projectRes = await getProject(id)
-    formDataForUpdateProject.projectId = id
+    theBiggsetForm.projectId = id
 
-    projectUpdateFormVisible.value = true
-    projectUpdateFormTitle.value = '编辑项目'
+    booleanForVis.value = true
+    projectUpdateFormTitle.value = 'edit'
 
-    // 重置表单
+
     if (updateFormRef.value) {
       updateFormRef.value.resetFields()
     }
     
-    Object.assign(formDataForUpdateProject, projectRes.data);
+    Object.assign(theBiggsetForm, projectRes.data);
 
-  } catch (error) {
-    console.error('获取项目详情失败:', error)
-    ElMessage.error('获取项目详情失败')
-  }
 }
 
 const handleDelete = async (row) => {
   try {
     await delProject(row.projectId)
 
-    ElMessage.success('删除成功')
+    ElMessage.success('false')
     getList() // 刷新列表
   } catch (error) {
-    ElMessage.error('删除失败')
+    ElMessage.error('false')
   }
 }
 
@@ -559,67 +529,5 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.project-container {
-  padding: 24px;
-  background-color: #f5f7fa;
-  min-height: calc(100vh - 48px);
-}
-
-.project-card {
-  border-radius: 8px;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.05);
-}
-
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 0;
-}
-
-.header-title {
-  font-size: 18px;
-  font-weight: 600;
-  color: #303133;
-}
-
-.add-button {
-  padding: 8px 16px;
-  font-weight: 500;
-}
-
-.project-table {
-  margin-top: 8px;
-}
-
-.action-button {
-  padding: 4px 0;
-  margin: 0 8px;
-  font-size: 14px;
-}
-
-.action-button:first-child {
-  margin-left: 0;
-}
-
-:deep(.el-card__header) {
-  padding: 16px 20px;
-  border-bottom: 1px solid #ebeef5;
-}
-
-:deep(.el-table) {
-  --el-table-header-bg-color: #f5f7fa;
-}
-
-:deep(.el-table th) {
-  font-weight: 600;
-}
-
-:deep(.el-table__row) {
-  transition: background-color 0.3s;
-}
-
-:deep(.el-table__row:hover) {
-  background-color: #f5f7fa;
-}
+@import "index.scss";
 </style>

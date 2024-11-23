@@ -8,3 +8,10 @@ export function getUserNoticeList(userId) {
         params: { userId }
     })
 }
+export function updateNoticeStatus(data) {
+    return request({
+        url: '/system/user/notice/status',
+        method: 'put',
+        data: data
+    })
+}

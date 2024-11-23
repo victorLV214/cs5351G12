@@ -23,6 +23,12 @@
           <span>需求管理</span>
         </el-menu-item>
 
+        <el-menu-item index="iterations">
+          <el-icon><Refresh /></el-icon>
+          <span>迭代管理</span>
+        </el-menu-item>
+
+
         <el-menu-item index="defects">
           <el-icon><Warning /></el-icon>
           <span>缺陷管理</span>
@@ -33,35 +39,32 @@
           <span>工作项</span>
         </el-menu-item>
 
-        <el-menu-item index="iterations">
-          <el-icon><Refresh /></el-icon>
-          <span>迭代管理</span>
-        </el-menu-item>
+
 
         <el-menu-item index="releases">
           <el-icon><Upload /></el-icon>
-          <span>发布管理</span>
+          <span>任务管理</span>
         </el-menu-item>
 
-        <el-menu-item index="baseline">
-          <el-icon><Files /></el-icon>
-          <span>基线管理</span>
-        </el-menu-item>
+<!--        <el-menu-item index="baseline">-->
+<!--          <el-icon><Files /></el-icon>-->
+<!--          <span>基线管理</span>-->
+<!--        </el-menu-item>-->
 
-        <el-menu-item index="reviews">
-          <el-icon><ChatDotRound /></el-icon>
-          <span>评审管理</span>
-        </el-menu-item>
+<!--        <el-menu-item index="reviews">-->
+<!--          <el-icon><ChatDotRound /></el-icon>-->
+<!--          <span>评审管理</span>-->
+<!--        </el-menu-item>-->
 
-        <el-menu-item index="testing">
-          <el-icon><Histogram /></el-icon>
-          <span>测试管理</span>
-        </el-menu-item>
+<!--        <el-menu-item index="testing">-->
+<!--          <el-icon><Histogram /></el-icon>-->
+<!--          <span>测试管理</span>-->
+<!--        </el-menu-item>-->
 
-        <el-menu-item index="documents">
-          <el-icon><Document /></el-icon>
-          <span>文档管理</span>
-        </el-menu-item>
+<!--        <el-menu-item index="documents">-->
+<!--          <el-icon><Document /></el-icon>-->
+<!--          <span>文档管理</span>-->
+<!--        </el-menu-item>-->
 
         <el-menu-item index="resources">
           <el-icon><Connection /></el-icon>

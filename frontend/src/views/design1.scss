@@ -1,0 +1,113 @@
+.design1 {
+  .box-card {
+    margin-bottom: 20px;
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .ss {
+    font-size: 24px;
+    font-weight: bold;
+    color: #409EFF;
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  .project-item {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+
+    &:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    h3 {
+      margin: 0 0 15px 0;
+      font-size: 16px;
+    }
+
+    .project-metrics {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+      flex-wrap: wrap;
+      gap: 10px;
+
+      span {
+        font-size: 14px;
+        color: #606266;
+      }
+    }
+  }
+}
+
+.project-overview-card {
+  margin-bottom: 20px;
+}
+
+.project-overview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.project-overview-switcher {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.project-overview-switcher .el-icon {
+  cursor: pointer;
+}
+
+.project-overview-switcher .switcher-disabled {
+  color: var(--el-text-color-placeholder);
+  cursor: not-allowed;
+}
+
+.project-overview-content {
+  padding: 10px 0;
+}
+
+.project-overview-title {
+  margin-bottom: 15px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.project-overview-progress {
+  margin: 20px 0;
+}
+
+.project-overview-metrics {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.project-metric-item {
+  text-align: center;
+  flex: 1;
+}
+
+.metric-label {
+  display: block;
+  font-size: 14px;
+  color: var(--el-text-color-secondary);
+}
+
+.metric-value {
+  display: block;
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 5px;
+  color: var(--el-color-primary);
+}
