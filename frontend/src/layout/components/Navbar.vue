@@ -9,8 +9,11 @@
         <header-search id="header-search" class="right-menu-item" />
 
         <el-tooltip content="notice" effect="dark" placement="bottom">
-          <ruo-yi-git id="ruoyi-git" class="right-menu-item hover-effect" />
+          <el-badge :value="unreadCount" class="right-menu-item hover-effect">
+            <el-icon @click="handleNoticeClick"><Bell /></el-icon>
+          </el-badge>
         </el-tooltip>
+
 
         <el-tooltip content="docs" effect="dark" placement="bottom">
           <ruo-yi-doc id="ruoyi-doc" class="right-menu-item hover-effect" />
@@ -67,7 +70,10 @@ import useAppStore from '@/store/modules/app'
 import useUserStore from '@/store/modules/user'
 import useSettingsStore from '@/store/modules/settings'
 import { Bell } from '@element-plus/icons-vue'
+import { ref, onMounted } from 'vue'
+import { getUserNoticeList } from '@/api/notice/noticeapi'
 
+const unreadCount = ref(0)
 const appStore = useAppStore()
 const userStore = useUserStore()
 const settingsStore = useSettingsStore()
@@ -75,6 +81,17 @@ const settingsStore = useSettingsStore()
 function toggleSideBar() {
   appStore.toggleSideBar()
 }
+// console.log('userStore:', userStore)
+// console.log('userId:', userStore.userId)
+
+const getUnreadCount = async () => {
+
+    const res = await getUserNoticeList(userStore.id)
+
+    unreadCount.value = res.rows.filter(notice => notice.userReadStatus === 0).length
+
+}
+
 
 function handleCommand(command) {
   switch (command) {
@@ -106,7 +123,10 @@ function setLayout() {
   emits('setLayout');
 }
 
-
+// 在组件挂载时获取未读消息数量
+onMounted(() => {
+  getUnreadCount()
+})
 
 </script>
 
@@ -130,7 +150,9 @@ function setLayout() {
       background: rgba(0, 0, 0, 0.025);
     }
   }
-
+  :deep(.el-badge__content.el-badge__content--danger) {
+    top: 15px;  // 调整这个值来改变红点的垂直位置
+  }
   .breadcrumb-container {
     float: left;
   }
