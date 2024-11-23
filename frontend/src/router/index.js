@@ -227,7 +227,15 @@ export const constantRoutes = [
     ]
   },
 
-
+  {
+    path: '/userNotice/notice',
+    component: () => import('@/views/project/userNotice/notice.vue'),
+    name: 'Notice',
+    meta: {
+      title: 'Notice',
+      icon: 'message'
+    }
+  },
 ]
 
 // 动态路由，基于用户权限动态去加载

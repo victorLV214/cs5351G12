@@ -15,3 +15,10 @@ export function updateNoticeStatus(data) {
         data: data
     })
 }
+export function addNotice(data) {
+    return request({
+        url: '/system/notice',
+        method: 'post',
+        data: data
+    })
+}

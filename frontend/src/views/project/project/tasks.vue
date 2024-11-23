@@ -6,11 +6,11 @@
       </div>
       <el-table :data="list" v-loading="loading">
         <el-table-column label="ID" prop="workItemId" width="80"/>
-        <el-table-column label="Title" prop="title"/>
+        <el-table-column label="Title" prop="title" width=""/>
         <el-table-column label="Type" prop="type" width="100"/>
         <el-table-column label="Status" prop="status" width="100"/>
         <el-table-column label="Priority" prop="priority" width="80"/>
-        <el-table-column label="Assigned" prop="assignedTo" width="100"/>
+        <el-table-column label="Assigned" prop="assignedTo" width="200"/>
         <el-table-column label="Start Date" width="180">
           <template #default="scope">
             <el-date-picker v-model="scope.row.startDate" type="date" size="small" style="width: 130px" @change="changedate2(scope.row)"/>
@@ -120,6 +120,7 @@ import {listItem, addItem, updateItem} from '@/api/project/item'
 import {listProjectMember} from '@/api/project/member'
 import {listRequirement} from '@/api/project/requirements'
 import {listIteration} from '@/api/project/iteration'
+import {addNotice} from "@/api/notice/noticeapi.js";
 
 const route = useRoute()
 const projectId = route.params.id
@@ -217,6 +218,15 @@ async function doADD2() {
     await addItem(form.value)
     addDialog.value = false
     getList()
+  const assignedUser = members.value.find(m => m.userId === form.value.assignedTo)
+  await addNotice({
+    sysNotice: {
+      noticeTitle: 'NewWorkItem',
+      noticeContent: `newworkitem:${form.value.title}`,
+      noticeType: '1',
+    },
+    userIds: [assignedUser.userId]
+  })
 }
 
 
