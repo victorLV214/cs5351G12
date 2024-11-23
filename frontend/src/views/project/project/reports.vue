@@ -55,7 +55,9 @@
           </el-col>
           <el-col :span="6">
             <div class="stat-card">
-              <div class="stat-title">Project Overview</div>
+              <div class="stat-title">
+                Project Overview
+              </div>
               <div class="project-info">
                 <p><i class="el-icon-user"></i> Team Size: {{ projectData.memberCount }} members</p>
                 <p><i class="el-icon-data-analysis"></i> Iterations: {{ projectData.iterationCount }}</p>

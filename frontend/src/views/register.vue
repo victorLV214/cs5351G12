@@ -1,7 +1,11 @@
 <template>
   <div class="register">
     <el-form ref="registerRef" :model="registerForm" :rules="registerRules" class="register-form">
-      <h3 class="title">Agile Innovators</h3>
+      <h3 class="title">
+        <img v-if="logo" :src="logo" class="sidebar-logo" alt="" width="30"
+             style="position: relative; top: 5px;"/>
+        Agile Innovators
+      </h3>
       <el-form-item prop="username">
         <el-input 
           v-model="registerForm.username" 
@@ -78,6 +82,7 @@
 <script setup>
 import { ElMessageBox } from "element-plus";
 import { getCodeImg, register } from "@/api/login";
+import logo from "@/assets/logo/logo.png";
 
 const router = useRouter();
 const { proxy } = getCurrentInstance();

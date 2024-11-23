@@ -131,6 +131,7 @@
      </el-dialog>
 
       <!-- 添加或修改公告对话框 -->
+     <!-- TODO: 修改新增表单的数据结构 -->
       <el-dialog :title="title" v-model="open" width="780px" append-to-body>
          <el-form ref="noticeRef" :model="form" :rules="rules" label-width="80px">
             <el-row>

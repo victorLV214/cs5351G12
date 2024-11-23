@@ -8,23 +8,47 @@
     <el-row :gutter="20" style="margin-top: 20px;">
       <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
         <el-card class="box-card">
-          <template #header><div class="card-header"><span>Team member activity level</span>
+          <template #header>
+            <div class="card-header">
+            <span>
+              <img src="@/assets/icons/png/team-member.png" style="width: 25px;
+                vertical-align: middle; position: relative; top: -2px;">
+              Team Member Activity Level
+            </span>
           </div>
-          </template><div ref="chartR" style="height: 300px;"></div></el-card>
-      </el-col><el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12"><el-card class="box-card"><template #header><div class="card-header"><span>Complete task statistics this week</span>
-            </div>
+          </template><div ref="chartR" style="height: 300px;"></div>
+        </el-card>
+      </el-col><el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12"><el-card class="box-card"><template #header>
+      <div class="card-header">
+        <span>
+             <img src="@/assets/icons/png/task-finish.png" style="width: 25px;
+                vertical-align: middle; position: relative; top: -2px;">
+          Complete Task Statistics This Week
+        </span>
+      </div>
     </template>
         <div ref="weekChart" style="height: 300px;"></div></el-card></el-col></el-row><el-row :gutter="20" style="margin-top: 20px;">
       <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
         <el-card class="box-card">
-          <template #header><div class="card-header">
-              <span>Project progress visualization</span></div>
+          <template #header>
+            <div class="card-header">
+              <span>
+                <img src="@/assets/icons/png/progress-visual.png" style="width: 25px;
+                  vertical-align: middle; position: relative; top: -2px;">
+                Project progress visualization
+              </span>
+            </div>
           </template><div ref="projectC" style="height: 300px;"></div>
         </el-card>
       </el-col>
     <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
         <el-card class="box-card"><template #header>
-            <div class="card-header"><span>My Responsible Work Items</span>
+            <div class="card-header">
+              <span>
+                <img src="@/assets/icons/png/task.png" style="width: 25px;
+                vertical-align: middle; position: relative; top: -2px;">
+                My Responsible Work Items
+              </span>
             </div>
           </template><div class="itemlist">
           <el-table :data="myWorkItems" style="width: 100%">
@@ -57,6 +81,7 @@ import { listProject } from '@/api/project/index'
 import {listProjectMember} from "@/api/project/member.js";
 import useUserStore from "@/store/modules/user.js";
 import {listUser} from "@/api/system/user.js";
+import logo from "@/assets/logo/logo.png";
 const chartR = ref(null)
 const weekChart = ref(null)
 const projectC = ref(null)
@@ -123,8 +148,11 @@ const getData = async () => {
 
 
   projectDaat.value = [
-    { title: 'running', value: ongoingProjects }, { title: 'planning', value: planProjects }, { title: 'completed', value: endProject },
-    { title: 'unfinish', value: notFinishT },{ title: 'recently', value: nearT }
+    { title: 'Running', value: ongoingProjects},
+    { title: 'Planning', value: planProjects },
+    { title: 'Completed', value: endProject },
+    { title: 'Unfinished', value: notFinishT },
+    { title: 'Recently', value: nearT }
   ]
 
   projects.value = projectList
