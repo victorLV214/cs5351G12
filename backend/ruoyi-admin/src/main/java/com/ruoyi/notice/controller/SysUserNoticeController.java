@@ -31,6 +31,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
  */
 @RestController
 @Api(tags = "用户通知管理")
+@RequestMapping("/system/user/notice")
 public class SysUserNoticeController extends BaseController
 {
     @Autowired
