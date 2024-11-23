@@ -2,48 +2,45 @@
   <div class="project-detail-container">
 
     <div class="top-navbar">
-      <el-menu
-          :default-active="setBarMenuChoice"
-          class="project-menu"
-          mode="horizontal"
-          @select="handleSelect"
+      <el-menu :default-active="setC" class="project-menu" mode="horizontal" @select="doTrans"
       >
         <el-menu-item index="overview">
           <el-icon><DataBoard /></el-icon>
-          <span>项目概览</span>
+          <span>overview</span>
         </el-menu-item>
 
         <el-menu-item index="plan">
           <el-icon><Calendar /></el-icon>
-          <span>项目规划</span>
+<!--          <span>项目规划</span>-->
+          <span>project plan</span>
         </el-menu-item>
 
         <el-menu-item index="requirements">
           <el-icon><List /></el-icon>
-          <span>需求管理</span>
+          <span>requirements</span>
         </el-menu-item>
 
         <el-menu-item index="iterations">
           <el-icon><Refresh /></el-icon>
-          <span>迭代管理</span>
-        </el-menu-item>
-
-
-        <el-menu-item index="defects">
-          <el-icon><Warning /></el-icon>
-          <span>缺陷管理</span>
+          <span>iterations</span>
         </el-menu-item>
 
         <el-menu-item index="tasks">
           <el-icon><Tickets /></el-icon>
-          <span>工作项</span>
+          <span>tasks</span>
         </el-menu-item>
+        <el-menu-item index="defects">
+          <el-icon><Warning /></el-icon>
+          <span>defects</span>
+        </el-menu-item>
+
+
 
 
 
         <el-menu-item index="releases">
           <el-icon><Upload /></el-icon>
-          <span>任务管理</span>
+          <span>jobs</span>
         </el-menu-item>
 
 <!--        <el-menu-item index="baseline">-->
@@ -68,12 +65,12 @@
 
         <el-menu-item index="resources">
           <el-icon><Connection /></el-icon>
-          <span>资源管理</span>
+          <span>human resources</span>
         </el-menu-item>
 
         <el-menu-item index="reports">
           <el-icon><PieChart /></el-icon>
-          <span>统计报表</span>
+          <span>reports</span>
         </el-menu-item>
       </el-menu>
     </div>
@@ -111,76 +108,17 @@ const route = useRoute()
 const router = useRouter()
 
 
-const setBarMenuChoice = ref('overview')
-const handleSelect = (key) => {
+const setC = ref('overview')
+const doTrans = (key) => {
   router.push(`/project/detail/${route.params.id}/${key}`)
 }
 
 onMounted(() => {
-  const pathArray = route.path.split('/')
-  setBarMenuChoice.value = pathArray[pathArray.length - 1] || 'overview'
+  const path1 = route.path.split('/')
+  setC.value = path1[path1.length - 1] || 'overview'
 })
 
 </script>
 <style scoped>
-.project-detail-container {
-  display: flex;
-  flex-direction: column;
-  height: calc(100vh - 84px);
-  background-color: #f5f7fa;
-}
-
-.top-navbar {
-  background-color: #fff;
-  box-shadow: 0 2px 8px 0 rgba(29,35,41,.05);
-}
-
-.project-menu {
-  display: flex;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  border-bottom: none;
-}
-
-/* 隐藏水平滚动条但保持功能 */
-.project-menu::-webkit-scrollbar {
-  height: 0;
-}
-
-.main-content {
-  flex: 1;
-  padding: 20px;
-  overflow-y: auto;
-}
-
-:deep(.el-menu--horizontal) {
-  border-bottom: none;
-}
-
-:deep(.el-menu--horizontal > .el-menu-item) {
-  height: 50px;
-  line-height: 50px;
-  padding: 0 16px;
-}
-
-:deep(.el-menu-item .el-icon) {
-  margin-right: 4px;
-}
-
-:deep(.el-menu--horizontal > .el-menu-item.is-active) {
-  border-bottom: 2px solid var(--el-menu-active-color);
-  background-color: #ecf5ff;
-}
-
-
-:deep(.el-menu--horizontal) {
-  white-space: nowrap;
-  flex-wrap: nowrap;
-}
-
-:deep(.el-menu--horizontal > .el-menu-item) {
-  float: none;
-  display: inline-flex;
-  align-items: center;
-}
+@import "./scss/detail.scss";
 </style>

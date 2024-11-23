@@ -1,0 +1,16 @@
+.app-container {
+  padding: 20px;
+}
+
+.mb-20 {
+  margin-bottom: 20px;
+}
+
+.dialog-footer {
+  padding-right: 20px;
+  text-align: right;
+}
+
+:deep(.el-dialog__body) {
+  padding-top: 10px;
+}

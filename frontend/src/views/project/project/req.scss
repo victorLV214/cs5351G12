@@ -1,0 +1,71 @@
+.r-cards {
+  margin: 16px;
+  min-height: calc(100vh - 150px);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.count-tag {
+  font-size: 13px;
+}
+
+.search {
+  margin-bottom: 16px;
+  padding: 16px;
+  background-color: #f5f7fa;
+  border-radius: 4px;
+}
+
+.sF {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.rList {
+  margin-top: 16px;
+}
+@media screen and (max-width: 768px) {
+  .sF {
+    :deep(.el-form-item) {
+      margin-bottom: 16px;
+    }
+  }
+}
+
+:deep(.el-form-item__label) {
+  font-weight: normal;
+}
+
+:deep(.el-card__header) {
+  padding: 16px 20px;
+  border-bottom: 1px solid #e4e7ed;
+}
+
+:deep(.el-card__body) {
+  padding: 20px;
+}
+.completed-task {
+  background-color: #67C23A;
+}
+.progress-task {
+  background-color: #409EFF;
+}
+.pending-task {
+  background-color: #909399;
+}

@@ -28,7 +28,7 @@
       <template #header>
         <div class="card-header">
           <span class="title">static</span></div></template>
-      <div ref="chart1" style="height: 300px;"></div>
+      <div ref="chart1" style="height: 400px;"></div>
     </el-card></div>
   <div class="cards-container">
   <el-card class="countdown-card">
@@ -50,8 +50,8 @@
     </template>
     <div class="member-list">
       <el-table
-          v-if="memberList.length > 0"
-          :data="memberList"
+          v-if="mmeber.length > 0"
+          :data="mmeber"
           style="width: 100%"
       >
         <el-table-column prop="nickName" label="Name" />
@@ -81,15 +81,15 @@ const chart1 = ref(null)
 const currentDate = ref(new Date())
 let chart = null
 let times1="over time"
-const memberList = ref([])
+const mmeber = ref([])
 const getInfo =  async () => {
   const projectGet = await getProject(
       projectId
   )
-  console.log(projectGet)
+  // console.log(projectGet)
   projectInfo.value = projectGet.data
   const expectEndDate = projectGet.data.expectedEndDate
-  console.log(expectEndDate)
+  // console.log(expectEndDate)
   const remainingDays = computed(() => {
     const now = new Date()
     const end = new Date(expectEndDate)
@@ -105,6 +105,9 @@ const getInfo =  async () => {
     times1=day
   }
 }
+
+
+
 const getRList = async () => {
   const requirementListGet = await listRequirement(
       {projectId:projectId}
@@ -127,21 +130,21 @@ const getRList = async () => {
 }
 const getMembers = async () => {
 
-console.log(projectId)
+// console.log(projectId)
   const res = await listProjectMember({
     projectId: projectId
   })
-  console.log(res)
-    memberList.value = res.rows
+  // console.log(res)
+    mmeber.value = res.rows
 
   const details = []
-  for(let i=0;i<memberList.value.length;i++){
-  const user = memberList.value[i]
-  const userDetail = await getUser(user.userId)
-  details.push(userDetail.data)
+  for(let i=0;i<mmeber.value.length;i++){
+    const user = mmeber.value[i]
+    const userDetail = await getUser(user.userId)
+    details.push(userDetail.data)
   }
-  memberList.value = details
-  console.log(memberList.value)
+  mmeber.value = details
+  // console.log(mmeber.value)
 
 }
 const initChart = (statsData) => {
@@ -188,7 +191,6 @@ const initChart = (statsData) => {
       }
     ]
   }
-
   chart.setOption(option)
 }
 
