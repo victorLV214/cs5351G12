@@ -46,3 +46,7 @@ nbdist/
 !*/build/*.java
 !*/build/*.html
 !*/build/*.xml
+
+*.yml
+*.yaml
+logback.xml
