@@ -6,71 +6,46 @@
       >
         <el-menu-item index="overview">
           <el-icon><DataBoard /></el-icon>
-          <span>overview</span>
+          <span>Overview</span>
         </el-menu-item>
 
         <el-menu-item index="plan">
-          <el-icon><Calendar /></el-icon>
-<!--          <span>项目规划</span>-->
-          <span>project plan</span>
+          <el-icon><Calendar/></el-icon>
+          <span>Project Plan</span>
         </el-menu-item>
 
         <el-menu-item index="requirements">
           <el-icon><List /></el-icon>
-          <span>requirements</span>
+          <span>Requirements</span>
         </el-menu-item>
 
         <el-menu-item index="iterations">
           <el-icon><Refresh /></el-icon>
-          <span>iterations</span>
+          <span>Iterations</span>
         </el-menu-item>
 
         <el-menu-item index="tasks">
           <el-icon><Tickets /></el-icon>
-          <span>tasks</span>
+          <span>Tasks</span>
         </el-menu-item>
         <el-menu-item index="defects">
           <el-icon><Warning /></el-icon>
-          <span>defects</span>
+          <span>Defects</span>
         </el-menu-item>
-
-
-
-
 
         <el-menu-item index="releases">
-          <el-icon><Upload /></el-icon>
-          <span>jobs</span>
+          <el-icon><Files/></el-icon>
+          <span>Jobs</span>
         </el-menu-item>
 
-<!--        <el-menu-item index="baseline">-->
-<!--          <el-icon><Files /></el-icon>-->
-<!--          <span>基线管理</span>-->
-<!--        </el-menu-item>-->
-
-<!--        <el-menu-item index="reviews">-->
-<!--          <el-icon><ChatDotRound /></el-icon>-->
-<!--          <span>评审管理</span>-->
-<!--        </el-menu-item>-->
-
-<!--        <el-menu-item index="testing">-->
-<!--          <el-icon><Histogram /></el-icon>-->
-<!--          <span>测试管理</span>-->
-<!--        </el-menu-item>-->
-
-<!--        <el-menu-item index="documents">-->
-<!--          <el-icon><Document /></el-icon>-->
-<!--          <span>文档管理</span>-->
-<!--        </el-menu-item>-->
-
         <el-menu-item index="resources">
-          <el-icon><Connection /></el-icon>
-          <span>human resources</span>
+          <el-icon><Avatar/></el-icon>
+          <span>Human Resources</span>
         </el-menu-item>
 
         <el-menu-item index="reports">
-          <el-icon><PieChart /></el-icon>
-          <span>reports</span>
+          <el-icon><PieChart/></el-icon>
+          <span>Reports</span>
         </el-menu-item>
       </el-menu>
     </div>
@@ -101,7 +76,7 @@ import {
   Histogram,
   Document,
   Connection,
-  PieChart
+  PieChart, AlarmClock, Avatar
 } from '@element-plus/icons-vue'
 
 const route = useRoute()

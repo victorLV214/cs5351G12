@@ -3,7 +3,7 @@
     <el-card class="project-info-card">
       <template #header>
         <div class="card-header">
-          <span class="title">Project detail</span>
+          <span class="title">Project Detail</span>
           <el-button type="primary" @click="doEdit">Edit</el-button>
         </div>
         

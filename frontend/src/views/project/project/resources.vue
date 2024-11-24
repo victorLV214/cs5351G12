@@ -21,9 +21,9 @@
           </template>
         </el-table-column>
         <el-table-column label="Notes" align="center" prop="notes" />
-        <el-table-column label="operation" align="center">
+        <el-table-column label="Operation" align="center">
           <template #default="{ row }">
-            <el-button type="danger" link @click="doDELETE1(row)">delete</el-button>
+            <el-button type="danger" link @click="doDELETE1(row)">Delete</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -124,16 +124,24 @@ const subF = async () => {
       await addProjectMember(form)
       ElMessage.success('success')
       buttenVis.value = false
-      getList()
+      await getList()
     }
   })
 }
 
 const doDELETE1 = async (row) => {
-    await ElMessageBox.confirm('delete？')
+    await ElMessageBox.confirm(
+        'This action will permanently delete this Member. Continue?',
+        'Warning',
+        {
+          confirmButtonText: 'Confirm',
+          cancelButtonText: 'Cancel',
+          type: 'warning',
+        }
+    )
     await delProjectMember(row.projectMemberId)
     ElMessage.success('success')
-    getList()
+    await getList()
 
 }
 
