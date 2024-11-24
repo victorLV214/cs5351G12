@@ -152,7 +152,7 @@ watch(searchPool, (list) => {
 
   .search-icon {
     cursor: pointer;
-    font-size: 18px;
+    font-size: 20px;
     vertical-align: middle;
   }
 

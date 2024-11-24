@@ -4,6 +4,7 @@
       <div class="toolbar">
         <el-button type="primary" @click="doAdd">Create Work Item</el-button>
       </div>
+
       <el-table :data="list" v-loading="loading">
         <el-table-column label="ID" prop="workItemId" width="80"/>
         <el-table-column label="Title" prop="title" width=""/>
@@ -29,12 +30,11 @@
         </el-table-column>
       </el-table>
 
-      <pagination v-show="total > 0" :total="total" v-model:page="queryParams.pageNum" v-model:limit="queryParams.pageSize" @pagination="getList"
-      />
+      <pagination v-show="total > 0" :total="total" v-model:page="queryParams.pageNum" v-model:limit="queryParams.pageSize" @pagination="getList" />
+    
+      <!-- <div id="ganttContainer" style="height: 500px;"></div> -->
+
     </el-card>
-
-
-
 
     <el-dialog title="Create Work Item" v-model="addDialog" width="600px">
       <el-form :model="form" label-width="120px">
@@ -114,13 +114,16 @@
 </template>
 
 <script setup>
-import {ref} from 'vue'
+import {ref, onMounted} from 'vue'
 import {useRoute} from 'vue-router'
 import {listItem, addItem, updateItem} from '@/api/project/item'
 import {listProjectMember} from '@/api/project/member'
 import {listRequirement} from '@/api/project/requirements'
 import {listIteration} from '@/api/project/iteration'
 import {addNotice} from "@/api/notice/noticeapi.js";
+
+import { gantt } from 'dhtmlx-gantt'
+import 'dhtmlx-gantt/codebase/dhtmlxgantt.css'
 
 const route = useRoute()
 const projectId = route.params.id
@@ -229,9 +232,40 @@ async function doADD2() {
   })
 }
 
-
-
-
 getList()
 getAllProjectData()
+
+// const initGantt = () => {
+//   gantt.config.grid_width = 350
+//   gantt.config.add_column = false //添加符号
+ 
+//   //时间轴图表中，如果不设置，只有行边框，区分上下的任务，设置之后带有列的边框，整个时间轴变成格子状。
+//   gantt.config.autofit = false
+//   gantt.config.row_height = 40
+//   gantt.config.bar_height = 30
+//   // gantt.config.fit_tasks = true //自动延长时间刻度，以适应所有显示的任务
+//   gantt.config.auto_types = true //将包含子任务的任务转换为项目，将没有子任务的项目转换回任务
+
+//   gantt.config.date_format = "%Y-%m-%d"
+//   gantt.config.date_grid = "%Y-%m-%d"
+//   gantt.config.duration_unit = "day"
+
+//   gantt.config.readonly = true //是否只读
+//   gantt.i18n.setLocale('en') //设置语言
+
+//   gantt.config.columns =  [
+//     {name:"title", label:"Task name", width:200},
+//     {name:"start_date", label:"Start time", width:100, template:function(obj){return obj.startDate}},
+//     {name:"end_date", label:"End time", width:100, template:function(obj){return obj.dueDate}},
+//     {name:"duration", label:"Duration", width:100}
+//   ];
+
+//   gantt.init('ganttContainer')
+//   gantt.parse({data: list.value})
+// }
+
+// onMounted(async () => {
+//   await getList()
+//   initGantt()
+// })
 </script>
