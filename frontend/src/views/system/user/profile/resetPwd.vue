@@ -1,5 +1,7 @@
 <template>
-   <el-form ref="pwdRef" :model="user" :rules="rules" label-width="80px">
+  <el-button type="info" plain size="large" class="ms-auto me-4 mt-4" :icon="EditPen" @click="editPassword = true">Edit Password</el-button>
+  <el-dialog v-model="editPassword" title="Edit Password" width="800">
+    <el-form ref="pwdRef" :model="user" :rules="rules" label-width="80px">
       <el-form-item label="old" prop="oldPassword">
          <el-input v-model="user.oldPassword" placeholder="oldPassword" type="password" show-password />
       </el-form-item>
@@ -9,15 +11,21 @@
       <el-form-item label="confirm" prop="confirmPassword">
          <el-input v-model="user.confirmPassword" placeholder="confirmPassword" type="password" show-password/>
       </el-form-item>
-      <el-form-item>
-      <el-button type="primary" @click="submit">save</el-button>
-      <el-button type="danger" @click="close">exit</el-button>
-      </el-form-item>
-   </el-form>
+      <!-- <el-form-item>
+        <el-button type="primary" @click="submit">save</el-button>
+        <el-button type="danger" @click="close">exit</el-button>
+      </el-form-item> -->
+    </el-form>
+    <template #footer>
+      <el-button type="success" @click="submit">Save</el-button>
+    </template>
+  </el-dialog>
 </template>
 
 <script setup>
 import { updateUserPwd } from "@/api/system/user";
+
+const editPassword = ref(false)
 
 const { proxy } = getCurrentInstance();
 
@@ -45,6 +53,7 @@ function submit() {
   proxy.$refs.pwdRef.validate(valid => {
     if (valid) {
       updateUserPwd(user.oldPassword, user.newPassword).then(response => {
+        editPassword.value = false;
         proxy.$modal.msgSuccess("Modified successfully");
       });
     }

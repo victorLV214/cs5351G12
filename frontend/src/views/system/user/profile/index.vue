@@ -8,11 +8,7 @@
                <div class="fs-2 fw-bold">{{ state.user.userName }}</div>
                <div class="fs-6 text-body-secondary" v-if="state.user.dept">{{ state.user.dept.deptName }} / {{ state.postGroup }}</div>
             </div>
-            <el-button type="info" plain size="large" class="ms-auto me-4 mt-4" :icon="EditPen" @click="editPassword = true">Edit Password</el-button>
-            <el-dialog v-model="editPassword" title="Edit Password" width="800">
-               <resetPwd />
-               <template #footer><el-button type="success">Save</el-button></template>
-            </el-dialog>
+            <resetPwd />
          </div>
       </div>
       <el-row :gutter="20">
@@ -130,8 +126,6 @@ import resetPwd from "./resetPwd";
 import { getUserProfile } from "@/api/system/user";
 
 import { EditPen } from '@element-plus/icons-vue'
-
-const editPassword = ref(false)
 
 const activeTab = ref("userinfo");
 const state = reactive({

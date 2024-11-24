@@ -22,7 +22,7 @@
     "axios": "0.27.2",
     "bootstrap": "^5.3.3",
     "clipboard": "^2.0.11",
-    "dhtmlx-gantt": "^8.0.6",
+    "dhtmlx-gantt": "^8.0.11",
     "echarts": "5.4.3",
     "element-plus": "2.4.3",
     "file-saver": "2.0.5",

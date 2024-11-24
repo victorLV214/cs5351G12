@@ -13,7 +13,7 @@
       <el-table :data="projectList" style="width: 100%" class="project-table" :row-class-name="tableRowClassName" @row-click="doRCS">
         <el-table-column prop="projectName" label="Project Name">
           <template #default="scope">
-            <a href="javascript:;" @click="checkProjectAccess(scope.row)" class="project-link">{{ scope.row.projectName }}</a></template>
+            <a href="javascript:;" @click="checkProjectAccess(scope.row)" class="project-link text-decoration-none">{{ scope.row.projectName }}</a></template>
         </el-table-column>
         <el-table-column prop="projectCode" label="Project Code" />
         <el-table-column prop="createTime" label="Create Time" />
