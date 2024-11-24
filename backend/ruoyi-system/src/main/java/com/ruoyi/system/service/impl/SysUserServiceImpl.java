@@ -243,10 +243,10 @@ public class SysUserServiceImpl implements ISysUserService
             SysUser user = new SysUser();
             user.setUserId(userId);
             List<SysUser> users = SpringUtils.getAopProxy(this).selectUserList(user);
-            if (StringUtils.isEmpty(users))
-            {
-                throw new ServiceException("没有权限访问用户数据！");
-            }
+//            if (StringUtils.isEmpty(users))
+//            {
+//                throw new ServiceException("没有权限访问用户数据！");
+//            }
         }
     }
 
