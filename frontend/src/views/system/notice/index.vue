@@ -118,8 +118,7 @@
          v-model="dialogVisible"
          :title= "noticeTitle"
          width="500"
-         :before-close="handleClose"
-     >
+         :before-close="handleClose">
        <div v-html="noticeContent"></div>
        <template #footer>
          <div class="dialog-footer">

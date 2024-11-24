@@ -59,10 +59,21 @@
                 Project Overview
               </div>
               <div class="project-info">
-                <p><i class="el-icon-user"></i> Team Size: {{ projectData.memberCount }} members</p>
-                <p><i class="el-icon-data-analysis"></i> Iterations: {{ projectData.iterationCount }}</p>
-                <p><i class="el-icon-timer"></i> Start Date: {{ projectData.startDate }}</p>
-                <p><i class="el-icon-timer"></i> Expected End: {{ projectData.expectedEndDate }}</p>
+                <p>
+                  <i class="el-icon-user"></i>
+                  Team Size: {{ projectData.memberCount }} members
+                </p>
+                <p>
+                  <i class="el-icon-data-analysis"></i>
+                  Iterations: {{ projectData.iterationCount }}</p>
+                <p>
+                  <i class="el-icon-timer"></i>
+                  Start Date: {{ projectData.startDate }}
+                </p>
+                <p><i class="el-icon-timer"></i>
+                  End Date: {{ projectData.expectedEndDate }}
+                  （Expected）
+                </p>
               </div>
             </div>
           </el-col>
