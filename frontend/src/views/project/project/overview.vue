@@ -1,6 +1,10 @@
 <template>
-  <div class="cards-container">  <el-card class="project-info-card">
-    <template #header><div class="card-header"><span class="title">basic info</span><span class="status-tag">{{ projectInfo.status }}</span>
+  <div class="cards-container">
+    <el-card class="project-info-card">
+    <template #header>
+      <div class="card-header">
+        <span class="title">Basic Info</span>
+        <span class="status-tag">{{ projectInfo.status }}</span>
       </div>
     </template>
     <div class="info-content"><div class="info-row"><div class="info-item">
@@ -12,9 +16,7 @@
       </div>
       <div class="info-row">
         <div class="info-item"><span class="label">completionPercentage:</span>
-          <el-progress :percentage="projectInfo.completionPercentage"
-
-          />
+          <el-progress :percentage="projectInfo.completionPercentage"/>
         </div>
       </div>
 
@@ -27,7 +29,7 @@
     <el-card class="chart-card">
       <template #header>
         <div class="card-header">
-          <span class="title">static</span></div></template>
+          <span class="title">Static</span></div></template>
       <div ref="chart1" style="height: 400px;"></div>
     </el-card></div>
   <div class="cards-container">
