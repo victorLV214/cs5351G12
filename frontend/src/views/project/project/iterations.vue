@@ -88,7 +88,8 @@ const form = ref({
   name: '',
   startDate: '',
   endDate: '',
-  plannedStoryPoints: 0
+  plannedStoryPoints: 0,
+  status:'1',
 })
 
 const rules = {
