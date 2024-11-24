@@ -3,7 +3,11 @@
     <el-card class="project-card">
       <template #header>
         <div class="card-header">
-          <span class="header-title">Project List</span>
+          <span class="header-title">
+            <img src="@/assets/icons/png/project-list.png" style="width: 25px;
+                vertical-align: middle; position: relative; top: -2px;">
+            Project List
+          </span>
           <el-button type="primary" @click="addP" class="add-button">New Project</el-button></div>
       </template>
       <el-table :data="projectList" style="width: 100%" class="project-table" :row-class-name="tableRowClassName" @row-click="doRCS">
