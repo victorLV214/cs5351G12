@@ -218,7 +218,7 @@
 <script setup>
 import { ref, onMounted ,reactive} from 'vue'
 
-import { ElMessage } from 'element-plus'
+import {ElMessage, ElMessageBox} from 'element-plus'
 import {listProject, addProject, getProject, delProject, updateProject} from '@/api/project/index.js'
 
 import { listProjectMember } from '@/api/project/member.js'
@@ -488,9 +488,18 @@ const doEdit = async (row) => {
 }
 
 const doDelete = async (row) => {
+    await ElMessageBox.confirm(
+        'This action will permanently delete this project. Continue?',
+        'Warning',
+        {
+          confirmButtonText: 'Confirm',
+          cancelButtonText: 'Cancel',
+          type: 'warning',
+        }
+    )
     await delProject(row.projectId)
-    ElMessage.success('false')
-    getList() // 刷新列表
+    ElMessage.success('Delete Success')
+    await getList() // 刷新列表
 }
 
 

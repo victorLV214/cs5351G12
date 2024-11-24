@@ -1,7 +1,9 @@
 <template>
   <el-card class="r-cards">
     <template #header><div class="card-header">
-        <div class="header-left"><span class="title">requirment list</span><el-tag class="count-tag" type="info">total {{ total }} requirements</el-tag>
+        <div class="header-left">
+          <span class="title">Requirement List</span>
+          <el-tag class="count-tag" type="info">total {{ total }} requirements</el-tag>
         </div>
       <div class="addR">
         <el-button type="primary" :icon="Plus" @click="addReq"></el-button>
