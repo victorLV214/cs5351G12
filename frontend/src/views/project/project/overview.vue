@@ -35,7 +35,10 @@
   <div class="cards-container">
   <el-card class="countdown-card">
     <template #header>
-      <div class="card-header"><span class="title">Time remaining</span></div>
+      <div class="card-header">
+        <span class="title">Time Remaining</span>
+        <el-icon><Clock/></el-icon>
+      </div>
     </template>
     <div class="Timer">
       <div class="Timerinfo"><div class="time-remaining"><span class="days">{{ times1 }}</span></div><div class="calendar-container">
@@ -75,6 +78,7 @@ import {listRequirement} from "@/api/project/requirements.js";
 import * as echarts from 'echarts'
 import {listProjectMember} from "@/api/project/member.js";
 import {getUser} from "@/api/system/user.js";
+import {Clock, Files} from "@element-plus/icons-vue";
 
 const projectInfo = ref({})
 const route = useRoute()
