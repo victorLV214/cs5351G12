@@ -18,11 +18,31 @@
     </div>
     <div class="rList">
       <el-table v-loading="loading" :data="reqList" style="width: 100%">
-        <el-table-column label="ID" align="center">
-          <template #default="{ row }"><el-link type="primary" @click="clickV(row)">{{ row.defectId }}</el-link>
+<!--        <el-table-column label="ID" align="center">-->
+<!--          <template #default="{ row }"><el-link type="primary" @click="clickV(row)">{{ row.defectId }}</el-link>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
+        <el-table-column label="Title" align="center" prop="title"/>
+        <el-table-column label="Description" align="center" prop="description" show-overflow-tooltip />
+        <el-table-column label="Priority" align="center" prop="priority"></el-table-column>
+        <el-table-column label="Status" align="center" prop="status"></el-table-column>
+        <el-table-column label="CreateTime" align="center" prop="createTime" width="180" />
+        <el-table-column label="Operations" align="center" width="180" >
+          <template #default="{ row }">
+            <el-row :gutter="10">
+              <el-col :span="12">
+                <el-button size="small" type="primary" class="w-100"
+                           @click="clickV(row)" :icon="Edit">Edit
+                </el-button>
+              </el-col>
+              <el-col :span="12">
+                <el-button size="small" type="danger" class="w-100"
+                           @click="delReq(row)" :icon="Delete">Delete</el-button>
+              </el-col>
+            </el-row>
           </template>
-                         </el-table-column><el-table-column label="title" align="center" prop="title" /><el-table-column label="description" align="center" prop="description" show-overflow-tooltip /><el-table-column label="priority" align="center" prop="priority"></el-table-column><el-table-column label="status" align="center" prop="status"></el-table-column>
-        <el-table-column label="createTime" align="center" prop="createTime" width="180" />
+        </el-table-column>
+
       </el-table>
       <div class="pagination-container">
         <el-pagination :page-sizes="[10, 20, 50, 100]" :total="total" v-model:current-page="Params.pageNum" v-model:page-size="Params.pageSize"
@@ -31,8 +51,7 @@
     </div>
   </el-card>
 
-  <el-dialog
-      v-model="boolVis1" title="Requirement Details" width="60%">
+  <el-dialog v-model="boolVis1" title="Requirement Details" width="60%">
     <el-form ref="formRef" :model="curReq"  label-width="120px">
       <el-form-item label="Requirement ID" prop="requirementId"><span>{{ curReq?.defectId }}</span></el-form-item>
       <el-form-item label="Title" prop="title"><el-input v-model="curReq.title" :disabled="!isEdit"/>
@@ -49,15 +68,19 @@
       <el-form-item label="Description" prop="description"><el-input v-model="curReq.description" type="textarea" :rows="3":disabled="!isEdit"/>
       </el-form-item>
       <el-form-item label="Remarks" prop="remarks">
-        <el-input v-model="curReq.remarks" type="textarea" :rows="3" :disabled="!isEdit"
-        /></el-form-item>
-    </el-form><template #footer>
-  <span class="dialog-footer">
-    <el-button @click="boolVis1  = false">Exit</el-button>
-    <el-button v-if="curReq?.createBy === username" type="danger" @click="delReq(curReq)">Delete</el-button>
-    <el-button v-if="!isEdit" type="primary" @click="ISEDITT">Edit</el-button><template v-else><el-button @click="donotEDITT">Cancel</el-button>
-    <el-button type="primary" @click="doEDIT">Save</el-button></template>
-  </span></template>
+        <el-input v-model="curReq.remarks" type="textarea" :rows="3" :disabled="!isEdit"/></el-form-item>
+    </el-form>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="boolVis1  = false">Exit</el-button>
+<!--        <el-button v-if="curReq?.createBy === username" type="danger" @click="delReq(curReq)">Delete</el-button>-->
+        <el-button v-if="!isEdit" type="primary" @click="ISEDITT">Edit</el-button>
+        <template v-else>
+          <el-button @click="donotEDITT">Cancel</el-button>
+          <el-button type="primary" @click="doEDIT">Save</el-button>
+        </template>
+      </span>
+    </template>
   </el-dialog>
 
   <el-dialog v-model="addButten" title="Add New Defeat" width="60%">
@@ -86,13 +109,15 @@
       <el-form-item label="Assigned To" prop="assignedTo"><el-input v-model="reqForm.assignedTo" placeholder="Assignto"/></el-form-item>
 
       <el-form-item label="Description" prop="description">
-        <el-input v-model="reqForm.description" type="textarea" :rows="3" placeholder="description"
-        />
+        <el-input v-model="reqForm.description" type="textarea" :rows="3" placeholder="description"/>
       </el-form-item>
 
-      <el-form-item label="Expected Version" prop="expectedFixVersion"><el-input v-model="reqForm.expectedFixVersion" placeholder="expectedFixVersion"/></el-form-item>
+      <el-form-item label="Expected Version" prop="expectedFixVersion">
+        <el-input v-model="reqForm.expectedFixVersion" placeholder="expectedFixVersion"/>
+      </el-form-item>
 
-      <el-form-item label="Related Req ID" prop="relatedRequirementId"><el-input v-model="reqForm.relatedRequirementId" placeholder="relatedRequirementId"/>
+      <el-form-item label="Related Req ID" prop="relatedRequirementId">
+        <el-input v-model="reqForm.relatedRequirementId" placeholder="relatedRequirementId"/>
       </el-form-item>
 
       <el-form-item label="Remarks" prop="remarks">
@@ -113,7 +138,7 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
-import { Search, Refresh, Plus, Download } from '@element-plus/icons-vue'
+import {Search, Refresh, Plus, Download, Edit, Document, EditPen, Delete} from '@element-plus/icons-vue'
 import 'dhtmlx-gantt/codebase/dhtmlxgantt.css'
 import 'dhtmlx-gantt/codebase/dhtmlxgantt.js'
 import { useRoute } from "vue-router"
@@ -285,6 +310,15 @@ const doEDIT = async () => {
 }
 
 const delReq = async (row) => {
+  await ElMessageBox.confirm(
+      'This action will permanently delete this defect. Continue?',
+      'Warning',
+      {
+        confirmButtonText: 'Confirm',
+        cancelButtonText: 'Cancel',
+        type: 'warning',
+      }
+  )
   loading.value = true
   await delDefect(row.defectId)
   boolVis1.value = false

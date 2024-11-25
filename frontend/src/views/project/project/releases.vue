@@ -7,8 +7,7 @@
         </div>
       </template>
 
-      <el-table v-loading="loading" :data="treeD" row-key="taskId" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-      >
+      <el-table v-loading="loading" :data="treeD" row-key="taskId" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
         <el-table-column prop="title" label="Title" min-width="200">
           <template #default="{ row }">
             <span>{{ row.title }}</span>
@@ -41,21 +40,26 @@
             {{ row.complexity }}
           </template>
         </el-table-column>
-        <el-table-column label="Operations" align="center" width="150">
+        <el-table-column label="Operations" align="center" width="180" >
           <template #default="{ row }">
-            <el-button type="text" @click="doEDIT(row)">Edit</el-button>
-           
+            <el-row :gutter="10">
+              <el-col :span="12">
+                <el-button size="small" type="primary" class="w-100"
+                           @click="doEDIT(row)" :icon="Edit">Edit
+                </el-button>
+              </el-col>
+              <el-col :span="12">
+                <el-button size="small" type="danger" class="w-100"
+                           @click="del(row)" :icon="Delete">Delete</el-button>
+              </el-col>
+            </el-row>
           </template>
         </el-table-column>
       </el-table>
     </el-card>
 
-
-
-
-
     <el-dialog :title="butTit" v-model="buttonVis" width="500px" append-to-body>
-      <el-form ref="taskForm" :model="taskForm" :rules="rules" label-width="100px">
+      <el-form ref="taskFormRef" :model="taskForm" :rules="rules" label-width="100px">
         <el-form-item label="Title" prop="title">
           <el-input v-model="taskForm.title" placeholder="Please input title" />
         </el-form-item>
@@ -80,8 +84,7 @@
         </el-form-item>
         <el-form-item label="Parent Task">
           <el-select v-model="taskForm.parentTaskId" placeholder="parentTaskId" clearable>
-            <el-option v-for="task in taskD" :key="task.taskId" :label="task.title" :value="task.taskId"
-            />
+            <el-option v-for="task in taskD" :key="task.taskId" :label="task.title" :value="task.taskId"/>
           </el-select>
         </el-form-item>
         <el-form-item label="Due Date">
@@ -114,11 +117,10 @@ import { ref, reactive, onMounted } from 'vue'
 import { listTask, getTask, addTask, updateTask, delTask } from '@/api/project/tasks'
 import { useRoute } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
-
+import {Delete, Edit} from "@element-plus/icons-vue";
 
 const route = useRoute()
 const taskFormRef = ref(null)
-
 
 const loading = ref(false)
 const taskD = ref([])
@@ -126,14 +128,9 @@ const treeD = ref([])
 const buttonVis = ref(false)
 const butTit = ref('')
 
-
-
-
 const queryParams = reactive({
   projectId: route.params.id
 })
-
-
 
 const taskForm = reactive({
   taskId: undefined,
@@ -154,17 +151,13 @@ const rules = {
   priority: [{ required: true, message: 'priority', trigger: 'change' }]
 }
 
-
-
 const getList = async () => {
-    loading.value = true
-    const response = await listTask(queryParams)
-    taskD.value = response.rows
-    treeD.value = doEleTree(taskD.value)
-    loading.value = false
-
+  loading.value = true
+  const response = await listTask(queryParams)
+  taskD.value = response.rows
+  treeD.value = doEleTree(taskD.value)
+  loading.value = false
 }
-
 
 const doEleTree = (list) => {
   const map = {}
@@ -186,8 +179,6 @@ const doEleTree = (list) => {
   return result
 }
 
-
-
 const doAdd = () => {
   butTit.value = 'ADD'
   Object.assign(taskForm, {
@@ -205,17 +196,12 @@ const doAdd = () => {
   buttonVis.value = true
 }
 
-
 const doEDIT = async (row) => {
   butTit.value = 'Edit'
   const response = await getTask(row.taskId)
   Object.assign(taskForm, response.data)
   buttonVis.value = true
 }
-
-
-
-
 
 const subF = async () => {
   if (!taskFormRef.value) return
@@ -234,6 +220,20 @@ const subF = async () => {
   })
 }
 
+const del = async (row) => {
+  await ElMessageBox.confirm(
+      'This action will permanently delete this Task. Continue?',
+      'Warning',
+      {
+        confirmButtonText: 'Confirm',
+        cancelButtonText: 'Cancel',
+        type: 'warning',
+      }
+  )
+  await delTask(row.taskId)
+  ElMessage.success('Delete successful')
+  getList()
+}
 
 // 页面加载时获取列表
 onMounted(() => {

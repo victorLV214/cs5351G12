@@ -6,12 +6,12 @@
       </div>
 
       <el-table :data="list" v-loading="loading">
-        <el-table-column label="ID" prop="workItemId" width="80"/>
-        <el-table-column label="Title" prop="title" width=""/>
-        <el-table-column label="Type" prop="type" width="100"/>
-        <el-table-column label="Status" prop="status" width="100"/>
-        <el-table-column label="Priority" prop="priority" width="80"/>
-        <el-table-column label="Assigned" prop="assignedTo" width="200"/>
+<!--        <el-table-column label="ID" prop="workItemId" width="80" align="center"/>-->
+        <el-table-column label="Title" prop="title" width="180" align="center"/>
+        <el-table-column label="Type" prop="type" width="100" align="center"/>
+        <el-table-column label="Status" prop="status" width="100" align="center"/>
+        <el-table-column label="Priority" prop="priority" width="80" align="center"/>
+        <el-table-column label="Assigned" prop="assignedTo" width="100" align="center"/>
         <el-table-column label="Start Date" width="180">
           <template #default="scope">
             <el-date-picker v-model="scope.row.startDate" type="date" size="small" style="width: 130px" @change="changedate2(scope.row)"/>
@@ -26,6 +26,12 @@
         <el-table-column label="Actual" width="120">
           <template #default="scope">
             <el-input-number v-model="scope.row.actualEffort" :precision="1" :step="0.5" @change="changePoint1(scope.row)" size="small" style="width: 90px"/>
+          </template>
+        </el-table-column>
+        <el-table-column label="Operations" align="center" width="100" >
+          <template #default="{ row }">
+            <el-button size="small" type="danger" class="w-100"
+                       @click="delWorkItem(row)" :icon="Delete">Delete</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -49,8 +55,6 @@
             <el-option label="Design Task" value="Design Task"/>
           </el-select>
         </el-form-item>
-
-
 
 
         <el-form-item label="Assigned To" required>
@@ -116,7 +120,7 @@
 <script setup>
 import {ref, onMounted} from 'vue'
 import {useRoute} from 'vue-router'
-import {listItem, addItem, updateItem} from '@/api/project/item'
+import {listItem, addItem, updateItem, delItem} from '@/api/project/item'
 import {listProjectMember} from '@/api/project/member'
 import {listRequirement} from '@/api/project/requirements'
 import {listIteration} from '@/api/project/iteration'
@@ -124,6 +128,9 @@ import {addNotice} from "@/api/notice/noticeapi.js";
 
 import { gantt } from 'dhtmlx-gantt'
 import 'dhtmlx-gantt/codebase/dhtmlxgantt.css'
+import {Delete, Edit} from "@element-plus/icons-vue";
+import {delTask} from "@/api/project/tasks.js";
+import {ElMessageBox} from "element-plus";
 
 const route = useRoute()
 const projectId = route.params.id
@@ -164,6 +171,20 @@ async function getList() {
   list.value = res.rows
   total.value = res.total
   loading.value = false
+}
+async function delWorkItem(row) {
+  await ElMessageBox.confirm(
+      'This action will permanently delete this Work Item. Continue?',
+      'Warning',
+      {
+        confirmButtonText: 'Confirm',
+        cancelButtonText: 'Cancel',
+        type: 'warning',
+      }
+  )
+  await delItem(row.workItemId);
+  getList();
+
 }
 
 async function getAllProjectData() {
@@ -235,37 +256,4 @@ async function doADD2() {
 getList()
 getAllProjectData()
 
-// const initGantt = () => {
-//   gantt.config.grid_width = 350
-//   gantt.config.add_column = false //添加符号
- 
-//   //时间轴图表中，如果不设置，只有行边框，区分上下的任务，设置之后带有列的边框，整个时间轴变成格子状。
-//   gantt.config.autofit = false
-//   gantt.config.row_height = 40
-//   gantt.config.bar_height = 30
-//   // gantt.config.fit_tasks = true //自动延长时间刻度，以适应所有显示的任务
-//   gantt.config.auto_types = true //将包含子任务的任务转换为项目，将没有子任务的项目转换回任务
-
-//   gantt.config.date_format = "%Y-%m-%d"
-//   gantt.config.date_grid = "%Y-%m-%d"
-//   gantt.config.duration_unit = "day"
-
-//   gantt.config.readonly = true //是否只读
-//   gantt.i18n.setLocale('en') //设置语言
-
-//   gantt.config.columns =  [
-//     {name:"title", label:"Task name", width:200},
-//     {name:"start_date", label:"Start time", width:100, template:function(obj){return obj.startDate}},
-//     {name:"end_date", label:"End time", width:100, template:function(obj){return obj.dueDate}},
-//     {name:"duration", label:"Duration", width:100}
-//   ];
-
-//   gantt.init('ganttContainer')
-//   gantt.parse({data: list.value})
-// }
-
-// onMounted(async () => {
-//   await getList()
-//   initGantt()
-// })
 </script>

@@ -38,7 +38,7 @@ export function getTask(taskId) {
 // 删除任务
 export function delTask(taskId) {
     return request({
-        url: '/dev-api/project/tas k/' + taskId,
+        url: '/dev-api/project/task/' + taskId,
         method: 'delete'
     })
 }
