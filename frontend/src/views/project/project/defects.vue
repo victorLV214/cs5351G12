@@ -32,12 +32,12 @@
             <el-row :gutter="10">
               <el-col :span="12">
                 <el-button size="small" type="primary" class="w-100"
-                           @click="clickV(row)" :icon="Edit">Edit
+                           @click="clickV(row)" :icon="Edit" v-if="booladmin">Edit
                 </el-button>
               </el-col>
               <el-col :span="12">
                 <el-button size="small" type="danger" class="w-100"
-                           @click="delReq(row)" :icon="Delete">Delete</el-button>
+                           @click="delReq(row)" :icon="Delete" v-if="booladmin">Delete</el-button>
               </el-col>
             </el-row>
           </template>
@@ -142,6 +142,7 @@ import {Search, Refresh, Plus, Download, Edit, Document, EditPen, Delete} from '
 import 'dhtmlx-gantt/codebase/dhtmlxgantt.css'
 import 'dhtmlx-gantt/codebase/dhtmlxgantt.js'
 import { useRoute } from "vue-router"
+import { listRole } from '@/api/system/role.js'
 import {
   addRequirement,
   delRequirement,
@@ -157,7 +158,7 @@ import {addDefect, delDefect, getDefect, listDefect, updateDefect} from "@/api/p
 const userStore = useUserStore()
 const route = useRoute()
 const projectId = route.params.id
-
+const booladmin = ref(false)
 const reqList = ref([])
 const total = ref(0)
 const isEdit = ref(false)
@@ -245,7 +246,13 @@ const clearAll = () => {
   getReqs()
 }
 
+const checkRoles = async () => {
 
+  const res = await listRole()
+  console.log('res:', res)
+  booladmin.value = res.rows.some(role => role.roleKey === 'admin')
+
+}
 const addReq = () => {
   addButten.value = true
   reqForm.value = {
@@ -340,6 +347,7 @@ const cP = (val) => {
 onMounted(() => {
   getReqs()
   gettheUser()
+  checkRoles()
 })
 
 const rule1 = {

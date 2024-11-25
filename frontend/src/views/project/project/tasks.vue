@@ -31,7 +31,7 @@
         <el-table-column label="Operations" align="center" width="100" >
           <template #default="{ row }">
             <el-button size="small" type="danger" class="w-100"
-                       @click="delWorkItem(row)" :icon="Delete">Delete</el-button>
+                       @click="delWorkItem(row)" :icon="Delete" v-if="booladmin">Delete</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -125,13 +125,13 @@ import {listProjectMember} from '@/api/project/member'
 import {listRequirement} from '@/api/project/requirements'
 import {listIteration} from '@/api/project/iteration'
 import {addNotice} from "@/api/notice/noticeapi.js";
-
+import { listRole } from '@/api/system/role.js'
 import { gantt } from 'dhtmlx-gantt'
 import 'dhtmlx-gantt/codebase/dhtmlxgantt.css'
 import {Delete, Edit} from "@element-plus/icons-vue";
 import {delTask} from "@/api/project/tasks.js";
 import {ElMessageBox} from "element-plus";
-
+const booladmin=ref(false)
 const route = useRoute()
 const projectId = route.params.id
 
@@ -198,7 +198,13 @@ async function getAllProjectData() {
   requirements.value = reqR.rows
   // console.log(reqR)
 }
+const checkRoles = async () => {
 
+  const res = await listRole()
+  console.log('res:', res)
+  booladmin.value = res.rows.some(role => role.roleKey === 'admin')
+
+}
 async function changePoint1(row) {
   await updateItem({
     workItemId: row.workItemId,
@@ -253,7 +259,12 @@ async function doADD2() {
   })
 }
 
-getList()
-getAllProjectData()
+
+onMounted(() => {
+  getAllProjectData()
+  checkRoles()
+  getList()
+})
+
 
 </script>

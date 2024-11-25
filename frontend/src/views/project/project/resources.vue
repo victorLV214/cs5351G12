@@ -26,12 +26,12 @@
             <el-row :gutter="10">
               <el-col :span="12">
                 <el-button size="small" type="primary" class="w-100"
-                           @click="editMember(row)" :icon="Edit">Edit
+                           @click="editMember(row)" :icon="Edit" v-if="booladmin">Edit
                 </el-button>
               </el-col>
               <el-col :span="12">
                 <el-button size="small" type="danger" class="w-100"
-                           @click="doDelete(row)" :icon="Delete">Delete</el-button>
+                           @click="doDelete(row)" :icon="Delete" v-if="booladmin">Delete</el-button>
               </el-col>
             </el-row>
           </template>
@@ -41,6 +41,11 @@
 
     <el-dialog title="user" v-model="buttenVis" width="600px">
       <el-form ref="formRef" :model="form" :ruleX="ruleX" label-width="100px">
+        <el-form-item label="User" prop="userId">
+          <el-select v-model="form.userId" placeholder="Select user">
+            <el-option v-for="user in usersss" :key="user.userId" :label="user.userName" :value="user.userId"/>
+          </el-select>
+        </el-form-item>
         <el-form-item label="Role" prop="role">
           <el-input v-model="form.role" placeholder="Role" />
         </el-form-item>
@@ -79,7 +84,8 @@ const buttenVis = ref(false)
 const usersss = ref([])
 import {listProjectMember, addProjectMember, updateProjectMember, delProjectMember} from '@/api/project/member'
 import {Delete, Edit} from "@element-plus/icons-vue";
-
+import {listRole} from "@/api/system/role.js";
+const booladmin = ref(false)
 const form = reactive({
   projectMemberId: null, // 用于区分新增和编辑操作
   userId: undefined,
@@ -98,7 +104,13 @@ const ruleX = {
   allocationPercentage: [{required: true, message: 'allocationPercentage', trigger: 'blur'}],
   permissions: [{required: true, message: 'permissions', trigger: 'change'}]
 }
+const checkRoles = async () => {
 
+  const res = await listRole()
+  console.log('res:', res)
+  booladmin.value = res.rows.some(role => role.roleKey === 'admin')
+
+}
 const queryParams = reactive({
   projectId: route.params.id
 })
@@ -172,5 +184,6 @@ const editMember = (row) => {
 
 onMounted(() => {
   getList()
+  checkRoles()
 })
 </script>

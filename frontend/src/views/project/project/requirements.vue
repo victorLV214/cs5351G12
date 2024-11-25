@@ -57,12 +57,12 @@
             <el-row :gutter="10">
               <el-col :span="12">
                 <el-button size="small" type="primary" class="w-100"
-                           @click="clickV(row)" :icon="Edit">Edit
+                           @click="clickV(row)" :icon="Edit" v-if="booladmin">Edit
                 </el-button>
               </el-col>
               <el-col :span="12">
                 <el-button size="small" type="danger" class="w-100"
-                           @click="delReq(row)">Delete</el-button>
+                           @click="delReq(row)"  v-if="booladmin">Delete</el-button>
               </el-col>
             </el-row>
           </template>
@@ -189,13 +189,12 @@ import {
   listRequirement,
   updateRequirement
 } from "@/api/project/requirements.js"
-
-
+import { listRole } from '@/api/system/role.js'
 import useUserStore from "@/store/modules/user.js"
 import {getUser} from "@/api/system/user.js"
 import {gantt} from "dhtmlx-gantt"
 import {ElMessageBox} from "element-plus";
-
+const booladmin=ref(false)
 const userStore = useUserStore()
 const route = useRoute()
 const projectId = route.params.id
@@ -221,7 +220,13 @@ const reqForm = ref({
   delFlag: 1,
   createBy: username.value,
 })
+const checkRoles = async () => {
 
+  const res = await listRole()
+  console.log('res:', res)
+  booladmin.value = res.rows.some(role => role.roleKey === 'admin')
+
+}
 const id = userStore.id
 const Params = ref({
   pageNum: 1,
@@ -475,6 +480,7 @@ const cP = (val) => {
 onMounted(() => {
   getReqs()
   gettheUser()
+  checkRoles()
 })
 
 watch(ganttButten, (newVal) => {

@@ -4,7 +4,7 @@
       <template #header>
         <div class="card-header">
           <span class="title">Project Detail</span>
-          <el-button type="primary" @click="doEdit" :icon="Edit">Edit</el-button>
+          <el-button type="primary" @click="doEdit" :icon="Edit" v-if="booladmin">Edit</el-button>
         </div>
 
       </template>
@@ -51,6 +51,8 @@
 import { ref, onMounted } from 'vue';
 import { getProject, updateProject } from "@/api/project";
 import { useRoute } from "vue-router";
+import { listRole } from '@/api/system/role.js'
+const booladmin=ref(false)
 import { ElMessage } from 'element-plus';
 import {Edit} from "@element-plus/icons-vue";
 
@@ -81,8 +83,16 @@ const doNew = async () => {
 
 }
 
+const checkRoles = async () => {
+
+  const res = await listRole()
+  console.log('res:', res)
+  booladmin.value = res.rows.some(role => role.roleKey === 'admin')
+
+}
 onMounted(() => {
   getInfo()
+  checkRoles()
 })
 </script>
 

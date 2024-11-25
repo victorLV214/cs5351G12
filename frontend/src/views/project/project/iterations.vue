@@ -23,12 +23,12 @@
           <el-row :gutter="10">
             <el-col :span="12">
               <el-button size="small" type="primary" class="w-100"
-                         @click="doEdit(row)" :icon="Edit">Edit
+                         @click="doEdit(row)" :icon="Edit" v-if="booladmin">Edit
               </el-button>
             </el-col>
             <el-col :span="12">
               <el-button size="small" type="danger" class="w-100"
-                         @click="delIteration(row)" :icon="Delete">Delete</el-button>
+                         @click="delIteration(row)" :icon="Delete" v-if="booladmin">Delete</el-button>
             </el-col>
           </el-row>
         </template>
@@ -86,6 +86,7 @@ import { listItem } from '@/api/project/item'
 import * as echarts from 'echarts'
 import {Delete, Edit, TrendCharts} from "@element-plus/icons-vue";
 import {delDefect} from "@/api/project/defect.js";
+import {listRole} from "@/api/system/role.js";
 
 const route = useRoute()
 const projectId = route.params.id
@@ -94,7 +95,7 @@ const loading = ref(false)
 const show = ref(false)
 const title = ref('')
 const list = ref([])
-
+const booladmin = ref(false)
 
 const bVisItem = ref(false)
 const bItem = ref(false)
@@ -110,7 +111,13 @@ const form = ref({
   plannedStoryPoints: 0,
   status:'1',
 })
+const checkRoles = async () => {
 
+  const res = await listRole()
+  console.log('res:', res)
+  booladmin.value = res.rows.some(role => role.roleKey === 'admin')
+
+}
 const rules = {
   name: [
     { required: true, message: 'Please input iteration name', trigger: 'blur' }
@@ -333,6 +340,7 @@ const rF1 = () => {
 
 onMounted(() => {
   getList()
+  checkRoles()
 })
 </script>
 

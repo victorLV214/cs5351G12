@@ -8,7 +8,7 @@
                 vertical-align: middle; position: relative; top: -2px;">
             Project List
           </span>
-          <el-button type="primary" @click="addP" class="add-button">New Project</el-button></div>
+          <el-button type="primary" @click="addP" class="add-button" v-if="booladmin">New Project</el-button></div>
       </template>
       <el-table :data="projectList" style="width: 100%" class="project-table" :row-class-name="tableRowClassName" @row-click="doRCS">
         <el-table-column prop="projectName" label="Project Name">
@@ -26,11 +26,11 @@
               </el-col>
               <el-col :span="8">
                 <el-button size="small" type="success" class="w-100"
-                           @click="doEdit(scope.row)" :icon="EditPen">Edit</el-button>
+                           @click="doEdit(scope.row)" :icon="EditPen" v-if="booladmin">Edit</el-button>
               </el-col>
               <el-col :span="8">
                 <el-button size="small" type="danger" class="w-100"
-                           @click="doDelete(scope.row)" :icon="Delete">Delete</el-button>
+                           @click="doDelete(scope.row)" :icon="Delete" v-if="booladmin">Delete</el-button>
               </el-col>
             </el-row>
           </template>
@@ -228,13 +228,14 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 const userStore = useUserStore()
 import { addProjectMember, } from '@/api/project/member.js'
-
+import { listRole } from '@/api/system/role.js'
 const currentRow = ref(null)
 const pFormVisi = ref(false)
 const booleanForVis = ref(false)
 
 import useUserStore from "@/store/modules/user.js"
 
+const booladmin=ref(false)
 
 const detailV = ref(false)
 const cPro = ref(null)
@@ -268,7 +269,13 @@ const theBiggsetForm = reactive({
   startDate: '',
   status: '',
 })
+const checkRoles = async () => {
 
+    const res = await listRole()
+  console.log('res:', res)
+  booladmin.value = res.rows.some(role => role.roleKey === 'admin')
+
+}
 const checkProjectAccess = async (project) => {
 
 
@@ -500,6 +507,7 @@ const doDelete = async (row) => {
 
 onMounted(() => {
   getList()
+  checkRoles()
 })
 </script>
 

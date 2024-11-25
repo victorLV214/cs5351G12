@@ -45,12 +45,12 @@
             <el-row :gutter="10">
               <el-col :span="12">
                 <el-button size="small" type="primary" class="w-100"
-                           @click="doEDIT(row)" :icon="Edit">Edit
+                           @click="doEDIT(row)" :icon="Edit" v-if="booladmin">Edit
                 </el-button>
               </el-col>
               <el-col :span="12">
                 <el-button size="small" type="danger" class="w-100"
-                           @click="del(row)" :icon="Delete">Delete</el-button>
+                           @click="del(row)" :icon="Delete" v-if="booladmin">Delete</el-button>
               </el-col>
             </el-row>
           </template>
@@ -121,17 +121,23 @@ import {Delete, Edit} from "@element-plus/icons-vue";
 
 const route = useRoute()
 const taskFormRef = ref(null)
-
+import { listRole } from '@/api/system/role.js'
 const loading = ref(false)
 const taskD = ref([])
 const treeD = ref([])
 const buttonVis = ref(false)
 const butTit = ref('')
-
+const booladmin = ref(false)
 const queryParams = reactive({
   projectId: route.params.id
 })
+const checkRoles = async () => {
 
+  const res = await listRole()
+  console.log('res:', res)
+  booladmin.value = res.rows.some(role => role.roleKey === 'admin')
+
+}
 const taskForm = reactive({
   taskId: undefined,
   projectId: route.params.id,
@@ -238,6 +244,7 @@ const del = async (row) => {
 // 页面加载时获取列表
 onMounted(() => {
   getList()
+  checkRoles()
 })
 </script>
 
