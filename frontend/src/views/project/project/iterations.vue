@@ -10,10 +10,27 @@
       <el-table-column label="Start Date" prop="startDate" />
       <el-table-column label="End Date" prop="endDate" />
       <el-table-column label="Story Points" prop="plannedStoryPoints" />
-      <el-table-column label="Actions" width="250" align="center">
+      <el-table-column label="Burndown Chart" width="250" align="center">
         <template #default="scope">
-          <el-button type="primary" link @click="doED(scope.row)">Edit</el-button>
-          <el-button type="success" link @click="showAll(scope.row)">Show Items</el-button>
+          <el-button type="success" link @click="showAll(scope.row)">
+            <el-icon><TrendCharts/></el-icon>
+            View Chart
+          </el-button>
+        </template>
+      </el-table-column>
+      <el-table-column label="Operations" align="center" width="180" >
+        <template #default="{ row }">
+          <el-row :gutter="10">
+            <el-col :span="12">
+              <el-button size="small" type="primary" class="w-100"
+                         @click="doEdit(row)" :icon="Edit">Edit
+              </el-button>
+            </el-col>
+            <el-col :span="12">
+              <el-button size="small" type="danger" class="w-100"
+                         @click="delIteration(row)" :icon="Delete">Delete</el-button>
+            </el-col>
+          </el-row>
         </template>
       </el-table-column>
     </el-table>
@@ -63,10 +80,12 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { ElMessage } from 'element-plus'
+import {ElMessage, ElMessageBox} from 'element-plus'
 import { listIteration, addIteration, updateIteration } from '@/api/project/iteration'
 import { listItem } from '@/api/project/item'
 import * as echarts from 'echarts'
+import {Delete, Edit, TrendCharts} from "@element-plus/icons-vue";
+import {delDefect} from "@/api/project/defect.js";
 
 const route = useRoute()
 const projectId = route.params.id
@@ -119,10 +138,27 @@ const doDiga = () => {
   show.value = true
 }
 
-const doED = (row) => {
+const doEdit = (row) => {
   title.value = 'Edit Iteration'
   form.value = { ...row, projectId: projectId }
   show.value = true
+}
+
+const delIteration = async (row) => {
+  await ElMessageBox.confirm(
+      'This action will permanently delete this iteration. Continue?',
+      'Warning',
+      {
+        confirmButtonText: 'Confirm',
+        cancelButtonText: 'Cancel',
+        type: 'warning',
+      }
+  )
+  loading.value = true
+  await delDefect(row.defectId)
+  boolVis1.value = false
+  await getReqs()
+  loading.value = false
 }
 
 const showAll = async (row) => {
@@ -136,11 +172,11 @@ const showAll = async (row) => {
   bItem.value = false
   
   setTimeout(() => {
-    drwaPaint(row, res.rows)
+    drawPaint(row, res.rows)
   }, 100)
 }
 
-const drwaPaint = (iteration, items) => {
+const drawPaint = (iteration, items) => {
   const chartDom = document.getElementById('burndownChart')
   const myChart = echarts.init(chartDom)
 
@@ -265,8 +301,6 @@ const drwaPaint = (iteration, items) => {
     }
   })
 }
-
-
 
 
 const sF1 = () => {

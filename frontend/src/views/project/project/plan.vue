@@ -4,11 +4,9 @@
       <template #header>
         <div class="card-header">
           <span class="title">Project Detail</span>
-          <el-button type="primary" @click="doEdit">Edit</el-button>
+          <el-button type="primary" @click="doEdit" :icon="Edit">Edit</el-button>
         </div>
-        
-        
-        
+
       </template>
       <el-descriptions :column="1" border>
         <el-descriptions-item label="projectName">{{ pInfo.projectName }}</el-descriptions-item>
@@ -54,6 +52,7 @@ import { ref, onMounted } from 'vue';
 import { getProject, updateProject } from "@/api/project";
 import { useRoute } from "vue-router";
 import { ElMessage } from 'element-plus';
+import {Edit} from "@element-plus/icons-vue";
 
 const pInfo = ref({})
 const route = useRoute()
