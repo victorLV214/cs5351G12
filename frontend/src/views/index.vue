@@ -53,7 +53,8 @@
           </template><div class="itemlist">
           <el-table :data="myWorkItems" style="width: 100%">
             <el-table-column prop="title" label="title" /><el-table-column prop="dueDate" label="dueDate" width="120" />
-            <el-table-column prop="status" label="status" width="100"><template #default="scope">
+            <el-table-column prop="status" label="status" width="100">
+              <template #default="scope">
                   <el-tag :type="setT(scope.row.status)">
                     {{ scope.row.status }}
                   </el-tag>
