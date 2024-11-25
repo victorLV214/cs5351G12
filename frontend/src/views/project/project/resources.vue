@@ -5,7 +5,8 @@
         <el-button type="primary" @click="doADD">ADD</el-button>
       </div>
       <el-table v-loading="loading" :data="members">
-        <el-table-column label="Member ID" align="center" prop="projectMemberId" />
+        <el-table-column label="Member ID" align="center" prop="projectMemberId"/>
+        <el-table-column label="User" align="center" prop="userName" />
         <el-table-column label="Role" align="center" prop="role" />
         <el-table-column label="Join Date" align="center" prop="joinDate" />
         <el-table-column label="Allocation" align="center">

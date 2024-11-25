@@ -1,9 +1,12 @@
 package com.ruoyi.member.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ruoyi.common.core.domain.entity.SysUser;
+import com.ruoyi.system.service.ISysUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,6 +40,8 @@ import com.ruoyi.common.core.page.TableDataInfo;
 public class SysProjectMemberController extends BaseController {
     @Autowired
     private ISysProjectMemberService sysProjectMemberService;
+    @Autowired
+    private ISysUserService sysUserService;
 
     /**
      * 查询项目成员列表
@@ -45,7 +50,14 @@ public class SysProjectMemberController extends BaseController {
     @GetMapping("/list")
     public TableDataInfo list(SysProjectMember sysProjectMember) {
         startPage();
+        List<Long> userIds = new ArrayList<Long>();
         List<SysProjectMember> list = sysProjectMemberService.selectSysProjectMemberList(sysProjectMember);
+        for (SysProjectMember member : list) {
+            SysUser sysUser = sysUserService.selectUserById(member.getUserId());
+            member.setUserName(sysUser.getUserName());
+            member.setNickName(sysUser.getNickName());
+        }
+
         return getDataTable(list);
     }
 
