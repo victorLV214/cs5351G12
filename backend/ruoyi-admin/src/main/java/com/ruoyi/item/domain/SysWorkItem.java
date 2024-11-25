@@ -84,6 +84,20 @@ public class SysWorkItem extends BaseEntity {
     private Long assignedTo;
 
     /**
+     * 用户名
+     * 仅用于返回前端
+     */
+    @ApiModelProperty(value = "用户名", example = "Bob")
+    private String userName;
+
+    /**
+     * 用户昵称
+     * 仅用于返回前端
+     */
+    @ApiModelProperty(value = "用户名", example = "Bob")
+    private String nickName;
+
+    /**
      * 开始日期
      */
     @ApiModelProperty(value = "开始日期", example = "2024-01-01")
@@ -290,6 +304,22 @@ public class SysWorkItem extends BaseEntity {
 
     public String getDelFlag() {
         return delFlag;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName){
+        this.nickName = nickName;
     }
 
     @Override

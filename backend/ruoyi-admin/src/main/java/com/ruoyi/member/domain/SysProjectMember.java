@@ -50,7 +50,7 @@ public class SysProjectMember extends BaseEntity {
 
     /**
      * 用户昵称
-     * 仅用于返回前段
+     * 仅用于返回前端
      */
     @ApiModelProperty(value = "用户名", example = "Bob")
     private String nickName;
@@ -201,6 +201,7 @@ public class SysProjectMember extends BaseEntity {
     public void setNickName(String nickName){
         this.nickName = nickName;
     }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)

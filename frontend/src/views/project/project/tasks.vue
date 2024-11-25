@@ -11,7 +11,7 @@
         <el-table-column label="Type" prop="type" width="200" align="center"/>
         <el-table-column label="Status" prop="status" width="150" align="center"/>
         <el-table-column label="Priority" prop="priority" width="100" align="center"/>
-        <el-table-column label="Assigned" prop="assignedTo" width="200" align="center"/>
+        <el-table-column label="Assigned" prop="userName" width="200" align="center"/>
         <el-table-column label="Start Date" width="180">
           <template #default="scope">
             <el-date-picker v-model="scope.row.startDate" type="date" size="small" style="width: 130px" @change="changedate2(scope.row)"/>
