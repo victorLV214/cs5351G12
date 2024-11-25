@@ -456,7 +456,7 @@ const subF = async () => {
           remark: 'creator'
         }
         await addProjectMember(theData)
-        ElMessage.success('Project created successfully')
+        ElMessage.success('Project Create Success')
         pFormVisi.value = false
         getList() // Refresh the list
     }
@@ -468,7 +468,7 @@ const reloadFprm = async () => {
   await updateFormRef.value.validate(async (valid) => {
     if (valid) {
         await updateProject(theBiggsetForm)
-        ElMessage.success('编辑成功')
+        ElMessage.success('Edit Success')
         booleanForVis.value = false
         getList() // 刷新列表
     }
