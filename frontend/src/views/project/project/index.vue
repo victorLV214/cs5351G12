@@ -13,12 +13,13 @@
       <el-table :data="projectList" style="width: 100%" class="project-table" :row-class-name="tableRowClassName" @row-click="doRCS">
         <el-table-column prop="projectName" label="Project Name">
           <template #default="scope">
-            <a href="javascript:;" @click="checkProjectAccess(scope.row)" class="project-link">{{ scope.row.projectName }}</a></template>
+            <a href="javascript:;" @click="checkProjectAccess(scope.row)" class="project-link text-decoration-none">{{ scope.row.projectName }}</a></template>
         </el-table-column>
         <el-table-column prop="projectCode" label="Project Code" />
         <el-table-column prop="createTime" label="Create Time" />
-        <el-table-column label="Action" width="180">
-          <template #default="scope"><el-dropdown trigger="click">
+        <el-table-column label="Action" width="240">
+          <template #default="scope">
+            <!-- <el-dropdown trigger="click">
               <el-button type="primary" link class="action-button">
                 <el-icon><MoreFilled /></el-icon>
               </el-button>
@@ -35,9 +36,12 @@
                   </el-dropdown-item>
                 </el-dropdown-menu>
               </template>
-
-
-            </el-dropdown>
+            </el-dropdown> -->
+            <el-row :gutter="10">
+              <el-col :span="8"><el-button size="small" type="primary" class="w-100" @click="getDetail(scope.row)" :icon="Document">Detail</el-button></el-col>
+              <el-col :span="8"><el-button size="small" type="success" class="w-100" @click="handleEdit(scope.row)" :icon="EditPen">Edit</el-button></el-col>
+              <el-col :span="8"><el-button size="small" type="danger" class="w-100" @click="handleDelete(scope.row)" :icon="Delete">Delete</el-button></el-col>
+            </el-row>
           </template>
         </el-table-column>
       </el-table>

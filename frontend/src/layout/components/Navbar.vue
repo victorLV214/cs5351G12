@@ -1,31 +1,32 @@
 <template>
   <div class="navbar">
-    <hamburger id="hamburger-container" :is-active="appStore.sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
-    <breadcrumb id="breadcrumb-container" class="breadcrumb-container" v-if="!settingsStore.topNav" />
-    <top-nav id="topmenu-container" class="topmenu-container" v-if="settingsStore.topNav" />
-
-    <div class="right-menu">
+    <div class="d-flex align-items-center">
+      <hamburger id="hamburger-container" :is-active="appStore.sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
+      <breadcrumb id="breadcrumb-container" class="breadcrumb-container" v-if="!settingsStore.topNav" />
+      <top-nav id="topmenu-container" class="topmenu-container" v-if="settingsStore.topNav" />
+    </div>
+    
+    <div class="right-menu d-flex align-items-center">
       <template v-if="appStore.device !== 'mobile'">
         <header-search id="header-search" class="right-menu-item" />
+      </template>
 
-        <el-tooltip content="notice" effect="dark" placement="bottom">
-          <el-badge :value="unreadCount" class="right-menu-item hover-effect">
-            <el-icon @click="handleNoticeClick"><Bell /></el-icon>
-          </el-badge>
-        </el-tooltip>
+      <el-tooltip content="notice" effect="dark" placement="bottom">
+        <el-badge :value="unreadCount" class="right-menu-item hover-effect item">
+          <el-icon @click="handleNoticeClick" class="mt-1" style="font-size: 25px"><Bell /></el-icon>
+        </el-badge>
+      </el-tooltip>
 
-
+      <template v-if="appStore.device !== 'mobile'">
         <el-tooltip content="docs" effect="dark" placement="bottom">
           <ruo-yi-doc id="ruoyi-doc" class="right-menu-item hover-effect" />
         </el-tooltip>
 
-
-
         <screenfull id="screenfull" class="right-menu-item hover-effect" />
 
-<!--        <el-tooltip content="布局大小" effect="dark" placement="bottom">-->
-<!--          <size-select id="size-select" class="right-menu-item hover-effect" />-->
-<!--        </el-tooltip>-->
+        <!-- <el-tooltip content="布局大小" effect="dark" placement="bottom">
+          <size-select id="size-select" class="right-menu-item hover-effect" />
+        </el-tooltip> -->
       </template>
       <div class="avatar-container">
         <el-dropdown @command="handleCommand" class="right-menu-item hover-effect" trigger="click">
@@ -36,10 +37,10 @@
           <template #dropdown>
             <el-dropdown-menu>
 
-              <router-link to="/user/profile">
+              <router-link class="text-decoration-none" to="/user/profile">
                 <el-dropdown-item>profile</el-dropdown-item>
               </router-link>
-              <router-link to="/system/user" v-if="userStore.roles && userStore.roles.includes('admin')">
+              <router-link class="text-decoration-none" to="/system/user" v-if="userStore.roles && userStore.roles.includes('admin')">
                 <el-dropdown-item>user manage</el-dropdown-item>
               </router-link>
 <!--              <el-dropdown-item command="setLayout" v-if="settingsStore.showSettings">-->
@@ -136,14 +137,14 @@ onMounted(() => {
 
 <style lang='scss' scoped>
 .navbar {
-  height: 50px;
+  // height: 40px;
   overflow: hidden;
   position: relative;
   background: #fff;
   box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
 
   .hamburger-container {
-    line-height: 46px;
+    // line-height: 46px;
     height: 100%;
     float: left;
     cursor: pointer;
@@ -155,7 +156,8 @@ onMounted(() => {
     }
   }
   :deep(.el-badge__content.el-badge__content--danger) {
-    top: 15px;  // 调整这个值来改变红点的垂直位置
+    top: 25px;  // 调整这个值来改变红点的垂直位置
+    right: 18px;
   }
   .breadcrumb-container {
     float: left;
@@ -174,7 +176,7 @@ onMounted(() => {
   .right-menu {
     float: right;
     height: 100%;
-    line-height: 50px;
+    // line-height: 50px;
     display: flex;
 
     &:focus {

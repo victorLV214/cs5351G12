@@ -20,7 +20,9 @@
     "@vueup/vue-quill": "1.2.0",
     "@vueuse/core": "10.6.1",
     "axios": "0.27.2",
+    "bootstrap": "^5.3.3",
     "clipboard": "^2.0.11",
+    "dhtmlx-gantt": "^8.0.11",
     "echarts": "5.4.3",
     "element-plus": "2.4.3",
     "file-saver": "2.0.5",
@@ -33,17 +35,16 @@
     "vue": "3.4.0",
     "vue-cropper": "1.1.1",
     "vue-router": "4.2.5",
-    "vuedraggable": "^4.1.0",
-    "dhtmlx-gantt": "^8.0.6"
+    "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "5.0.1",
     "@vue/compiler-sfc": "3.4.0",
     "sass": "1.69.5",
     "unplugin-auto-import": "0.17.1",
+    "unplugin-vue-setup-extend-plus": "1.0.0",
     "vite": "5.0.4",
     "vite-plugin-compression": "0.5.1",
-    "vite-plugin-svg-icons": "2.0.1",
-    "unplugin-vue-setup-extend-plus": "1.0.0"
+    "vite-plugin-svg-icons": "2.0.1"
   }
 }
