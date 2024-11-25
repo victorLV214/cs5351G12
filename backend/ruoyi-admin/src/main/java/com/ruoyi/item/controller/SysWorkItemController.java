@@ -1,9 +1,12 @@
 package com.ruoyi.item.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ruoyi.common.core.domain.entity.SysUser;
+import com.ruoyi.system.service.ISysUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,6 +40,8 @@ import com.ruoyi.common.core.page.TableDataInfo;
 public class SysWorkItemController extends BaseController {
     @Autowired
     private ISysWorkItemService sysWorkItemService;
+    @Autowired
+    private ISysUserService sysUserService;
 
     /**
      * 查询工作项列表
@@ -46,6 +51,11 @@ public class SysWorkItemController extends BaseController {
     public TableDataInfo list(SysWorkItem sysWorkItem) {
         startPage();
         List<SysWorkItem> list = sysWorkItemService.selectSysWorkItemList(sysWorkItem);
+        for (SysWorkItem item : list) {
+            SysUser sysUser = sysUserService.selectUserById(item.getAssignedTo());
+            item.setUserName(sysUser.getUserName());
+            item.setNickName(sysUser.getNickName());
+        }
         return getDataTable(list);
     }
 

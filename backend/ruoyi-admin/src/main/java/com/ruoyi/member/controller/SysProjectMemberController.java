@@ -50,14 +50,12 @@ public class SysProjectMemberController extends BaseController {
     @GetMapping("/list")
     public TableDataInfo list(SysProjectMember sysProjectMember) {
         startPage();
-        List<Long> userIds = new ArrayList<Long>();
         List<SysProjectMember> list = sysProjectMemberService.selectSysProjectMemberList(sysProjectMember);
         for (SysProjectMember member : list) {
             SysUser sysUser = sysUserService.selectUserById(member.getUserId());
             member.setUserName(sysUser.getUserName());
             member.setNickName(sysUser.getNickName());
         }
-
         return getDataTable(list);
     }
 

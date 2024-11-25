@@ -41,12 +41,12 @@
 
     <div class="rList">
       <el-table v-loading="loading" :data="reqList" style="width: 100%">
-        <el-table-column label="ID" align="center" prop="requirementId">
-          <template #default="{ row }">
-            <el-link type="primary" @click="clickV(row)">{{ row.requirementId }}</el-link>
-          </template>
-          <template #header><span class="header-text">ID</span></template>
-        </el-table-column>
+<!--        <el-table-column label="ID" align="center" prop="requirementId">-->
+<!--          <template #default="{ row }">-->
+<!--            <el-link type="primary" @click="clickV(row)">{{ row.requirementId }}</el-link>-->
+<!--          </template>-->
+<!--          <template #header><span class="header-text">ID</span></template>-->
+<!--        </el-table-column>-->
         <el-table-column label="title" align="center" prop="title"/>
         <el-table-column label="description" align="center" prop="description" show-overflow-tooltip/>
         <el-table-column label="priority" align="center" prop="priority"></el-table-column>

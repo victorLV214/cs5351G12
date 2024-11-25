@@ -5,8 +5,8 @@
         <el-button type="primary" @click="doADD">ADD</el-button>
       </div>
       <el-table v-loading="loading" :data="members">
-        <el-table-column label="Member ID" align="center" prop="projectMemberId"/>
-        <el-table-column label="User" align="center" prop="userName" />
+<!--        <el-table-column label="Member ID" align="center" prop="projectMemberId"/>-->
+        <el-table-column label="User" align="center" prop="userName"/>
         <el-table-column label="Role" align="center" prop="role" />
         <el-table-column label="Join Date" align="center" prop="joinDate" />
         <el-table-column label="Allocation" align="center">
@@ -42,11 +42,11 @@
 
     <el-dialog title="user" v-model="buttenVis" width="600px">
       <el-form ref="formRef" :model="form" :ruleX="ruleX" label-width="100px">
-        <el-form-item label="User" prop="userId">
-          <el-select v-model="form.userId" placeholder="Select user">
-            <el-option v-for="user in usersss" :key="user.userId" :label="user.userName" :value="user.userId"/>
-          </el-select>
-        </el-form-item>
+<!--        <el-form-item label="User" prop="userId">-->
+<!--          <el-select v-model="form.userId" placeholder="Select user">-->
+<!--            <el-option v-for="user in usersss" :key="user.userId" :label="user.userName" :value="user.userId"/>-->
+<!--          </el-select>-->
+<!--        </el-form-item>-->
         <el-form-item label="Role" prop="role">
           <el-input v-model="form.role" placeholder="Role" />
         </el-form-item>
