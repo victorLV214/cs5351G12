@@ -42,6 +42,20 @@ public class SysProjectMember extends BaseEntity {
     private Long userId;
 
     /**
+     * 用户名
+     * 仅用于返回前端
+     */
+    @ApiModelProperty(value = "用户名", example = "Bob")
+    private String userName;
+
+    /**
+     * 用户昵称
+     * 仅用于返回前段
+     */
+    @ApiModelProperty(value = "用户名", example = "Bob")
+    private String nickName;
+
+    /**
      * 成员角色
      */
     @ApiModelProperty(value = "成员角色", example = "开发人员")
@@ -172,6 +186,21 @@ public class SysProjectMember extends BaseEntity {
         return notes;
     }
 
+    public String getUserName() {
+		return userName;
+	}
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName){
+        this.nickName = nickName;
+    }
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
