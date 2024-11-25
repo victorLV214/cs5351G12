@@ -7,11 +7,11 @@
 
       <el-table :data="list" v-loading="loading">
 <!--        <el-table-column label="ID" prop="workItemId" width="80" align="center"/>-->
-        <el-table-column label="Title" prop="title" width="180" align="center"/>
-        <el-table-column label="Type" prop="type" width="100" align="center"/>
-        <el-table-column label="Status" prop="status" width="100" align="center"/>
-        <el-table-column label="Priority" prop="priority" width="80" align="center"/>
-        <el-table-column label="Assigned" prop="assignedTo" width="100" align="center"/>
+        <el-table-column label="Title" prop="title" width="300" align="center"/>
+        <el-table-column label="Type" prop="type" width="200" align="center"/>
+        <el-table-column label="Status" prop="status" width="150" align="center"/>
+        <el-table-column label="Priority" prop="priority" width="100" align="center"/>
+        <el-table-column label="Assigned" prop="assignedTo" width="200" align="center"/>
         <el-table-column label="Start Date" width="180">
           <template #default="scope">
             <el-date-picker v-model="scope.row.startDate" type="date" size="small" style="width: 130px" @change="changedate2(scope.row)"/>
@@ -23,7 +23,7 @@
           </template>
         </el-table-column>
         <el-table-column label="Estimated" prop="estimatedEffort" width="100"/>
-        <el-table-column label="Actual" width="120">
+        <el-table-column label="Actual" width="200">
           <template #default="scope">
             <el-input-number v-model="scope.row.actualEffort" :precision="1" :step="0.5" @change="changePoint1(scope.row)" size="small" style="width: 90px"/>
           </template>
