@@ -65,7 +65,7 @@ public class SysProjectMemberController extends BaseController {
     @ApiOperation("导出项目成员")
     @Log(title = "项目成员", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, SysProjectMember sysProjectMember) {
+    public void export(HttpServletResponse response, @RequestBody SysProjectMember sysProjectMember) {
         List<SysProjectMember> list = sysProjectMemberService.selectSysProjectMemberList(sysProjectMember);
         ExcelUtil<SysProjectMember> util = new ExcelUtil<SysProjectMember>(SysProjectMember.class);
         util.exportExcel(response, list, "项目成员数据");

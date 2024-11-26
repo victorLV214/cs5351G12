@@ -55,7 +55,7 @@ public class SysTaskController extends BaseController {
     @ApiOperation("导出任务")
     @Log(title = "任务", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, SysTask sysTask) {
+    public void export(HttpServletResponse response, @RequestBody SysTask sysTask) {
         List<SysTask> list = sysTaskService.selectSysTaskList(sysTask);
         ExcelUtil<SysTask> util = new ExcelUtil<SysTask>(SysTask.class);
         util.exportExcel(response, list, "任务数据");

@@ -55,7 +55,7 @@ public class SysDefectController extends BaseController {
     @ApiOperation("导出缺陷")
     @Log(title = "缺陷管理", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, SysDefect sysDefect) {
+    public void export(HttpServletResponse response, @RequestBody SysDefect sysDefect) {
         List<SysDefect> list = sysDefectService.selectSysDefectList(sysDefect);
         ExcelUtil<SysDefect> util = new ExcelUtil<SysDefect>(SysDefect.class);
         util.exportExcel(response, list, "缺陷数据");

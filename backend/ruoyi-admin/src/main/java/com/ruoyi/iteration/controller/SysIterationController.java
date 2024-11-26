@@ -58,7 +58,7 @@ public class SysIterationController extends BaseController
     @Log(title = "迭代", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ApiOperation(value = "导出迭代列表")
-    public void export(HttpServletResponse response, SysIteration sysIteration)
+    public void export(HttpServletResponse response, @RequestBody SysIteration sysIteration)
     {
         List<SysIteration> list = sysIterationService.selectSysIterationList(sysIteration);
         ExcelUtil<SysIteration> util = new ExcelUtil<SysIteration>(SysIteration.class);
