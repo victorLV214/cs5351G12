@@ -1,9 +1,15 @@
 <template>
   <div class="app-container design1">
-    <el-row :gutter="20"><el-col :xs="24" :sm="4" :md="4" :lg="4.8" :xl="4.8" v-for="(item, index) in projectDaat" :key="index">
+    <el-row :gutter="20">
+      <el-col :xs="24" :sm="4" :md="4" :lg="4.8" :xl="4.8" v-for="(item, index) in projectDaat" :key="index">
         <el-card class="box-card">
-          <div class="card-header"><span>{{ item.title }}</span></div><div class="ss">{{ item.value }}</div></el-card>
-    </el-col></el-row>
+          <div class="card-header">
+            <span>{{ item.title }}</span>
+          </div>
+          <div class="ss">{{ item.value }}</div>
+        </el-card>
+      </el-col>
+    </el-row>
 
     <el-row :gutter="20" style="margin-top: 20px;">
       <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
@@ -18,31 +24,36 @@
           </div>
           </template><div ref="chartR" style="height: 300px;"></div>
         </el-card>
-      </el-col><el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12"><el-card class="box-card"><template #header>
-      <div class="card-header">
-        <span>
-             <img src="@/assets/icons/png/task-finish.png" style="width: 25px;
-                vertical-align: middle; position: relative; top: -2px;">
-          Complete Task Statistics This Week
-        </span>
-      </div>
-    </template>
-        <div ref="weekChart" style="height: 300px;"></div></el-card></el-col></el-row><el-row :gutter="20" style="margin-top: 20px;">
+      </el-col><el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+      <el-card class="box-card">
+        <template #header>
+          <div class="card-header">
+            <span>
+                 <img src="@/assets/icons/png/task-finish.png" style="width: 25px;
+                    vertical-align: middle; position: relative; top: -2px;">
+              Complete Task Statistics This Week
+            </span>
+          </div>
+        </template>
+        <div ref="weekChart" style="height: 300px;"></div>
+      </el-card></el-col></el-row><el-row :gutter="20" style="margin-top: 20px;">
       <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
         <el-card class="box-card">
           <template #header>
             <div class="card-header">
               <span>
                 <img src="@/assets/icons/png/progress-visual.png" style="width: 25px;
-                  vertical-align: middle; position: relative; top: -2px;">
-                Project progress visualization
+                  vertical-align: middle; position: relative; top: -2px;" alt="">
+                Projects Progress
               </span>
             </div>
-          </template><div ref="projectC" style="height: 300px;"></div>
+          </template>
+          <div ref="projectC" style="height: 300px;"></div>
         </el-card>
       </el-col>
     <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-        <el-card class="box-card"><template #header>
+        <el-card class="box-card">
+          <template #header>
             <div class="card-header">
               <span>
                 <img src="@/assets/icons/png/task.png" style="width: 25px;
@@ -50,17 +61,22 @@
                 My Responsible Work Items
               </span>
             </div>
-          </template><div class="itemlist">
-          <el-table :data="myWorkItems" style="width: 100%">
-            <el-table-column prop="title" label="title" /><el-table-column prop="dueDate" label="dueDate" width="120" />
-            <el-table-column prop="status" label="status" width="100">
-              <template #default="scope">
-                  <el-tag :type="setT(scope.row.status)">
-                    {{ scope.row.status }}
-                  </el-tag>
-            </template>
-              </el-table-column>
-          </el-table></div></el-card></el-col></el-row>
+          </template>
+          <div class="itemlist">
+            <el-table :data="myWorkItems" style="width: 100%">
+              <el-table-column prop="title" label="title" /><el-table-column prop="dueDate" label="dueDate" width="120" />
+                <el-table-column prop="status" label="status" width="100">
+                  <template #default="scope">
+                      <el-tag :type="setT(scope.row.status)">
+                        {{ scope.row.status }}
+                      </el-tag>
+                  </template>
+                </el-table-column>
+            </el-table>
+          </div>
+        </el-card>
+    </el-col>
+  </el-row>
   </div>
 </template>
 <script setup name="Index">
