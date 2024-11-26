@@ -47,7 +47,8 @@ export function delItem(workItemIds) {
 export function exportItem(query) {
     return request({
         url: '/dev-api/project/item/export',
-        method: 'get',
-        params: query
+        method: 'post',
+        data: query,
+        responseType: 'blob'
     })
 }

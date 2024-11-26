@@ -3,7 +3,8 @@
     <el-card class="box-card">
       <template #header>
         <div class="card-header">
-          <el-button type="primary" @click="doAdd">Add Task</el-button>
+          <el-button type="primary" :icon="Plus" @click="doAdd">Add Task</el-button>
+          <el-button type="primary" :icon="Download" @click="downloadTaskList">Download</el-button>
         </div>
       </template>
 
@@ -114,10 +115,10 @@
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
-import { listTask, getTask, addTask, updateTask, delTask } from '@/api/project/tasks'
+import {listTask, getTask, addTask, updateTask, delTask, exportTask} from '@/api/project/tasks'
 import { useRoute } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import {Delete, Edit} from "@element-plus/icons-vue";
+import {Delete, Download, Edit, Plus} from "@element-plus/icons-vue";
 
 const route = useRoute()
 const taskFormRef = ref(null)
@@ -128,6 +129,7 @@ const treeD = ref([])
 const buttonVis = ref(false)
 const butTit = ref('')
 const booladmin = ref(false)
+const projectId = route.params.id
 const queryParams = reactive({
   projectId: route.params.id
 })
@@ -239,6 +241,20 @@ const del = async (row) => {
   await delTask(row.taskId)
   ElMessage.success('Delete successful')
   getList()
+}
+
+// 下载项目任务列表
+const downloadTaskList = async () => {
+  const query = {
+    projectId: projectId
+  }
+  const res = await exportTask(query)
+  const blob = new Blob([res], { type: 'application/vnd.ms-excel' })
+  const href = window.URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = href
+  link.download = `project_task_list.xlsx`
+  link.click()
 }
 
 // 页面加载时获取列表

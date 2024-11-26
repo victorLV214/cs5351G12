@@ -1,9 +1,12 @@
 <template>
   <div class="app-container">
     <el-card class="box-card">
-      <div class="mb-2">
-        <el-button type="primary" @click="doADD">ADD</el-button>
-      </div>
+      <template #header>
+        <div class="card-header">
+          <el-button type="primary" :icon="Plus" @click="doAdd">Add Member</el-button>
+          <el-button type="primary" :icon="Download" @click="downloadMemberList">Download</el-button>
+        </div>
+      </template>
       <el-table v-loading="loading" :data="members">
 <!--        <el-table-column label="Member ID" align="center" prop="projectMemberId"/>-->
         <el-table-column label="User" align="center" prop="userName"/>
@@ -83,8 +86,14 @@ const loading = ref(false)
 const members = ref([])
 const buttenVis = ref(false)
 const usersss = ref([])
-import {listProjectMember, addProjectMember, updateProjectMember, delProjectMember} from '@/api/project/member'
-import {Delete, Edit} from "@element-plus/icons-vue";
+import {
+  listProjectMember,
+  addProjectMember,
+  updateProjectMember,
+  delProjectMember,
+  exportProjectMember
+} from '@/api/project/member'
+import {Delete, Download, Edit, Plus} from "@element-plus/icons-vue";
 import {listRole} from "@/api/system/role.js";
 const booladmin = ref(false)
 const form = reactive({
@@ -181,6 +190,20 @@ const editMember = (row) => {
   form.projectId = row.projectId
   form.joinDate = row.joinDate
   buttenVis.value = true
+}
+
+// 下载项目任务列表
+const downloadMemberList = async () => {
+  const query = {
+    projectId: projectId
+  }
+  const res = await exportProjectMember(query)
+  const blob = new Blob([res], { type: 'application/vnd.ms-excel' })
+  const href = window.URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = href
+  link.download = `project_task_list.xlsx`
+  link.click()
 }
 
 onMounted(() => {

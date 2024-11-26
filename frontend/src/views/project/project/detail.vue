@@ -2,8 +2,7 @@
   <div class="project-detail-container">
 
     <div class="top-navbar">
-      <el-menu :default-active="setC" class="project-menu" mode="horizontal" @select="doTrans"
-      >
+      <el-menu :default-active="setC" class="project-menu" mode="horizontal" @select="doTrans">
         <el-menu-item index="overview">
           <el-icon><DataBoard /></el-icon>
           <span>Overview</span>

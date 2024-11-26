@@ -1,11 +1,17 @@
 <template>
   <el-card class="r-cards">
-    <template #header><div class="card-header">
-      <div class="header-left"><span class="title">Defects List</span><el-tag class="count-tag" type="info">total {{ total }} defectId</el-tag>
+    <template #header>
+      <div class="card-header">
+        <div class="header-left">
+          <span class="title">Defects List</span>
+          <el-tag class="count-tag" type="info">total {{ total }} entries</el-tag>
+        </div>
+        <div class="addR">
+          <el-button type="primary" :icon="Plus" @click="addReq">New</el-button>
+          <el-button type="primary" :icon="Download" @click="downloadDefectList()">Download</el-button>
+        </div>
       </div>
-      <div class="addR">
-        <el-button type="primary" :icon="Plus" @click="addReq"></el-button>
-      </div></div></template>
+    </template>
 
     <div class="search"><el-form :inline="true" :model="Params" class="sF"><el-form-item label="">
       <el-input v-model="Params.title" placeholder="" clearable style="width: 200px"/>
@@ -154,7 +160,7 @@ import { ElMessage, ElMessageBox } from "element-plus"
 import useUserStore from "@/store/modules/user.js"
 import { getUser } from "@/api/system/user.js"
 
-import {addDefect, delDefect, getDefect, listDefect, updateDefect} from "@/api/project/defect.js";
+import {addDefect, delDefect, exportDefect, getDefect, listDefect, updateDefect} from "@/api/project/defect.js";
 const userStore = useUserStore()
 const route = useRoute()
 const projectId = route.params.id
@@ -363,8 +369,22 @@ const rule1 = {
   title: [
     { required: true, message: 'title', trigger: 'blur' }
   ]
-
 }
+
+// 下载项目缺陷列表
+const downloadDefectList = async () => {
+  const query = {
+    projectId: projectId
+  }
+  const res = await exportDefect(query)
+  const blob = new Blob([res], { type: 'application/vnd.ms-excel' })
+  const href = window.URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = href
+  link.download = `project_defect_list.xlsx`
+  link.click()
+}
+
 
 </script>
 

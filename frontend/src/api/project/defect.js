@@ -47,7 +47,8 @@ export function delDefect(defectIds) {
 export function exportDefect(query) {
     return request({
         url: '/dev-api/project/defect/export',
-        method: 'get',
-        params: query
+        method: 'post',
+        data: query,
+        responseType: "blob"
     })
 }

@@ -1,8 +1,9 @@
 <template>
   <div>
     <el-card>
-      <div class="toolbar">
-        <el-button type="primary" @click="doAdd">Create Work Item</el-button>
+      <div class="toolbar" style="margin-bottom: 20px;">
+        <el-button type="primary" :icon="Plus" @click="doAdd">Create Work Item</el-button>
+        <el-button type="primary" :icon="Download" @click="downloadItemList()">Download</el-button>
       </div>
 
       <el-table :data="list" v-loading="loading">
@@ -120,7 +121,7 @@
 <script setup>
 import {ref, onMounted} from 'vue'
 import {useRoute} from 'vue-router'
-import {listItem, addItem, updateItem, delItem} from '@/api/project/item'
+import {listItem, addItem, updateItem, delItem, exportItem} from '@/api/project/item'
 import {listProjectMember} from '@/api/project/member'
 import {listRequirement} from '@/api/project/requirements'
 import {listIteration} from '@/api/project/iteration'
@@ -128,7 +129,7 @@ import {addNotice} from "@/api/notice/noticeapi.js";
 import { listRole } from '@/api/system/role.js'
 import { gantt } from 'dhtmlx-gantt'
 import 'dhtmlx-gantt/codebase/dhtmlxgantt.css'
-import {Delete, Edit} from "@element-plus/icons-vue";
+import {Delete, Download, Edit, Plus} from "@element-plus/icons-vue";
 import {delTask} from "@/api/project/tasks.js";
 import {ElMessageBox} from "element-plus";
 const booladmin=ref(false)
@@ -257,6 +258,21 @@ async function doADD2() {
     },
     userIds: [assignedUser.userId]
   })
+}
+
+
+// 下载项目迭代列表
+const downloadItemList = async () => {
+  const query = {
+    projectId: projectId
+  }
+  const res = await exportItem(query)
+  const blob = new Blob([res], { type: 'application/vnd.ms-excel' })
+  const href = window.URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = href
+  link.download = `project_workItem_list.xlsx`
+  link.click()
 }
 
 

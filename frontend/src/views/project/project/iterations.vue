@@ -1,9 +1,9 @@
 <template>
   <div class="app-container">
     <div class="mb-20">
-      <el-button type="primary" @click="doDiga">Add Iteration</el-button>
+      <el-button type="primary" :icon="Plus" @click="doDiga">Add Iteration</el-button>
+      <el-button type="primary" :icon="Download" @click="downloadIterationList()" class="download-button">Download</el-button>
     </div>
-
 
     <el-table :data="list" v-loading="loading" border>
       <el-table-column label="Iteration Name" prop="name" />
@@ -81,10 +81,10 @@
 import { ref, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import {ElMessage, ElMessageBox} from 'element-plus'
-import { listIteration, addIteration, updateIteration } from '@/api/project/iteration'
+import {listIteration, addIteration, updateIteration, exportIteration} from '@/api/project/iteration'
 import { listItem } from '@/api/project/item'
 import * as echarts from 'echarts'
-import {Delete, Edit, TrendCharts} from "@element-plus/icons-vue";
+import {Delete, Download, Edit, Plus, TrendCharts} from "@element-plus/icons-vue";
 import {delDefect} from "@/api/project/defect.js";
 import {listRole} from "@/api/system/role.js";
 
@@ -336,6 +336,20 @@ const rF1 = () => {
     endDate: '',
     plannedStoryPoints: 0
   }
+}
+
+// 下载项目迭代列表
+const downloadIterationList = async () => {
+  const query = {
+    projectId: projectId
+  }
+  const res = await exportIteration(query)
+  const blob = new Blob([res], { type: 'application/vnd.ms-excel' })
+  const href = window.URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = href
+  link.download = `project_iteration_list.xlsx`
+  link.click()
 }
 
 onMounted(() => {
