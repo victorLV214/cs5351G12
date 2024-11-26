@@ -42,3 +42,14 @@ export function deleteIteration(iterationId) {
         method: 'delete'
     })
 }
+
+
+// 导出迭代列表
+export function exportIteration(query) {
+    return request({
+        url: `/dev-api/project/iteration/export`,
+        method: 'post',
+        data: query,
+        responseType: 'blob' ,
+    })
+}

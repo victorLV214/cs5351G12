@@ -8,8 +8,8 @@
         </div>
         <div class="addR">
           <el-button type="primary" :icon="Plus" @click="addReq">New</el-button>
-          <el-button type="primary" @click="showGantt">Gantt Chart</el-button>
-          <el-button type="primary" :icon="Download" @click="downloadReq(row)">Download</el-button>
+          <el-button type="success" :icon="TrendCharts" @click="showGantt">Gantt Chart</el-button>
+          <el-button type="primary" :icon="Download" @click="downloadRequirementList()">Download</el-button>
         </div>
       </div>
     </template>
@@ -179,13 +179,13 @@
 
 <script setup>
 import {ref, onMounted, onUnmounted, watch, nextTick} from 'vue'
-import {Search, Refresh, Plus, Download, Edit, Delete} from '@element-plus/icons-vue'
+import {Search, Refresh, Plus, Download, Edit, Delete, TrendCharts} from '@element-plus/icons-vue'
 import 'dhtmlx-gantt/codebase/dhtmlxgantt.css'
 import 'dhtmlx-gantt/codebase/dhtmlxgantt.js'
 import {useRoute} from "vue-router"
 import {
   addRequirement,
-  delRequirement,
+  delRequirement, exportRequirement,
   getRequirementDetail,
   listRequirement,
   updateRequirement
@@ -491,6 +491,20 @@ watch(ganttButten, (newVal) => {
     })
   }
 })
+
+// 下载项目列表
+const downloadRequirementList = async () => {
+  const query = {
+    projectId: projectId
+  }
+  const res = await exportRequirement(query)
+  const blob = new Blob([res], { type: 'application/vnd.ms-excel' })
+  const href = window.URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = href
+  link.download = `project_requirement_list.xlsx`
+  link.click()
+}
 
 onUnmounted(() => {
   if (gantt) {

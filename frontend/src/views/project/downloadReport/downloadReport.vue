@@ -46,7 +46,7 @@ const downloadProject = async (row) => {
   const href = window.URL.createObjectURL(blob)
   const link = document.createElement('a')
   link.href = href
-  link.download = `project_${row.projectName}.xlsx`
+  link.download = `project_list.xlsx`
   link.click()
 }
 

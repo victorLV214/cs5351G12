@@ -47,7 +47,8 @@ export function delProjectMember(projectMemberIds) {
 export function exportProjectMember(query) {
     return request({
         url: '/dev-api/project/member/export',
-        method: 'get',
-        params: query
+        method: 'post',
+        data: query,
+        responseType: "blob"
     })
 }

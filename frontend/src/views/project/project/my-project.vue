@@ -444,17 +444,6 @@ const getList = async () => {
     projectList.value = allProject.rows
 }
 
-// 下载项目列表
-const downloadProjectList = async () => {
-  const query = {}
-  const res = await exportMyProjectList(query)
-  const blob = new Blob([res], { type: 'application/vnd.ms-excel' })
-  const href = window.URL.createObjectURL(blob)
-  const link = document.createElement('a')
-  link.href = href
-  link.download = `project_list.xlsx`
-  link.click()
-}
 
 const subF = async () => {
   if (!formRef.value) return
@@ -526,6 +515,17 @@ const doDelete = async (row) => {
     await getList() // 刷新列表
 }
 
+// 下载项目列表
+const downloadProjectList = async () => {
+  const query = {}
+  const res = await exportMyProjectList(query)
+  const blob = new Blob([res], { type: 'application/vnd.ms-excel' })
+  const href = window.URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = href
+  link.download = `my_project_list.xlsx`
+  link.click()
+}
 
 onMounted(() => {
   getList()

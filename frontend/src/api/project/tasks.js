@@ -42,3 +42,13 @@ export function delTask(taskId) {
         method: 'delete'
     })
 }
+
+// 导出缺陷
+export function exportTask(query) {
+    return request({
+        url: '/dev-api/project/task/export',
+        method: 'post',
+        data: query,
+        responseType: "blob"
+    })
+}

@@ -44,10 +44,11 @@ export function delRequirement(requirementId) {
 }
 
 // 导出需求列表
-export function exportRequirement(projectId, query) {
+export function exportRequirement(query) {
     return request({
-        url: `/dev-api/project/${projectId}/requirement/export`,
-        method: 'get',
-        params: query
+        url: `/dev-api/project/requirement/export`,
+        method: 'post',
+        data: query,
+        responseType: 'blob' ,
     })
 }

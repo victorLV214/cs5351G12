@@ -65,7 +65,7 @@ public class SysWorkItemController extends BaseController {
     @ApiOperation("导出工作项")
     @Log(title = "工作项", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, SysWorkItem sysWorkItem) {
+    public void export(HttpServletResponse response, @RequestBody SysWorkItem sysWorkItem) {
         List<SysWorkItem> list = sysWorkItemService.selectSysWorkItemList(sysWorkItem);
         ExcelUtil<SysWorkItem> util = new ExcelUtil<SysWorkItem>(SysWorkItem.class);
         util.exportExcel(response, list, "工作项数据");
