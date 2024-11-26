@@ -61,7 +61,7 @@ public class SysRequirementController extends BaseController
     @Log(title = "需求", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ApiOperation(value = "导出需求列表")
-    public void export(HttpServletResponse response, SysRequirement sysRequirement)
+    public void export(HttpServletResponse response, @RequestBody SysRequirement sysRequirement)
     {
         List<SysRequirement> list = sysRequirementService.selectSysRequirementList(sysRequirement);
         ExcelUtil<SysRequirement> util = new ExcelUtil<SysRequirement>(SysRequirement.class);
