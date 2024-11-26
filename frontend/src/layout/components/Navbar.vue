@@ -5,7 +5,7 @@
       <breadcrumb id="breadcrumb-container" class="breadcrumb-container" v-if="!settingsStore.topNav" />
       <top-nav id="topmenu-container" class="topmenu-container" v-if="settingsStore.topNav" />
     </div>
-    
+
     <div class="right-menu d-flex align-items-center">
       <template v-if="appStore.device !== 'mobile'">
         <header-search id="header-search" class="right-menu-item" />
@@ -36,18 +36,16 @@
           </div>
           <template #dropdown>
             <el-dropdown-menu>
-
               <router-link class="text-decoration-none" to="/user/profile">
-                <el-dropdown-item>profile</el-dropdown-item>
+                <el-dropdown-item><strong>Profile</strong></el-dropdown-item>
               </router-link>
               <router-link class="text-decoration-none" to="/system/user" v-if="userStore.roles && userStore.roles.includes('admin')">
-                <el-dropdown-item>user manage</el-dropdown-item>
+                <el-dropdown-item><strong>User Manage</strong></el-dropdown-item>
               </router-link>
-<!--              <el-dropdown-item command="setLayout" v-if="settingsStore.showSettings">-->
-<!--                <span>布局设置</span>-->
-<!--              </el-dropdown-item>-->
               <el-dropdown-item divided command="logout">
-                <span>logout</span>
+                <span style="color: #ed5565">
+                  <strong>Logout</strong>
+                </span>
               </el-dropdown-item>
             </el-dropdown-menu>
           </template>
@@ -58,9 +56,10 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router'
+import {useRouter} from 'vue-router'
+
 const router = useRouter()
-import { ElMessageBox } from 'element-plus'
+import {ElMessageBox} from 'element-plus'
 import Breadcrumb from '@/components/Breadcrumb'
 import TopNav from '@/components/TopNav'
 import Hamburger from '@/components/Hamburger'
@@ -72,79 +71,90 @@ import RuoYiDoc from '@/components/RuoYi/Doc'
 import useAppStore from '@/store/modules/app'
 import useUserStore from '@/store/modules/user'
 import useSettingsStore from '@/store/modules/settings'
-import { Bell } from '@element-plus/icons-vue'
-import { ref, onMounted } from 'vue'
-import { getUserNoticeList } from '@/api/notice/noticeapi'
+import {Bell} from '@element-plus/icons-vue'
+import {ref, onMounted, onBeforeUnmount} from 'vue'
+import {getUserNoticeList} from '@/api/notice/noticeapi'
+import Detail from "@/views/project/project/detail.vue";
 
 const unreadCount = ref(0)
 const appStore = useAppStore()
 const userStore = useUserStore()
 const settingsStore = useSettingsStore()
+let intervalId = null
 
 function toggleSideBar() {
   appStore.toggleSideBar()
 }
-// console.log('userStore:', userStore)
-// console.log('userId:', userStore.userId)
 
-const getUnreadCount = async () => {
 
+async function getUnreadCount() {
+  try {
     const res = await getUserNoticeList(userStore.id)
-
     unreadCount.value = res.rows.filter(notice => notice.userReadStatus === 0).length
-
+  } catch (error) {
+    console.error('Error fetching unread count:', error)
+  }
 }
 
 const handleNoticeClick = () => {
   router.push('/userNotice/notice')  // 跳转到通知页面
 }
+
 function handleCommand(command) {
   switch (command) {
     case "setLayout":
-      setLayout();
-      break;
+      setLayout()
+      break
     case "logout":
-      logout();
-      break;
+      logout()
+      break
     default:
-      break;
+      break
   }
 }
 
 function logout() {
-  ElMessageBox.confirm('确定注销并退出系统吗？', '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
+  ElMessageBox.confirm("Log out and exit the system?", 'Warning', {
+    confirmButtonText: 'Confirm',
+    cancelButtonText: 'Cancel',
     type: 'warning'
   }).then(() => {
     userStore.logOut().then(() => {
-      location.href = '/index';
+      location.href = '/index'
     })
-  }).catch(() => { });
+  }).catch(() => {
+  })
 }
 
 const emits = defineEmits(['setLayout'])
+
 function setLayout() {
-  emits('setLayout');
+  emits('setLayout')
 }
 
-// 在组件挂载时获取未读消息数量
+// 在组件挂载时获取未读消息数量并设置轮询
 onMounted(() => {
   getUnreadCount()
+  intervalId = setInterval(getUnreadCount, 60000)
+})
+
+// 在组件卸载时清除定时器
+onBeforeUnmount(() => {
+  if (intervalId) {
+    clearInterval(intervalId)
+  }
 })
 
 </script>
 
 <style lang='scss' scoped>
 .navbar {
-  // height: 40px;
   overflow: hidden;
   position: relative;
   background: #fff;
   box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
 
   .hamburger-container {
-    // line-height: 46px;
     height: 100%;
     float: left;
     cursor: pointer;
@@ -155,10 +165,12 @@ onMounted(() => {
       background: rgba(0, 0, 0, 0.025);
     }
   }
+
   :deep(.el-badge__content.el-badge__content--danger) {
-    top: 25px;  // 调整这个值来改变红点的垂直位置
+    top: 25px; // 调整这个值来改变红点的垂直位置
     right: 18px;
   }
+
   .breadcrumb-container {
     float: left;
   }
@@ -176,7 +188,6 @@ onMounted(() => {
   .right-menu {
     float: right;
     height: 100%;
-    // line-height: 50px;
     display: flex;
 
     &:focus {
