@@ -5,7 +5,7 @@
         <el-input v-model="searchQuery" placeholder="Search Notifications..."
                   class="search-bar" style="margin-left: 40px; width:240px"/>
         <el-button @click="markAllAsRead" class="mark-all-read" style="margin-right: 8px">
-          Mark All as Read
+          <el-icon><tickets/></el-icon>&nbsp; Mark All as Read
         </el-button>
       </div>
       <div class="notice-list">
@@ -42,6 +42,7 @@
 import { ref, onMounted, computed } from 'vue'
 import { getUserNoticeList, updateNoticeStatus } from '@/api/notice/noticeapi'
 import useUserStore from '@/store/modules/user'
+import {MagicStick, Notebook, Reading, ReadingLamp, Ticket} from "@element-plus/icons-vue";
 
 const allM = ref([])
 const userStore = useUserStore()

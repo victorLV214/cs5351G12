@@ -125,7 +125,7 @@ import {listItem, addItem, updateItem, delItem, exportItem} from '@/api/project/
 import {listProjectMember} from '@/api/project/member'
 import {listRequirement} from '@/api/project/requirements'
 import {listIteration} from '@/api/project/iteration'
-import {addNotice} from "@/api/notice/noticeapi.js";
+import {addNotice, getUnreadCount} from "@/api/notice/noticeapi.js";
 import { listRole } from '@/api/system/role.js'
 import { gantt } from 'dhtmlx-gantt'
 import 'dhtmlx-gantt/codebase/dhtmlxgantt.css'
@@ -246,19 +246,38 @@ function doAdd() {
 }
 
 async function doADD2() {
+  try {
     await addItem(form.value)
     addDialog.value = false
-    getList()
-  const assignedUser = members.value.find(m => m.userId === form.value.assignedTo)
-  await addNotice({
-    sysNotice: {
-      noticeTitle: 'NewWorkItem',
-      noticeContent: `newworkitem:${form.value.title}`,
-      noticeType: '1',
-    },
-    userIds: [assignedUser.userId]
-  })
+    await getList()
+    const assignedUser = members.value.find(m => m.userId === form.value.assignedTo)
+
+    // 格式化日期
+    const formatDate = (date) => {
+      const options = { year: 'numeric', month: 'long', day: 'numeric' }
+      return new Date(date).toLocaleDateString('en-US', options)
+    }
+
+    const dueDate = form.value.dueDate ? formatDate(form.value.dueDate) : 'No deadline'
+
+    await addNotice({
+      sysNotice: {
+        noticeTitle: 'New Work Item Assigned',
+        noticeContent: `You have been assigned a new work item: <strong>${form.value.title}</strong>.
+        Please review the details and start working on it as soon as possible.
+        Deadline: ${dueDate}.`,
+        noticeType: '1',
+      },
+      userIds: [assignedUser.userId]
+    })
+
+    // 主动刷新未读通知数
+    await getUnreadCount()
+  } catch (error) {
+    console.error('Error adding new work item:', error)
+  }
 }
+
 
 
 // 下载项目迭代列表
