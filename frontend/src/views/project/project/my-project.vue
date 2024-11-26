@@ -6,14 +6,25 @@
           <span class="header-title">
             <img src="@/assets/icons/png/project-list.png" style="width: 25px;
                 vertical-align: middle; position: relative; top: -2px;" alt="">
-            My Project List
+            Project List
           </span>
-          <el-button type="primary" @click="addP" class="add-button" v-if="booladmin">New Project</el-button></div>
+          <div class="button-group" v-if="booladmin">
+            <el-button type="primary" @click="addP" class="add-button">
+              <el-icon><Plus/></el-icon>
+              &nbsp;New
+            </el-button>
+            <el-button type="primary" @click="downloadProjectList()" class="download-button">
+              <el-icon><Download/></el-icon>
+              &nbsp;Download
+            </el-button>
+          </div>
+        </div>
       </template>
       <el-table :data="projectList" style="width: 100%" class="project-table" :row-class-name="tableRowClassName" @row-click="doRCS">
         <el-table-column prop="projectName" label="Project Name">
           <template #default="scope">
-            <a href="javascript:;" @click="checkProjectAccess(scope.row)" class="project-link text-decoration-none">{{ scope.row.projectName }}</a></template>
+            <a href="javascript:;" @click="checkProjectAccess(scope.row)" class="project-link text-decoration-none">{{ scope.row.projectName }}</a>
+          </template>
         </el-table-column>
         <el-table-column prop="projectCode" label="Project Code" />
         <el-table-column prop="createTime" label="Create Time" />
@@ -217,8 +228,9 @@ import {ElMessage, ElMessageBox} from 'element-plus'
 import {listProject, addProject, getProject, delProject, updateProject, listMyProject} from '@/api/project/index.js'
 
 import { listProjectMember } from '@/api/project/member.js'
-import {  EditPen, Delete, InfoFilled, Document, ChatLineSquare, User, Plus, MoreFilled,
-  } from '@element-plus/icons-vue'
+import {
+  EditPen, Delete, InfoFilled, Document, ChatLineSquare, User, Plus, MoreFilled, Download,
+} from '@element-plus/icons-vue'
 const projectFormTitle = ref('')
 const projectUpdateFormTitle = ref('')
 const formRef = ref(null)
@@ -234,6 +246,7 @@ const pFormVisi = ref(false)
 const booleanForVis = ref(false)
 
 import useUserStore from "@/store/modules/user.js"
+import {exportMyProjectList, exportProject} from "@/api/download.js";
 
 const booladmin=ref(false)
 
@@ -418,6 +431,7 @@ const addP = () => {
   }
 }
 
+//获取项目列表
 const getList = async () => {
   const userStore = useUserStore()
   const userId = userStore.id
@@ -428,6 +442,18 @@ const getList = async () => {
       userId: userId,
     })
     projectList.value = allProject.rows
+}
+
+// 下载项目列表
+const downloadProjectList = async () => {
+  const query = {}
+  const res = await exportMyProjectList(query)
+  const blob = new Blob([res], { type: 'application/vnd.ms-excel' })
+  const href = window.URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = href
+  link.download = `project_list.xlsx`
+  link.click()
 }
 
 const subF = async () => {

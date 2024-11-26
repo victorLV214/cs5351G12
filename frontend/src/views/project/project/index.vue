@@ -8,15 +8,27 @@
                 vertical-align: middle; position: relative; top: -2px;" alt="">
             Project List
           </span>
-          <el-button type="primary" @click="addP" class="add-button" v-if="booladmin">New Project</el-button></div>
+          <div class="button-group" v-if="booladmin">
+            <el-button type="primary" @click="addP" class="add-button">
+              <el-icon><Plus/></el-icon>
+              &nbsp;New
+            </el-button>
+            <el-button type="primary" @click="downloadProjectList()" class="download-button">
+              <el-icon><Download/></el-icon>
+              &nbsp;Download
+            </el-button>
+          </div>
+        </div>
       </template>
-      <el-table :data="projectList" style="width: 100%" class="project-table" :row-class-name="tableRowClassName" @row-click="doRCS">
+       <el-table :data="projectList" style="width: 100%" class="project-table" :row-class-name="tableRowClassName" @row-click="doRCS">
         <el-table-column prop="projectName" label="Project Name">
           <template #default="scope">
-            <a href="javascript:;" @click="checkProjectAccess(scope.row)" class="project-link text-decoration-none">{{ scope.row.projectName }}</a></template>
+            <a href="javascript:;" @click="checkProjectAccess(scope.row)"
+               class="project-link text-decoration-none">{{ scope.row.projectName }}</a>
+          </template>
         </el-table-column>
-        <el-table-column prop="projectCode" label="Project Code" />
-        <el-table-column prop="createTime" label="Create Time" />
+        <el-table-column prop="projectCode" label="Project Code"/>
+        <el-table-column prop="createTime" label="Create Time"/>
         <el-table-column label="Action" width="240">
           <template #default="scope">
             <el-row :gutter="10">
@@ -37,8 +49,6 @@
         </el-table-column>
       </el-table>
     </el-card>
-
-
 
     <el-dialog v-model="pFormVisi" :title="projectFormTitle" width="800px" :close-on-click-modal="false">
       <el-form ref="formRef" :model="formDataForAddProject" :rules="rulesForForm" label-width="150px">
@@ -77,8 +87,7 @@
           <el-input v-model="formDataForAddProject.remark" type="textarea" placeholder="remark"/>
         </el-form-item>
       </el-form>
-      
-      
+
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="pFormVisi = false">cancel</el-button>
@@ -86,9 +95,7 @@
         </div>
       </template>
     </el-dialog>
-    
-    
-    
+
     
     <el-dialog v-model="detailV" title="details" width="800px">
       <div class="detail-container" v-if="cPro">
@@ -217,8 +224,9 @@ import {ElMessage, ElMessageBox} from 'element-plus'
 import {listProject, addProject, getProject, delProject, updateProject} from '@/api/project/index.js'
 
 import { listProjectMember } from '@/api/project/member.js'
-import {  EditPen, Delete, InfoFilled, Document, ChatLineSquare, User, Plus, MoreFilled,
-  } from '@element-plus/icons-vue'
+import {
+  EditPen, Delete, InfoFilled, Document, ChatLineSquare, User, Plus, MoreFilled, Download,
+} from '@element-plus/icons-vue'
 const projectFormTitle = ref('')
 const projectUpdateFormTitle = ref('')
 const formRef = ref(null)
@@ -234,6 +242,7 @@ const pFormVisi = ref(false)
 const booleanForVis = ref(false)
 
 import useUserStore from "@/store/modules/user.js"
+import {exportProject, exportProjectList} from "@/api/download.js";
 
 const booladmin=ref(false)
 
@@ -499,6 +508,17 @@ const doDelete = async (row) => {
     await delProject(row.projectId)
     ElMessage.success('Delete Success')
     await getList() // 刷新列表
+}
+
+const downloadProjectList = async () => {
+  const query = {}
+  const res = await exportProjectList(query)
+  const blob = new Blob([res], { type: 'application/vnd.ms-excel' })
+  const href = window.URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = href
+  link.download = `project_list.xlsx`
+  link.click()
 }
 
 
