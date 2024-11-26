@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ruoyi.common.utils.SecurityUtils;
+import com.ruoyi.member.domain.SysProjectMember;
+import com.ruoyi.member.service.ISysProjectMemberService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,6 +40,8 @@ import com.ruoyi.common.core.page.TableDataInfo;
 public class SysProjectController extends BaseController {
     @Autowired
     private ISysProjectService sysProjectService;
+    @Autowired
+    private ISysProjectMemberService sysProjectMemberService;
 
     /**
      * 查询项目列表
@@ -47,6 +52,24 @@ public class SysProjectController extends BaseController {
         startPage();
         List<SysProject> list = sysProjectService.selectSysProjectList(sysProject);
         return getDataTable(list);
+    }
+
+    /**
+     * 查询当前登录用户参与的项目列表
+     */
+    @ApiOperation("查询当前登录用户参与的项目列表")
+    @GetMapping("my/list")
+    public TableDataInfo listMyProject(SysProject sysProject) {
+        startPage();
+        List<Long> projectIds = sysProjectMemberService
+                .selectSysProjectMemberByUserId(SecurityUtils.getUserId())
+                .stream().map(SysProjectMember::getProjectId).toList();
+
+        List<SysProject> myProjectList = projectIds.stream()
+                .map(projectId -> sysProjectService.selectSysProjectByProjectId(projectId))
+                .toList();
+
+        return getDataTable(myProjectList);
     }
 
     /**

@@ -19,6 +19,8 @@ public interface ISysProjectMemberService {
      */
     public SysProjectMember selectSysProjectMemberByProjectMemberId(Long projectMemberId);
 
+    List<SysProjectMember> selectSysProjectMemberByUserId(Long userId);
+
     /**
      * 查询项目成员列表
      *

@@ -80,7 +80,8 @@ public class SysProjectServiceImpl implements ISysProjectService {
     public Long insertSysProject(SysProject sysProject) {
         sysProject.setCreateTime(DateUtils.getNowDate());
         sysProject.setUpdateTime(DateUtils.getNowDate());
-        sysProject.setDelFlag("0"); // 存在
+        // 存在
+        sysProject.setDelFlag("0");
 
         LoginUser loginUser = SecurityUtils.getLoginUser();
         SysUser user = loginUser.getUser();

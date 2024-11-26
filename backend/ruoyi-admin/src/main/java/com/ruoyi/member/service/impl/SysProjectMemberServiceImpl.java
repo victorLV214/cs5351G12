@@ -33,6 +33,15 @@ public class SysProjectMemberServiceImpl implements ISysProjectMemberService {
     public SysProjectMember selectSysProjectMemberByProjectMemberId(Long projectMemberId) {
         return sysProjectMemberMapper.selectSysProjectMemberByProjectMemberId(projectMemberId);
     }
+    /**
+     * 根据项目成员的userId查询
+     * @param userId 项目成员对应用户的userId
+     * @return 项目成员
+     */
+    @Override
+    public List<SysProjectMember> selectSysProjectMemberByUserId(Long userId) {
+        return sysProjectMemberMapper.selectSysProjectMemberByUserId(userId);
+    }
 
     /**
      * 查询项目成员列表

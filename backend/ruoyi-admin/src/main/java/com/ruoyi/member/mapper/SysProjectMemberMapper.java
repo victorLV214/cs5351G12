@@ -22,6 +22,13 @@ public interface SysProjectMemberMapper {
     public SysProjectMember selectSysProjectMemberByProjectMemberId(Long projectMemberId);
 
     /**
+     * 根据用户ID查询项目成员
+     * @param userId 用户ID
+     * @return 项目成员
+     */
+    List<SysProjectMember> selectSysProjectMemberByUserId(Long userId);
+
+    /**
      * 查询项目成员列表
      *
      * @param sysProjectMember 项目成员
