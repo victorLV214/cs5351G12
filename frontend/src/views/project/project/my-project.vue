@@ -6,7 +6,7 @@
           <span class="header-title">
             <img src="@/assets/icons/png/project-list.png" style="width: 25px;
                 vertical-align: middle; position: relative; top: -2px;" alt="">
-            Project List
+            My Project List
           </span>
           <el-button type="primary" @click="addP" class="add-button" v-if="booladmin">New Project</el-button></div>
       </template>
@@ -214,7 +214,7 @@
 import { ref, onMounted ,reactive} from 'vue'
 
 import {ElMessage, ElMessageBox} from 'element-plus'
-import {listProject, addProject, getProject, delProject, updateProject} from '@/api/project/index.js'
+import {listProject, addProject, getProject, delProject, updateProject, listMyProject} from '@/api/project/index.js'
 
 import { listProjectMember } from '@/api/project/member.js'
 import {  EditPen, Delete, InfoFilled, Document, ChatLineSquare, User, Plus, MoreFilled,
@@ -422,12 +422,11 @@ const getList = async () => {
   const userStore = useUserStore()
   const userId = userStore.id
 
-    const allProject = await listProject({
+    const allProject = await listMyProject({
       pageNum: 1,
       pageSize: 999,
-      userId:userId,
+      userId: userId,
     })
-    // console.log('allProject:', allProject)
     projectList.value = allProject.rows
 }
 

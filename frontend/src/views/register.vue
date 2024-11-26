@@ -11,7 +11,7 @@
           v-model="registerForm.username" 
           type="text" 
           size="large" 
-          auto-complete="off" 
+          auto-complete="off" Ω
           placeholder="username"
         >
           <template #prefix><svg-icon icon-class="user" class="el-input__icon input-icon" /></template>
@@ -24,8 +24,7 @@
           size="large" 
           auto-complete="off"
           placeholder="password"
-          @keyup.enter="handleRegister"
-        >
+          @keyup.enter="handleRegister">
           <template #prefix><svg-icon icon-class="password" class="el-input__icon input-icon" /></template>
         </el-input>
       </el-form-item>

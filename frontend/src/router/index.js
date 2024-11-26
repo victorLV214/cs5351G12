@@ -124,6 +124,21 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/my-project',
+    component: Layout,
+    children: [
+      {
+        path: 'my-project',
+        component: () => import('@/views/project/project/my-project.vue'),
+        name: 'MyProjects',
+        meta: {
+          title: 'My Projects',
+          icon: 'project',
+        }
+      }
+    ]
+  },
+  {
     path: '/project',
     component: Layout,
     hidden: false,
