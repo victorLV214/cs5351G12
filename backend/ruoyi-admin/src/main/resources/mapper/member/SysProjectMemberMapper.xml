@@ -65,6 +65,11 @@
         where project_member_id = #{projectMemberId}
     </select>
 
+    <select id="selectSysProjectMemberByUserId" parameterType="Long" resultMap="SysProjectMemberResult">
+        <include refid="selectSysProjectMemberVo"/>
+        where user_id = #{userId}
+    </select>
+
     <insert id="insertSysProjectMember" parameterType="SysProjectMember" useGeneratedKeys="true" keyProperty="projectMemberId">
         insert into sys_project_member
         <trim prefix="(" suffix=")" suffixOverrides=",">
