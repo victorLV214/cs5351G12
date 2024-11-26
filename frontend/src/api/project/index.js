@@ -9,6 +9,15 @@ export function listProject(query) {
     })
 }
 
+// 查询当前登陆用户参与的项目列表
+export function listMyProject(query) {
+    return request({
+        url: '/dev-api/project/my/list',
+        method: 'get',
+        params: query
+    })
+}
+
 // 查询单个项目详情
 export function getProject(projectId) {
     return request({
