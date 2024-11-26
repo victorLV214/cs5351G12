@@ -3,7 +3,7 @@
     <el-form ref="registerRef" :model="registerForm" :rules="registerRules" class="register-form">
       <h3 class="title">
         <img v-if="logo" :src="logo" class="sidebar-logo" alt="" width="30"
-             style="position: relative; top: 5px;"/>
+             style="position: relative; top: -2px;"/>
         Agile Innovators
       </h3>
       <el-form-item prop="username">
