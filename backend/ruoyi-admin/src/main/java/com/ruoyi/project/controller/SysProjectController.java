@@ -77,11 +77,29 @@ public class SysProjectController extends BaseController {
      */
     @ApiOperation("导出项目")
     @Log(title = "项目管理", businessType = BusinessType.EXPORT)
-    @PostMapping("/export")
-    public void export(HttpServletResponse response, @RequestBody SysProject sysProject) {
+    @PostMapping("export")
+    public void exportMy(HttpServletResponse response, @RequestBody SysProject sysProject) {
         List<SysProject> list = sysProjectService.selectSysProjectList(sysProject);
         ExcelUtil<SysProject> util = new ExcelUtil<SysProject>(SysProject.class);
         util.exportExcel(response, list, "项目数据");
+    }
+
+    /**
+     * 导出当前用户参与项目列表
+     */
+    @ApiOperation("导出当前用户参与项目列表")
+    @Log(title = "项目管理", businessType = BusinessType.EXPORT)
+    @PostMapping("my/export")
+    public void export(HttpServletResponse response, @RequestBody SysProject sysProject) {
+        List<Long> projectIds = sysProjectMemberService
+                .selectSysProjectMemberByUserId(SecurityUtils.getUserId())
+                .stream().map(SysProjectMember::getProjectId).toList();
+        List<SysProject> myProjectList = projectIds.stream()
+                .map(projectId -> sysProjectService.selectSysProjectByProjectId(projectId))
+                .toList();
+
+        ExcelUtil<SysProject> util = new ExcelUtil<SysProject>(SysProject.class);
+        util.exportExcel(response, myProjectList, "用户参与项目数据");
     }
 
     /**

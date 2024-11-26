@@ -7,8 +7,9 @@
           <el-tag class="count-tag" type="info">total {{ total }} requirements</el-tag>
         </div>
         <div class="addR">
-          <el-button type="primary" :icon="Plus" @click="addReq"></el-button>
+          <el-button type="primary" :icon="Plus" @click="addReq">New</el-button>
           <el-button type="primary" @click="showGantt">Gantt Chart</el-button>
+          <el-button type="primary" :icon="Download" @click="downloadReq(row)">Download</el-button>
         </div>
       </div>
     </template>

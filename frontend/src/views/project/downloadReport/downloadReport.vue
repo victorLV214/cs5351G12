@@ -3,27 +3,30 @@
     <el-card>
       <el-table :data="p">
         <el-table-column prop="projectName" label="Project Name" />
-        <el-table-column >
-          <el-button type="primary" :icon="Download" @click="downloadProject">Project</el-button>
+        <el-table-column>
+          <template #default="{ row }">
+            <el-button type="primary" :icon="Download" @click=downloadProject(row)>Project</el-button>
+          </template>
         </el-table-column>
-        <el-table-column >
-          <el-button type="primary" :icon="Download" @click="downloadMember">Members</el-button>
+        <el-table-column>
+          <template #default="{ row }">
+            <el-button type="primary" :icon="Download" @click=downloadMember(row)>Members</el-button>
+          </template>
         </el-table-column>
-
       </el-table>
     </el-card>
   </div>
 </template>
 
-
-
 <script setup>
 import { ref, onMounted } from 'vue'
 import { listProject } from '@/api/project/index.js'
 import { ElMessage } from 'element-plus'
-import {exportProject,exportname} from '@/api/download.js'
-import {Download, Plus} from "@element-plus/icons-vue";
+import { exportProject, exportProjectMember} from '@/api/download.js'
+import { Download, Plus } from "@element-plus/icons-vue";
+
 const p = ref([])
+
 const getList = async () => {
   const r = await listProject({
     pageNum: 1,
@@ -33,41 +36,35 @@ const getList = async () => {
 }
 
 const downloadProject = async (row) => {
+  const query = {
+    projectId: row.projectId
+  }
+  console.log('Query:', query)
+  const res = await exportProject(query)
 
-  const res = await exportProject(
-  )
-
-
-  const blob = new Blob([res], {type: 'application/vnd.ms-excel'})
-
-
-
-  const herf = window.URL.createObjectURL(blob)
+  const blob = new Blob([res], { type: 'application/vnd.ms-excel' })
+  const href = window.URL.createObjectURL(blob)
   const link = document.createElement('a')
-  link.href = window.URL.createObjectURL(blob)
-  link.download = `projects.xlsx`
+  link.href = href
+  link.download = `project_${row.projectName}.xlsx`
   link.click()
-
-
-
 }
+
 const downloadMember = async (row) => {
+  const query = {
+    projectId: row.projectId
+  }
+  console.log('Query:', query)
+  const res = await exportProjectMember(query)
 
-  const res = await exportname()
-
-  const blob = new Blob([res], {type: 'application/vnd.ms-excel'})
-
-
-
-  const herf = window.URL.createObjectURL(blob)
+  const blob = new Blob([res], { type: 'application/vnd.ms-excel' })
+  const href = window.URL.createObjectURL(blob)
   const link = document.createElement('a')
-  link.href = window.URL.createObjectURL(blob)
-  link.download = `project_members.xlsx`
+  link.href = href
+  link.download = `project_members_${row.projectName}.xlsx`
   link.click()
-
-
-
 }
+
 onMounted(() => {
   getList()
 })
