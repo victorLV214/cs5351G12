@@ -125,7 +125,7 @@ import {listItem, addItem, updateItem, delItem, exportItem} from '@/api/project/
 import {listProjectMember} from '@/api/project/member'
 import {listRequirement} from '@/api/project/requirements'
 import {listIteration} from '@/api/project/iteration'
-import {addNotice, getUnreadCount} from "@/api/notice/noticeapi.js";
+import {addNotice} from "@/api/notice/noticeapi.js";
 import { listRole } from '@/api/system/role.js'
 import { gantt } from 'dhtmlx-gantt'
 import 'dhtmlx-gantt/codebase/dhtmlxgantt.css'
@@ -264,7 +264,7 @@ async function doADD2() {
       sysNotice: {
         noticeTitle: 'New Work Item Assigned',
         noticeContent: `You have been assigned a new work item: <strong>${form.value.title}</strong>.
-        Please review the details and start working on it as soon as possible.
+        <br>Please review the details and start working on it as soon as possible.<br>
         Deadline: ${dueDate}.`,
         noticeType: '1',
       },

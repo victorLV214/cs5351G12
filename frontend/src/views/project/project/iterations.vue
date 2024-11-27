@@ -50,7 +50,7 @@
           <el-input-number v-model="form.plannedStoryPoints" :min="0" controls-position="right" />
         </el-form-item>
       </el-form>
-      
+
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="show = false">Cancel</el-button>
@@ -177,7 +177,7 @@ const showAll = async (row) => {
   })
   wList.value = res.rows
   bItem.value = false
-  
+
   setTimeout(() => {
     drawPaint(row, res.rows)
   }, 100)
@@ -193,7 +193,7 @@ const drawPaint = (iteration, items) => {
     total += Number(item.actualEffort) || 0;
   }
 
-  
+
   const getDateline = (startDate, endDate) => {
     let dates = []
     let today = new Date(startDate)
@@ -210,7 +210,7 @@ const drawPaint = (iteration, items) => {
 
   const idea = []
   const totalDays = dateList.length
-  const totalPoints = total 
+  const totalPoints = total
   for (let i = 0; i < totalDays; i++) {
     idea.push(+(totalPoints - (totalPoints / (totalDays - 1)) * i).toFixed(1))
   }

@@ -2,8 +2,12 @@
   <div class="notice-container">
     <el-card>
       <div class="notice-header">
-        <el-input v-model="searchQuery" placeholder="Search Notifications..."
-                  class="search-bar" style="margin-left: 40px; width:240px"/>
+        <el-input v-model="searchQuery" placeholder="Search Notifications..." class="search-bar"
+          style="margin-left: 38px;margin-bottom: 20px;width: 300px;">
+          <template #prefix>
+            <el-icon><search/></el-icon>
+          </template>
+        </el-input>
         <el-button @click="markAllAsRead" class="mark-all-read" style="margin-right: 8px">
           <el-icon><tickets/></el-icon>&nbsp; Mark All as Read
         </el-button>
@@ -17,9 +21,14 @@
               <div class="notice-detail" v-html="item.noticeContent"></div>
               <div class="notice-footer">
                 <span class="notice-time">{{ formatTime(item.createTime) }}</span>
-                <el-button @click.stop="toggleReadStatus(item)" class="read-toggle" :class="{ 'read': item.userReadStatus === 1, 'unread': item.userReadStatus === 0 }">
-                  {{ item.userReadStatus === 0 ? 'Read' : 'Mark as Unread' }}
-                </el-button>
+                <div>
+                  <el-button @click.stop="toggleReadStatus(item)" class="read-toggle" :class="{ 'read': item.userReadStatus === 1, 'unread': item.userReadStatus === 0 }">
+                    {{ item.userReadStatus === 0 ? 'Read' : 'Mark as Unread' }}
+                  </el-button>
+                  <el-button @click="showDetails(item)" class="read-toggle">
+                    View Detail
+                  </el-button>
+                </div>
               </div>
             </div>
           </div>
@@ -35,6 +44,24 @@
       </el-pagination>
     </el-card>
 
+    <el-dialog title="Notice Detail" v-model="dialogVisible" width="600px" @close="dialogVisible = false">
+      <div v-if="currentNotice">
+        <h4>{{ currentNotice.noticeTitle }}</h4>
+        <br>
+        <p v-html="currentNotice.noticeContent"></p>
+        <p><strong>Time:</strong> {{ formatTime(currentNotice.createTime) }}</p>
+      </div>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="dialogVisible = false">Close</el-button>
+          <el-button @click.stop="toggleReadStatus(currentNotice)" class="read-toggle"
+                     :class="{ 'read': currentNotice.userReadStatus === 1,
+                     'unread': currentNotice.userReadStatus === 0 }">
+            {{ currentNotice.userReadStatus === 0 ? 'Read' : 'Mark as Unread' }}
+          </el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -42,7 +69,7 @@
 import { ref, onMounted, computed } from 'vue'
 import { getUserNoticeList, updateNoticeStatus } from '@/api/notice/noticeapi'
 import useUserStore from '@/store/modules/user'
-import {MagicStick, Notebook, Reading, ReadingLamp, Ticket} from "@element-plus/icons-vue";
+import { Search, Tickets } from "@element-plus/icons-vue";
 
 const allM = ref([])
 const userStore = useUserStore()
@@ -73,6 +100,7 @@ const toggleReadStatus = async (notice) => {
     notice.userReadStatus = newStatus
   } catch (error) {
     console.error('Failed to update notice status:', error)
+    throw error
   }
 }
 
@@ -107,6 +135,17 @@ const showDetails = (notice) => {
   dialogVisible.value = true
 }
 
+const markAsRead = async () => {
+  if (currentNotice) {
+    try {
+      await toggleReadStatus(currentNotice)
+      dialogVisible.value = false
+    } catch (error) {
+      console.error('Failed to mark as read:', error)
+    }
+  }
+}
+
 onMounted(() => {
   getMA()
 })
@@ -123,6 +162,8 @@ onMounted(() => {
 
 .search-bar {
   width: 60%;
+  border-radius: 25px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
 }
 
 .mark-all-read {
@@ -175,10 +216,6 @@ onMounted(() => {
   margin-left: 10px;
 }
 
-.read-toggle {
-  margin-left: 10px;
-}
-
 .read-toggle.read {
   //background-color: #edf5fe;
   //color: white;
@@ -187,5 +224,10 @@ onMounted(() => {
 .read-toggle.unread {
   background-color: #edf5fe;
   //color: white;
+}
+
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
 }
 </style>
