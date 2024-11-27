@@ -245,7 +245,7 @@ const drawPaint = (iteration, items) => {
       }
     },
     legend: {
-      data: ['IdealBurndown', 'ActualBurndown'],
+      data: ['Ideal Burndown', 'Actual Burndown'],
       bottom: '0%'
     },
     grid: {
@@ -264,12 +264,12 @@ const drawPaint = (iteration, items) => {
     },
     yAxis: {
       type: 'value',
-      name: 'Remaining Work (Points)',
+      name: 'Remain (Points)',
       min: 0
     },
     series: [
       {
-        name: 'IdealBurndown',
+        name: 'Ideal Burndown',
         type: 'line',
         data: idea,
         smooth: true,
@@ -278,7 +278,7 @@ const drawPaint = (iteration, items) => {
         }
       },
       {
-        name: 'ActualBurndown',
+        name: 'Actual Burndown',
         type: 'line',
         data: actural,
         smooth: true,
