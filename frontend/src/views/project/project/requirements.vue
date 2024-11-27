@@ -492,7 +492,7 @@ watch(ganttButten, (newVal) => {
   }
 })
 
-// 下载项目列表
+// 下载需求列表
 const downloadRequirementList = async () => {
   const query = {
     projectId: projectId
