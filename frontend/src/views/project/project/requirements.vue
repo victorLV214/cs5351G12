@@ -2,16 +2,16 @@
   <el-card class="r-cards">
     <template #header>
       <div class="card-header">
-        <div class="header-left">
-          <span class="title">Requirement List</span>
-          <el-tag class="count-tag" type="info">total {{ total }} requirements</el-tag>
+          <div class="header-left">
+            <span class="title">Requirement List</span>
+            <el-tag class="count-tag" type="info">total {{ total }} requirements</el-tag>
+          </div>
+          <div class="addR">
+            <el-button type="primary" :icon="Plus" @click="addReq">New</el-button>
+            <el-button type="success" :icon="TrendCharts" @click="showGantt">Gantt Chart</el-button>
+            <el-button type="primary" :icon="Download" @click="downloadRequirementList()">Download</el-button>
+          </div>
         </div>
-        <div class="addR">
-          <el-button type="primary" :icon="Plus" @click="addReq">New</el-button>
-          <el-button type="success" :icon="TrendCharts" @click="showGantt">Gantt Chart</el-button>
-          <el-button type="primary" :icon="Download" @click="downloadRequirementList()">Download</el-button>
-        </div>
-      </div>
     </template>
 
     <div class="search">
@@ -170,7 +170,7 @@
     </span>
     </template>
   </el-dialog>
-  <el-dialog v-model="ganttButten" title="gantt" width="90%" :destroy-on-close="true" :close-on-click-modal="false"
+  <el-dialog v-model="ganttButten" title="Gantt Chart" width="90%" :destroy-on-close="true" :close-on-click-modal="false"
              :close-on-press-escape="false" @opened="showGantt" @close="destroyGantt">
     <div ref="ganttContainer" style="height: 600px; width: 100%;"></div>
   </el-dialog>
@@ -194,7 +194,7 @@ import { listRole } from '@/api/system/role.js'
 import useUserStore from "@/store/modules/user.js"
 import {getUser} from "@/api/system/user.js"
 import {gantt} from "dhtmlx-gantt"
-import {ElMessageBox} from "element-plus";
+import {ElMessage, ElMessageBox} from "element-plus";
 const booladmin=ref(false)
 const userStore = useUserStore()
 const route = useRoute()
@@ -375,8 +375,6 @@ const loadGanttData = () => {
       progress: req.status === 'completed' ? 1 :
           req.status === 'processing' ? 0.5 : 0,
       status: req.status
-
-
     }))
   }
   gantt.parse(tasks)

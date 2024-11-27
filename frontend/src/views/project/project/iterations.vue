@@ -3,7 +3,7 @@
     <div class="mb-20">
       <el-button type="primary" :icon="Plus" @click="doDiga">Add Iteration</el-button>
       <el-button type="primary" :icon="Download" @click="downloadIterationList()" class="download-button">Download</el-button>
-    </div>
+     </div>
 
     <el-table :data="list" v-loading="loading" border>
       <el-table-column label="Iteration Name" prop="name" />
@@ -59,7 +59,11 @@
       </template>
     </el-dialog>
 
-    <el-dialog title="Work Items" v-model="bVisItem" width="1200px" destroy-on-close>
+    <el-dialog title="" v-model="bVisItem" width="1200px" destroy-on-close>
+      <el-button type="primary" :icon="Download" @click="downloadBurndownChart" class="download-button"
+        style="position: relative;top: -20px">
+          Download Burndown Chart
+      </el-button>
       <div style="display: flex; margin-bottom: 20px;">
         <div id="burndownChart" style="width: 100%; height: 300px;"></div>
       </div>
@@ -87,6 +91,7 @@ import * as echarts from 'echarts'
 import {Delete, Download, Edit, Plus, TrendCharts} from "@element-plus/icons-vue";
 import {delDefect} from "@/api/project/defect.js";
 import {listRole} from "@/api/system/role.js";
+import html2canvas from "html2canvas";
 
 const route = useRoute()
 const projectId = route.params.id
@@ -351,7 +356,15 @@ const downloadIterationList = async () => {
   link.download = `project_iteration_list.xlsx`
   link.click()
 }
-
+const downloadBurndownChart = () => {
+  const chartDom = document.getElementById('burndownChart');
+  html2canvas(chartDom).then(canvas => {
+    const link = document.createElement('a');
+    link.href = canvas.toDataURL('image/png');
+    link.download = 'burndown_chart.png';
+    link.click();
+  });
+};
 onMounted(() => {
   getList()
   checkRoles()
