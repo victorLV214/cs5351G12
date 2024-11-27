@@ -11,8 +11,8 @@
           <div class="search">
             <el-form :inline="true" :model="projectList" class="">
               <div class="search-bar" style="margin-left:400px">
-                <el-input v-model="searchQuery" placeholder="Search Projects..."
-                          clearable style="width: 210px;">
+                <el-input v-model="searchQuery" placeholder="Search My Projects..."
+                          clearable style="width: 240px;">
                   <template #prefix>
                     <el-icon><search/></el-icon>
                   </template>

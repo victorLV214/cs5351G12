@@ -7,7 +7,7 @@
           <el-tag class="count-tag" type="info">total {{ total }} requirements</el-tag>
         </div>
         <div class="addR">
-          <el-button type="primary" :icon="Plus" @click="addReq">New</el-button>
+          <el-button type="primary" :icon="Plus" @click="showDialog">New</el-button>
           <el-button type="success" :icon="TrendCharts" @click="showGantt">Gantt Chart</el-button>
           <el-button type="primary" :icon="Download" @click="downloadRequirementList()">Download</el-button>
         </div>
@@ -24,11 +24,6 @@
             </template>
           </el-input>
         </div>
-<!--        <el-form-item label="Requirements">-->
-<!--          <el-input v-model="Params.title" placeholder="" clearable style="width: 200px"/>-->
-<!--          <el-input v-model="searchQuery" placeholder="Search requirements..."-->
-<!--                    clearable style="width: 200px; margin-bottom: 20px;" />-->
-<!--        </el-form-item>-->
         <el-form-item label="Priority">
           <el-select v-model="Params.priority" placeholder="select priority"
                      clearable style="width: 150px">
@@ -52,7 +47,6 @@
     </div>
 
     <div class="rList">
-      <!-- 将表格的数据源绑定到 filteredReqList -->
       <el-table v-loading="loading" :data="filteredReqList" style="width: 100%">
         <el-table-column label="Title" align="center" prop="title"/>
         <el-table-column label="Description" align="center" prop="description" show-overflow-tooltip/>
@@ -84,9 +78,70 @@
       </div>
     </div>
   </el-card>
+
   <el-dialog v-model="ganttButten" title="Gantt Chart" width="90%" :destroy-on-close="true" :close-on-click-modal="false"
              :close-on-press-escape="false" @opened="showGantt" @close="destroyGantt">
     <div ref="ganttContainer" style="height: 600px; width: 100%;"></div>
+  </el-dialog>
+
+  <el-dialog :title="title" v-model="show" width="500px" @close="rF1">
+    <el-form ref="formRef" :model="form" :rules="rules" label-width="100px">
+      <el-form-item label="Title" prop="title">
+        <el-input v-model="form.title" placeholder="Please input requirement title" />
+      </el-form-item>
+      <el-form-item label="Description" prop="description">
+        <el-input type="textarea" v-model="form.description" placeholder="Please input requirement description" />
+      </el-form-item>
+      <el-form-item label="Priority" prop="priority">
+        <el-select v-model="form.priority" placeholder="Select priority">
+          <el-option label="High" value="1" />
+          <el-option label="Medium" value="2" />
+          <el-option label="Low" value="3" />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="Status" prop="status">
+        <el-select v-model="form.status" placeholder="Select status">
+          <el-option label="Pending" value="pending" />
+          <el-option label="Processing" value="processing" />
+          <el-option label="Completed" value="completed" />
+        </el-select>
+      </el-form-item>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="show = false" style="margin-left: 280px">Cancel</el-button>
+      <el-button type="primary" @click="doAdd('formRef')">Confirm</el-button>
+    </div>
+  </el-dialog>
+
+  <el-dialog title="Edit Requirement" v-model="showForEdit" width="500px" @close="rF1">
+    <el-form ref="formRef" :model="curReq" :rules="rules" label-width="100px">
+      <el-form-item label="Title" prop="title">
+        <el-input v-model="curReq.title" placeholder="Please input requirement title" />
+      </el-form-item>
+      <el-form-item label="Description" prop="description">
+        <el-input type="textarea" v-model="curReq.description" placeholder="Please input requirement description" />
+      </el-form-item>
+      <el-form-item label="Priority" prop="priority">
+        <el-select v-model="curReq.priorityLabel" :placeholder="curReq.priorityLabel">
+          <el-option label="High" value="1" />
+          <el-option label="Medium" value="2" />
+          <el-option label="Low" value="3" />
+        </el-select>
+      </el-form-item>
+
+
+      <el-form-item label="Status" prop="status">
+        <el-select v-model="curReq.status" placeholder="Select status">
+          <el-option label="Pending" value="pending" />
+          <el-option label="Processing" value="processing" />
+          <el-option label="Completed" value="completed" />
+        </el-select>
+      </el-form-item>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="showForEdit = false" style="margin-left: 280px">Cancel</el-button>
+      <el-button type="primary" @click="doEdit('formRef')">Confirm</el-button>
+    </div>
   </el-dialog>
 
 </template>
@@ -124,6 +179,11 @@ const addButten = ref(false)
 const username = ref(null)
 const loading = ref(false)
 const searchQuery = ref('');
+
+const show = ref(false)
+const showForEdit = ref(false)
+const title = ref('')
+
 const reqForm = ref({
   title: '',
   priority: '',
@@ -164,6 +224,18 @@ const addFormRef = ref(null)
 const delButten = ref(false)
 let ganttInstance = null
 
+const form = ref({
+  title: '',
+  priority: '',
+  status: 'pending',
+  type: '',
+  assignedTo: '',
+  description: '',
+  remarks: '',
+  projectId: projectId,
+  delFlag: 1,
+  createBy: username.value,
+});
 
 const initGantt = () => {
   gantt.config.autosize = "y"
@@ -302,42 +374,35 @@ const destroyGantt = () => {
 }
 
 
-const addReq = () => {
-  addButten.value = true
-  reqForm.value = {
-    title: '',
-    priority: '',
-    status: 'pending',
-    type: '',
-    assignedTo: '',
-    description: '',
-    remarks: '',
-    projectId: projectId,
-    delFlag: 1,
-    createBy: username.value,
-  }
+const showDialog = () => {
+  title.value = 'Add Requirement'
+  show.value = true
 }
 
 const doAdd = async () => {
-  if (!addFormRef.value) return
-  await addFormRef.value.validate()
+  if (!formRef.value) return
+  await formRef.value.validate()
   loading.value = true
-  await addRequirement(reqForm.value)
+  await addRequirement(form.value)
   addButten.value = false
   await getReqs()
   loading.value = false
 }
 
-
 const clickV = async (row) => {
-  loading.value = true
-  const res = await getRequirementDetail(row.requirementId)
-  curReq.value = res.data
-  firstData.value = JSON.parse(JSON.stringify(res.data))
-  isEdit.value = false
-  delButten.value = curReq.value.createBy === username.value
-  visibButten.value = true
-  loading.value = false
+  loading.value = true;
+  const res = await getRequirementDetail(row.requirementId);
+  const requirementData = {
+    ...res.data,
+    priorityLabel: priorityMap[res.data.priority]
+  };
+  curReq.value = res.data;
+  firstData.value = JSON.parse(JSON.stringify(requirementData));
+  isEdit.value = false;
+  // delButten.value = this.curReq.value.createBy === this.username.value;
+  visibButten.value = true;
+  loading.value = false;
+  showForEdit.value = true; // 显示对话框
 }
 
 const ISEDITT = () => {
@@ -358,8 +423,9 @@ const doEdit = async row => {
   visibButten.value = false
   await getReqs()
   loading.value = false
-
+  showForEdit.value = false
 }
+
 
 const delReq = async (row) => {
   await ElMessageBox.confirm(
@@ -422,6 +488,8 @@ const priorityMap = {
   2: 'Medium',
   3: 'Low'
 };
+
+
 
 // 计算属性：过滤后的需求列表
 const filteredReqList = computed(() => {

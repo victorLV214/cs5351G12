@@ -12,7 +12,7 @@
             <el-form :inline="true" :model="projectList" class="">
               <div class="search-bar" style="margin-left:400px">
                 <el-input v-model="searchQuery" placeholder="Search Projects..."
-                          clearable style="width: 210px;">
+                          clearable style="width: 240px;">
                   <template #prefix>
                     <el-icon><search/></el-icon>
                   </template>
@@ -326,7 +326,8 @@ const checkProjectAccess = async (project) => {
   // console.log('response:', response)
     const cID = userStore.id
     const isMember = response.rows.some(member => member.userId === cID)
-    if (isMember) {
+    const isAdmin = 1 === cID
+    if (isMember || isAdmin ) {
       router.push(`/project/detail/${project.projectId}`)
     } else {
       ElMessage.error('You do not have permission to access this project')
