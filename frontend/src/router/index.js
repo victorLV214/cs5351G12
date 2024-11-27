@@ -157,85 +157,85 @@ export const constantRoutes = [
         component: () => import('@/views/project/project/detail.vue'),
         name: 'ProjectDetail',
         hidden: true,
-        meta: { title: 'ProjectDetail' },
+        meta: { title: 'Project Detail' },
         props: true ,
         children: [ {
           path: 'overview',
           component: () => import('@/views/project/project/overview.vue'),
           name: 'ProjectOverview',
-          meta: { title: 'ProjectOverview' }
+          meta: { title: 'Project Overview' }
         },
           {
             path: 'plan',
             component: () => import('@/views/project/project/plan.vue'),
-            name: 'ProjectPlan',
-            meta: { title: 'ProjectPlan' }
+            name: 'Project Plan',
+            meta: { title: 'Project Plan' }
           },
           {
             path: 'requirements',
             component: () => import('@/views/project/project/requirements.vue'),
-            name: 'ProjectRequirements',
-            meta: { title: 'ProjectRequirements' }
+            name: 'Project Requirements',
+            meta: { title: 'Project Requirements' }
           },
           {
             path: 'defects',
             component: () => import('@/views/project/project/defects.vue'),
-            name: 'ProjectDefects',
-            meta: { title: 'ProjectDefects' }
+            name: 'Project Defects',
+            meta: { title: 'Project Defects' }
           },
           {
             path: 'tasks',
             component: () => import('@/views/project/project/tasks.vue'),
-            name: 'ProjectTasks',
-            meta: { title: 'ProjectTasks' }
+            name: 'Project Tasks',
+            meta: { title: 'Project Tasks' }
           },
           {
             path: 'iterations',
             component: () => import('@/views/project/project/iterations.vue'),
-            name: 'ProjectIterations',
-            meta: { title: 'ProjectIterations' }
+            name: 'Project Iterations',
+            meta: { title: 'Project Iterations' }
           },
           {
             path: 'releases',
             component: () => import('@/views/project/project/releases.vue'),
-            name: 'ProjectReleases',
-            meta: { title: 'ProjectReleases' }
+            name: 'Project Releases',
+            meta: { title: 'Project Releases' }
           },
           {
             path: 'baseline',
             component: () => import('@/views/project/project/baseline.vue'),
-            name: 'ProjectBaseline',
-            meta: { title: 'ProjectBaseline' }
+            name: 'Project Baseline',
+            meta: { title: 'Project Baseline' }
           },
           {
             path: 'reviews',
             component: () => import('@/views/project/project/reviews.vue'),
-            name: 'ProjectReviews',
-            meta: { title: 'ProjectReviews' }
+            name: 'Project Reviews',
+            meta: { title: 'Project Reviews' }
           },
           {
             path: 'testing',
             component: () => import('@/views/project/project/testing.vue'),
-            name: 'ProjectTesting',
+            name: 'Project Testing',
             meta: { title: 'ProjectTesting' }
           },
           {
             path: 'documents',
             component: () => import('@/views/project/project/documents.vue'),
-            name: 'ProjectDocuments',
-            meta: { title: 'ProjectDocuments' }
+            name: 'Project Documents',
+            meta: { title: 'Project Documents' }
           },
           {
             path: 'resources',
             component: () => import('@/views/project/project/resources.vue'),
-            name: 'ProjectResources',
-            meta: { title: 'ProjectResources' }
+            name: 'Project Resources',
+            meta: { title: 'Project Resources' }
           },
           {
             path: 'reports',
             component: () => import('@/views/project/project/reports.vue'),
-            name: 'ProjectReports',
-            meta: { title: 'ProjectReports' }
+            name: 'Project Reports',
+            meta: { title: 'Project Reports' }
           }
         ]
       }

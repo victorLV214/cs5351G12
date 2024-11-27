@@ -8,6 +8,18 @@
                 vertical-align: middle; position: relative; top: -2px;" alt="">
             Project List
           </span>
+          <div class="search">
+            <el-form :inline="true" :model="projectList" class="">
+              <div class="search-bar" style="margin-left:400px">
+                <el-input v-model="searchQuery" placeholder="Search Projects..."
+                          clearable style="width: 240px;">
+                  <template #prefix>
+                    <el-icon><search/></el-icon>
+                  </template>
+                </el-input>
+              </div>
+            </el-form>
+          </div>
           <div class="button-group" v-if="booladmin">
             <el-button type="primary" @click="addP" class="add-button">
               <el-icon><Plus/></el-icon>
@@ -20,7 +32,21 @@
           </div>
         </div>
       </template>
-       <el-table :data="projectList" style="width: 100%" class="project-table" :row-class-name="tableRowClassName" @row-click="doRCS">
+
+<!--      <div class="search">-->
+<!--        <el-form :inline="true" :model="projectList" class="">-->
+<!--          <div class="search-bar" style="margin-right: 20px">-->
+<!--            <el-input v-model="searchQuery" placeholder="Search Projects..."-->
+<!--                      clearable style="width: 210px; margin-bottom: 10px;">-->
+<!--              <template #prefix>-->
+<!--                <el-icon><search/></el-icon>-->
+<!--              </template>-->
+<!--            </el-input>-->
+<!--          </div>-->
+<!--        </el-form>-->
+<!--      </div>-->
+
+       <el-table :data="filteredProjectList" style="width: 100%" class="project-table" :row-class-name="tableRowClassName" @row-click="doRCS">
         <el-table-column prop="projectName" label="Project Name">
           <template #default="scope">
             <a href="javascript:;" @click="checkProjectAccess(scope.row)"
@@ -227,7 +253,7 @@ import {listProject, addProject, getProject, delProject, updateProject} from '@/
 
 import { listProjectMember } from '@/api/project/member.js'
 import {
-  EditPen, Delete, InfoFilled, Document, ChatLineSquare, User, Plus, MoreFilled, Download,
+  EditPen, Delete, InfoFilled, Document, ChatLineSquare, User, Plus, MoreFilled, Download, Search, Refresh,
 } from '@element-plus/icons-vue'
 const projectFormTitle = ref('')
 const projectUpdateFormTitle = ref('')
@@ -300,7 +326,8 @@ const checkProjectAccess = async (project) => {
   // console.log('response:', response)
     const cID = userStore.id
     const isMember = response.rows.some(member => member.userId === cID)
-    if (isMember) {
+    const isAdmin = 1 === cID
+    if (isMember || isAdmin ) {
       router.push(`/project/detail/${project.projectId}`)
     } else {
       ElMessage.error('You do not have permission to access this project')
@@ -524,6 +551,16 @@ const downloadProjectList = async () => {
   link.download = `project_list.xlsx`
   link.click()
 }
+
+
+const searchQuery = ref('');
+// 计算属性：过滤后的项目列表
+const filteredProjectList = computed(() => {
+  return projectList.value.filter(project => {
+    return project.projectName.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+        project.projectCode.toLowerCase().includes(searchQuery.value.toLowerCase());
+  });
+});
 
 
 onMounted(() => {
