@@ -38,7 +38,7 @@ export function updateDefect(data) {
 // 删除缺陷
 export function delDefect(defectIds) {
     return request({
-        url: '/dev-api/project/defect/${defectId}',
+        url: `/dev-api/project/defect/${defectIds}`,
         method: 'delete'
     })
 }

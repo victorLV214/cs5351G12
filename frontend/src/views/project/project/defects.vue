@@ -63,7 +63,7 @@
               </el-col>
               <el-col :span="12">
                 <el-button size="small" type="danger" class="w-100"
-                           @click="delReq(row)" :icon="Delete" v-if="booladmin">Delete</el-button>
+                           @click="delDef(row)" :icon="Delete" v-if="booladmin">Delete</el-button>
               </el-col>
             </el-row>
           </template>
@@ -343,7 +343,7 @@ const doEDIT = async () => {
 
 }
 
-const delReq = async (row) => {
+const delDef = async (row) => {
   await ElMessageBox.confirm(
       'This action will permanently delete this defect. Continue?',
       'Warning',
