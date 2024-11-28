@@ -122,10 +122,10 @@
         <el-input type="textarea" v-model="curReq.description" placeholder="Please input requirement description" />
       </el-form-item>
       <el-form-item label="Priority" prop="priority">
-        <el-select v-model="curReq.priorityLabel" :placeholder="curReq.priorityLabel">
-          <el-option label="High" value="1" />
-          <el-option label="Medium" value="2" />
-          <el-option label="Low" value="3" />
+        <el-select v-model="curReq.priority">
+          <el-option label="High" value="1"/>
+          <el-option label="Medium" value="2"/>
+          <el-option label="Low" value="3"/>
         </el-select>
       </el-form-item>
 
