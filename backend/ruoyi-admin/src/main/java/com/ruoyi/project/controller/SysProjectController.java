@@ -66,12 +66,12 @@ public class SysProjectController extends BaseController {
                 .selectSysProjectMemberByUserId(SecurityUtils.getUserId())
                 .stream()
                 .map(SysProjectMember::getProjectId)
-                .collect(Collectors.toList());;
+                .collect(Collectors.toList());
 
         List<SysProject> myProjectList = projectIds
                 .stream()
                 .map(projectId -> sysProjectService.selectSysProjectByProjectId(projectId))
-                .collect(Collectors.toList());;
+                .collect(Collectors.toList());
 
         return getDataTable(myProjectList);
     }
