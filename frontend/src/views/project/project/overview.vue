@@ -53,7 +53,8 @@
           <span class="title">Static</span></div></template>
       <div ref="chart1" style="height: 400px;"></div>
     </el-card></div>
-  <div class="cards-container">
+  <el-row :gutter="20">
+    <el-col :span="12">
   <el-card class="countdown-card">
     <template #header>
       <div class="card-header">
@@ -62,13 +63,30 @@
       </div>
     </template>
     <div class="Timer">
-      <div class="Timerinfo"><div class="time-remaining"><span class="days">{{ times1 }}</span></div><div class="calendar-container">
-        <el-calendar v-model="currentDate" /></div>
+      <div class="Timerinfo"><div class="calendar-container">
+        <el-calendar v-model="currentDate">
+          <template #header="{ date }">
+      <span>{{ date }}</span>
+      <span>{{ times1 }}</span>
+      <el-button-group>
+        <el-button size="small" @click="selectDate('prev-month')">
+          Previous Month
+        </el-button>
+        <el-button size="small" @click="selectDate('today')">Today</el-button>
+        <el-button size="small" @click="selectDate('next-month')">
+          Next Month
+        </el-button>
+      </el-button-group>
+    </template>
+        </el-calendar>
+        </div>
       </div>
     </div>
 
   </el-card>
-  <el-card class="member-card">
+</el-col>
+<el-col :span="12">
+  <el-card class="member-card" style="height: 100%;">
     <template #header>
       <div class="card-header">
         <span class="title">Team Members</span>
@@ -86,7 +104,8 @@
       </el-table>
     </div>
   </el-card>
-  </div>
+</el-col>
+</el-row>
 
 </template>
 
