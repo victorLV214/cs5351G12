@@ -112,7 +112,7 @@
 import {ref, onMounted, watch, reactive} from 'vue'
 import { useRoute } from 'vue-router'
 import {ElMessage, ElMessageBox} from 'element-plus'
-import {listIteration, addIteration, updateIteration, exportIteration} from '@/api/project/iteration'
+import {listIteration, addIteration, updateIteration, exportIteration, deleteIteration} from '@/api/project/iteration'
 import { listItem } from '@/api/project/item'
 import * as echarts from 'echarts'
 import {Delete, Download, Edit, Plus, Refresh, Search, TrendCharts} from "@element-plus/icons-vue";
@@ -207,8 +207,8 @@ const delIteration = async (row) => {
       }
   )
   loading.value = true
-  await delIteration(row.iterationId)
-  boolVis1.value = false
+  await deleteIteration(row.iterationId)
+  // boolVis1.value = false
   await getList()
   loading.value = false
 }
