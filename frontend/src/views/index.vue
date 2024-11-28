@@ -63,7 +63,7 @@
             </div>
           </template>
           <div class="itemlist">
-            <el-table :data="myWorkItems" style="width: 100%">
+            <el-table :data="myWorkItems" style="width: 100%" max-height="300">
               <el-table-column prop="title" label="title" /><el-table-column prop="dueDate" label="dueDate" width="120" />
                 <el-table-column prop="status" label="status" width="100">
                   <template #default="scope">
@@ -448,8 +448,8 @@ const getMyWorkItems = async () => {
 // 状态标签类型
 const setT = (status) => {
   const statusMap = {
-    '未开始': 'info',
-    '进行中': 'primary',
+    'Not Started': 'info',
+    'In Progress': 'primary',
     '已完成': 'success',
     '已逾期': 'danger'
   }

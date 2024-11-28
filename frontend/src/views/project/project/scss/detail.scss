@@ -1,7 +1,7 @@
 .project-detail-container {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 84px);
+  height: calc(100vh);
   background-color: #f5f7fa;
 }
 
@@ -33,7 +33,7 @@
 }
 
 :deep(.el-menu--horizontal > .el-menu-item) {
-  height: 50px;
+  // height: 50px;
   line-height: 50px;
   padding: 0 16px;
 }
