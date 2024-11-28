@@ -2,6 +2,7 @@ package com.ruoyi.project.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ruoyi.common.utils.SecurityUtils;
@@ -63,11 +64,14 @@ public class SysProjectController extends BaseController {
         startPage();
         List<Long> projectIds = sysProjectMemberService
                 .selectSysProjectMemberByUserId(SecurityUtils.getUserId())
-                .stream().map(SysProjectMember::getProjectId).toList();
+                .stream()
+                .map(SysProjectMember::getProjectId)
+                .collect(Collectors.toList());
 
-        List<SysProject> myProjectList = projectIds.stream()
+        List<SysProject> myProjectList = projectIds
+                .stream()
                 .map(projectId -> sysProjectService.selectSysProjectByProjectId(projectId))
-                .toList();
+                .collect(Collectors.toList());
 
         return getDataTable(myProjectList);
     }
@@ -93,10 +97,13 @@ public class SysProjectController extends BaseController {
     public void export(HttpServletResponse response, @RequestBody SysProject sysProject) {
         List<Long> projectIds = sysProjectMemberService
                 .selectSysProjectMemberByUserId(SecurityUtils.getUserId())
-                .stream().map(SysProjectMember::getProjectId).toList();
-        List<SysProject> myProjectList = projectIds.stream()
+                .stream()
+                .map(SysProjectMember::getProjectId)
+                .collect(Collectors.toList());;
+        List<SysProject> myProjectList = projectIds
+                .stream()
                 .map(projectId -> sysProjectService.selectSysProjectByProjectId(projectId))
-                .toList();
+                .collect(Collectors.toList());;
 
         ExcelUtil<SysProject> util = new ExcelUtil<SysProject>(SysProject.class);
         util.exportExcel(response, myProjectList, "用户参与项目数据");

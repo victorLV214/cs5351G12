@@ -8,6 +8,18 @@
                 vertical-align: middle; position: relative; top: -2px;" alt="">
             My Project List
           </span>
+          <div class="search">
+            <el-form :inline="true" :model="projectList" class="">
+              <div class="search-bar" style="margin-left:400px">
+                <el-input v-model="searchQuery" placeholder="Search My Projects..."
+                          clearable style="width: 240px;">
+                  <template #prefix>
+                    <el-icon><search/></el-icon>
+                  </template>
+                </el-input>
+              </div>
+            </el-form>
+          </div>
           <div class="button-group" v-if="booladmin">
             <el-button type="primary" @click="addP" class="add-button">
               <el-icon><Plus/></el-icon>
@@ -20,7 +32,7 @@
           </div>
         </div>
       </template>
-      <el-table :data="projectList" style="width: 100%" class="project-table" :row-class-name="tableRowClassName" @row-click="doRCS">
+      <el-table :data="filteredProjectList" style="width: 100%" class="project-table" :row-class-name="tableRowClassName" @row-click="doRCS">
         <el-table-column prop="projectName" label="Project Name">
           <template #default="scope">
             <a href="javascript:;" @click="checkProjectAccess(scope.row)" class="project-link text-decoration-none">{{ scope.row.projectName }}</a>
@@ -70,7 +82,8 @@
         <el-form-item label="priority" prop="priority">
           <el-select v-model="formDataForAddProject.priority" placeholder="priority">
             <el-option label="low" :value="1"/>
-            <el-option label="medium" :value="2"/><el-option label="high" :value="3"/>
+            <el-option label="medium" :value="2"/>
+            <el-option label="high" :value="3"/>
           </el-select>
         </el-form-item>
         <el-form-item label="status" prop="status">
@@ -184,7 +197,9 @@
                   </el-form-item>
                     <el-form-item label="Priority" prop="priority">
                       <el-select v-model="theBiggsetForm.priority" placeholder="priority">
-                        <el-option label="low" :value="1"/><el-option label="medium" :value="2"/><el-option label="high" :value="3"/>
+                        <el-option label="low" :value="1"/>
+                        <el-option label="medium" :value="2"/>
+                        <el-option label="high" :value="3"/>
                       </el-select>
                       </el-form-item>
                       <el-form-item label="Status" prop="status">
@@ -227,7 +242,7 @@ import {listProject, addProject, getProject, delProject, updateProject, listMyPr
 
 import { listProjectMember } from '@/api/project/member.js'
 import {
-  EditPen, Delete, InfoFilled, Document, ChatLineSquare, User, Plus, MoreFilled, Download,
+  EditPen, Delete, InfoFilled, Document, ChatLineSquare, User, Plus, MoreFilled, Download, Search,
 } from '@element-plus/icons-vue'
 const projectFormTitle = ref('')
 const projectUpdateFormTitle = ref('')
@@ -379,7 +394,7 @@ const myGetMembers = async (projectId) => {
 const setS = (status) => {
   const statusMap = {
     'Not Started': 'info',
-    'In Progress': '',//error!!!
+    'In Progress': '', //error!!!
     'Completed': 'success',
     'Paused': 'warning'
   }
@@ -524,6 +539,15 @@ const downloadProjectList = async () => {
   link.download = `my_project_list.xlsx`
   link.click()
 }
+
+const searchQuery = ref('');
+// 计算属性：过滤后的项目列表
+const filteredProjectList = computed(() => {
+  return projectList.value.filter(project => {
+    return project.projectName.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+        project.projectCode.toLowerCase().includes(searchQuery.value.toLowerCase());
+  });
+});
 
 onMounted(() => {
   getList()

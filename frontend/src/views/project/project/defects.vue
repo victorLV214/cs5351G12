@@ -13,14 +13,34 @@
       </div>
     </template>
 
-    <div class="search"><el-form :inline="true" :model="Params" class="sF"><el-form-item label="">
-      <el-input v-model="Params.title" placeholder="" clearable style="width: 200px"/>
-    </el-form-item>
-
-      <el-form-item>
-        <el-button type="primary" :icon="Search" @click="getReqs">Select</el-button><el-button :icon="Refresh" @click="clearAll">Refresh</el-button>
-      </el-form-item>
-    </el-form>
+    <div class="search">
+      <el-form :inline="true" :model="Params" class="sF">
+        <el-form-item label="Title">
+          <el-input v-model="Params.title" placeholder="" clearable style="width: 240px" @keyup.enter="getReqs"/>
+        </el-form-item>
+        <el-form-item label="Priority">
+          <el-select v-model="Params.priority" placeholder="Please select priority" clearable style="width: 240px">
+            <el-option label="High - 1" value="1"/>
+            <el-option label="Medium - 2" value="2"/>
+            <el-option label="Low - 3" value="3"/>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="Status">
+          <el-select v-model="Params.status" placeholder="Please select status" clearable style="width: 240px">
+            <el-option label="Pending" value="pending" />
+            <el-option label="Processing" value="processing" />
+            <el-option label="Fixed" value="fixed" />
+            <el-option label="To Verify" value="to_verify" />
+            <el-option label="Closed" value="closed" />
+            <el-option label="Reopened" value="reopened" />
+            <el-option label="Rejected" value="rejected" />
+          </el-select>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" :icon="Search" @click="getReqs">Search</el-button>
+          <el-button :icon="Refresh" @click="clearAll">Refresh</el-button>
+        </el-form-item>
+      </el-form>
     </div>
     <div class="rList">
       <el-table v-loading="loading" :data="reqList" style="width: 100%">
@@ -43,7 +63,7 @@
               </el-col>
               <el-col :span="12">
                 <el-button size="small" type="danger" class="w-100"
-                           @click="delReq(row)" :icon="Delete" v-if="booladmin">Delete</el-button>
+                           @click="delDef(row)" :icon="Delete" v-if="booladmin">Delete</el-button>
               </el-col>
             </el-row>
           </template>
@@ -161,6 +181,7 @@ import useUserStore from "@/store/modules/user.js"
 import { getUser } from "@/api/system/user.js"
 
 import {addDefect, delDefect, exportDefect, getDefect, listDefect, updateDefect} from "@/api/project/defect.js";
+import {listItem} from "@/api/project/item.js";
 const userStore = useUserStore()
 const route = useRoute()
 const projectId = route.params.id
@@ -322,7 +343,7 @@ const doEDIT = async () => {
 
 }
 
-const delReq = async (row) => {
+const delDef = async (row) => {
   await ElMessageBox.confirm(
       'This action will permanently delete this defect. Continue?',
       'Warning',

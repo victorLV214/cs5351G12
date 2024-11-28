@@ -3,26 +3,47 @@
     <el-card class="project-info-card">
     <template #header>
       <div class="card-header">
-        <span class="title">Basic Info</span>
+        <span class="title">
+          <el-icon style="position: relative;top:2px"><tickets/></el-icon>
+          Basic Info</span>
         <span class="status-tag">{{ projectInfo.status }}</span>
       </div>
     </template>
-    <div class="info-content"><div class="info-row"><div class="info-item">
-        <span class="label">projectName:</span><span class="value">{{ projectInfo.projectName }}</span>
-    </div>
-        <div class="info-item"><span class="label">projectCode:</span><span class="value">{{ projectInfo.projectCode }}</span></div>
-      </div><div class="info-row"><div class="info-item"><span class="label">startDate:</span><span class="value">{{ projectInfo.startDate }}</span>
-        </div><div class="info-item"><span class="label">expectedEndDate:</span><span class="value">{{ projectInfo.expectedEndDate }}</span></div>
-      </div>
+    <div class="info-content">
       <div class="info-row">
-        <div class="info-item"><span class="label">completionPercentage:</span>
-          <el-progress :percentage="projectInfo.completionPercentage"/>
+        <div class="info-item">
+          <span class="label">Project Name:</span>
+          <span class="value">{{ projectInfo.projectName }}</span>
         </div>
       </div>
-
-      <div class="info-row"><div class="info-item full-width">
-        <span class="label">description:</span><span class="value">{{ projectInfo.description }}</span>
+      <div class="info-row">
+        <div class="info-item">
+          <span class="label">Project Code:</span>
+          <span class="value">{{ projectInfo.projectCode }}</span>
+        </div>
       </div>
+        <div class="info-row">
+          <div class="info-item">
+            <span class="label">Start Date:</span>
+            <span class="value">{{ projectInfo.startDate }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Expected End Date:</span>
+            <span class="value">{{ projectInfo.expectedEndDate }}</span>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-item">
+            <span class="label">Completion Percentage:</span>
+            <el-progress :percentage="projectInfo.completionPercentage"/>
+          </div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-item full-width">
+          <span class="label">Description:</span>
+            <span class="value">{{ projectInfo.description }}</span>
+        </div>
       </div>
     </div>
   </el-card>
@@ -97,7 +118,8 @@ import {listRequirement} from "@/api/project/requirements.js";
 import * as echarts from 'echarts'
 import {listProjectMember} from "@/api/project/member.js";
 import {getUser} from "@/api/system/user.js";
-import {Clock, Files} from "@element-plus/icons-vue";
+import {Clock, Files, Notebook, Ticket, Tickets} from "@element-plus/icons-vue";
+import Notice from "@/views/project/userNotice/notice.vue";
 
 const projectInfo = ref({})
 const route = useRoute()

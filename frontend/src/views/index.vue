@@ -29,7 +29,7 @@
         <template #header>
           <div class="card-header">
             <span>
-                 <img src="@/assets/icons/png/task-finish.png" style="width: 25px;
+                 <img src="@/assets/icons/png/task-finish.png" style="width: 22px;
                     vertical-align: middle; position: relative; top: -2px;">
               Complete Task Statistics This Week
             </span>
@@ -56,7 +56,7 @@
           <template #header>
             <div class="card-header">
               <span>
-                <img src="@/assets/icons/png/task.png" style="width: 25px;
+                <img src="@/assets/icons/png/task.png" style="width: 26px;
                 vertical-align: middle; position: relative; top: -2px;">
                 My Responsible Work Items
               </span>
@@ -116,17 +116,18 @@ const getData = async () => {
   let planProjects = 0
 
   for (let i = 0; i < projectList.length; i++) {
-    if (projectList[i].status === '进行中' || projectList[i].status === 'ongoing') {
+    if (projectList[i].status === '进行中' || projectList[i].status === 'In Progress') {
       ongoingProjects++
     }
   }
   for (let i = 0; i < projectList.length; i++) {
-    if (projectList[i].status === '规划中' || projectList[i].status === 'planning') {
+    if (projectList[i].status === '规划中' || projectList[i].status === 'Planned'
+        || projectList[i].status === 'Planning') {
       planProjects++
     }
   }
   for (let i = 0; i < projectList.length; i++) {
-    if (projectList[i].status === '已完成' || projectList[i].status === 'completed') {
+    if (projectList[i].status === '已完成' || projectList[i].status === 'Completed') {
       endProject++
     }
   }
@@ -141,7 +142,7 @@ const getData = async () => {
   console.log(allTasks)
   let notFinishT= 0
   for (let i = 0; i < allTasks.rows.length; i++) {
-    if (allTasks.rows[i].status === '未完成') {
+    if (allTasks.rows[i].status === '未完成' || allTasks.rows[i].status === 'In Progress') {
       notFinishT++
     }
   }
@@ -155,7 +156,7 @@ const getData = async () => {
   for (let i = 0; i < allTasks.rows.length; i++) {
     const deadline = new Date(allTasks.rows[i].dueDate)
 
-    if (allTasks.rows[i].status === '已完成' || allTasks.rows[i].status === 'completed') {
+    if (allTasks.rows[i].status === '已完成' || allTasks.rows[i].status === 'Completed') {
       continue
     }
     if (deadline <= oneWeek && deadline >= now) {
@@ -225,7 +226,7 @@ const getTeamActivityData = async () => {
 
 
     const allTasks = await listItem({
-      status: '已完成',
+      status: 'Completed',
       projectIds: projectIds,
       pageNum: 1,
       pageSize: 999
@@ -239,7 +240,7 @@ const getTeamActivityData = async () => {
     for (let i = 0; i < allTasks.rows.length; i++) {
       const task = allTasks.rows[i]
       const completionDate = new Date(task.completedDate || task.updateTime)
-      if (completionDate >= thisMonth && task.status === '已完成' ) {
+      if (completionDate >= thisMonth && (task.status === '已完成' || task.status === 'Completed')) {
         const assignedNames = usernamewithNickName[task.assignedTo]
         if (!memberStats[assignedNames]) {
           memberStats[assignedNames] = 1
@@ -327,7 +328,7 @@ const getWeeklyTasksData = async () => {
     startDay1.setHours(0, 0, 0, 0)
 
     const allList = await listItem({
-      status: '已完成',
+      status: 'Completed',
       pageNum: 1,
       pageSize: 999
     })
@@ -406,7 +407,8 @@ const calFun = async (project) => {
     // console.log("allTasks",allTasks)
     const completedTasks = []
     for (let i = 0; i < allTasks.length; i++) {
-      if (allTasks[i].status === '已完成') {completedTasks.push(allTasks[i])
+      if (allTasks[i].status === '已完成'|| allTasks[i].status === "Completed" ) {
+        completedTasks.push(allTasks[i])
       }
     }
     const progress = Math.round((completedTasks.length / allTasks.length) * 100)
@@ -451,7 +453,8 @@ const setT = (status) => {
     'Not Started': 'info',
     'In Progress': 'primary',
     '已完成': 'success',
-    '已逾期': 'danger'
+    'Completed': 'success',
+    '已逾期': 'danger',
   }
   return statusMap[status] || 'info'
 }
@@ -460,7 +463,6 @@ const initCharts = () => {
   activeChart1 = echarts.init(chartR.value)
   taskChart1 = echarts.init(weekChart.value)
   projectChart = echarts.init(projectC.value)
-
 
   getTeamActivityData()
   getWeeklyTasksData()
