@@ -25,7 +25,7 @@
           </el-input>
         </div>
         <el-form-item label="Priority">
-          <el-select v-model="Params.priority" placeholder="select priority"
+          <el-select v-model="Params.priority" placeholder="Select priority"
                      clearable style="width: 150px">
             <el-option label="High" value="1"/>
             <el-option label="Medium" value="2"/>
@@ -33,14 +33,14 @@
           </el-select>
         </el-form-item>
         <el-form-item label="Status">
-          <el-select v-model="Params.status" placeholder="status" clearable style="width: 150px">
+          <el-select v-model="Params.status" placeholder="Select status" clearable style="width: 150px">
             <el-option label="Pending" value="pending"/>
             <el-option label="Processing" value="processing"/>
             <el-option label="Completed" value="completed"/>
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" :icon="Search" @click="getReqs">select</el-button>
+          <el-button type="primary" :icon="Search" @click="getReqs">Search</el-button>
           <el-button :icon="Refresh" @click="clearAll">Refresh</el-button>
         </el-form-item>
       </el-form>
@@ -348,6 +348,7 @@ const clearAll = () => {
     assignedTo: '',
     projectId: projectId
   }
+  searchQuery.value = ''
   getReqs()
 }
 const loadGanttData = () => {

@@ -8,6 +8,45 @@
         </div>
       </template>
 
+      <div class="search">
+        <el-form :inline="true" :model="Params" class="sF" label-width="70">
+          <el-form-item label="Title">
+            <el-input v-model="Params.title"
+                      placeholder="Input title"
+                      clearable
+                      style="width: 180px"
+                      @keyup.enter="handleQuery"/>
+          </el-form-item>
+          <el-form-item label="Status">
+            <el-select v-model="Params.status" placeholder="Select status" clearable style="width: 180px">
+              <el-option label="To Do" value="To Do" />
+              <el-option label="In Progress" value="In Progress" />
+              <el-option label="Done" value="Done" />
+              <el-option label="Blocked" value="Blocked" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="Priority">
+            <el-select v-model="Params.priority" placeholder="Select priority" clearable style="width: 180px">
+              <el-option label="Low - 0" :value="0" />
+              <el-option label="Medium - 1" :value="1" />
+              <el-option label="High - 2" :value="2" />
+              <el-option label="Urgent - 3" :value="3" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="Complexity">
+            <el-select v-model="Params.complexity" placeholder="Select complexity" clearable style="width: 180px">
+              <el-option label="Simple - 0" :value="0" />
+              <el-option label="Medium - 1" :value="1" />
+              <el-option label="Complex - 2" :value="2" />
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" :icon="Search" @click="handleQuery">Search</el-button>
+            <el-button :icon="Refresh" @click="resetQuery">Refresh</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+
       <el-table v-loading="loading" :data="treeD" row-key="taskId" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
         <el-table-column prop="title" label="Title" min-width="200">
           <template #default="{ row }">
@@ -118,7 +157,7 @@ import { ref, reactive, onMounted } from 'vue'
 import {listTask, getTask, addTask, updateTask, delTask, exportTask} from '@/api/project/tasks'
 import { useRoute } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import {Delete, Download, Edit, Plus} from "@element-plus/icons-vue";
+import {Delete, Download, Edit, Plus, Refresh, Search} from "@element-plus/icons-vue";
 
 const route = useRoute()
 const taskFormRef = ref(null)
@@ -133,6 +172,23 @@ const projectId = route.params.id
 const queryParams = reactive({
   projectId: route.params.id
 })
+const Params = reactive({
+  projectId: projectId,
+})
+const handleQuery = async () => {
+  loading.value = true
+  const searchProject = await listTask(Params)
+  taskD.value = searchProject.rows
+  treeD.value = doEleTree(taskD.value)
+  loading.value = false
+}
+const resetQuery = async () => {
+  Params.title = ''
+  Params.status = ''
+  Params.priority = ''
+  Params.complexity = ''
+  getList()
+}
 const checkRoles = async () => {
 
   const res = await listRole()
