@@ -48,7 +48,7 @@
 
     <div class="rList">
       <el-table v-loading="loading" :data="filteredReqList" style="width: 100%">
-        <el-table-column label="Title" align="center" prop="title"/>
+        <el-table-column label="Title" prop="title" width="250px"></el-table-column>
         <el-table-column label="Description" align="center" prop="description" show-overflow-tooltip/>
         <el-table-column label="Priority" align="center">
           <template #default="{ row }">
