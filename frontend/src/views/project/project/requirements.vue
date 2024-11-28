@@ -15,26 +15,39 @@
     </template>
 
     <div class="search">
-      <el-form :inline="true" :model="Params" class="sF">
-        <el-form-item label="requirements">
-          <el-input v-model="Params.title" placeholder="" clearable style="width: 200px"/>
+      <el-form :inline="true" :model="Params" class="sF" label-width="50">
+        <el-form-item label="Title">
+          <el-input v-model="Params.title"
+                    placeholder="Please input title"
+                    clearable
+                    style="width: 180px"
+                    @keyup.enter="getReqs"
+          />
         </el-form-item>
-        <el-form-item label="priority">
-          <el-select v-model="Params.priority" placeholder="select priority" clearable style="width: 200px">
-            <el-option label="high" value="1"/>
-            <el-option label="medium" value="2"/>
-            <el-option label="low" value="3"/>
+        <el-form-item label="Description">
+          <el-input v-model="Params.description"
+                    placeholder="Please input description"
+                    clearable
+                    style="width: 190px"
+                    @keyup.enter="getReqs"
+          />
+        </el-form-item>
+        <el-form-item label="Priority">
+          <el-select v-model="Params.priority" placeholder="Please select priority" clearable style="width: 190px">
+            <el-option label="High - 1" value="1"/>
+            <el-option label="Medium - 2" value="2"/>
+            <el-option label="Low - 3" value="3"/>
           </el-select>
         </el-form-item>
-        <el-form-item label="status">
-          <el-select v-model="Params.status" placeholder="status" clearable style="width: 200px">
-            <el-option label="pending" value="pending"/>
-            <el-option label="processing" value="processing"/>
-            <el-option label="completed" value="completed"/>
+        <el-form-item label="Status">
+          <el-select v-model="Params.status" placeholder="Please select status" clearable style="width: 190px">
+            <el-option label="Pending" value="pending"/>
+            <el-option label="Processing" value="processing"/>
+            <el-option label="Completed" value="completed"/>
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" :icon="Search" @click="getReqs">select</el-button>
+          <el-button type="primary" :icon="Search" @click="getReqs">Search</el-button>
           <el-button :icon="Refresh" @click="clearAll">Refresh</el-button>
         </el-form-item>
       </el-form>
@@ -48,11 +61,11 @@
 <!--          </template>-->
 <!--          <template #header><span class="header-text">ID</span></template>-->
 <!--        </el-table-column>-->
-        <el-table-column label="title" align="center" prop="title"/>
-        <el-table-column label="description" align="center" prop="description" show-overflow-tooltip/>
-        <el-table-column label="priority" align="center" prop="priority"></el-table-column>
-        <el-table-column label="status" align="center" prop="status"></el-table-column>
-        <el-table-column label="createTime" align="center" prop="createTime" width="180"/>
+        <el-table-column label="Title" align="center" prop="title"/>
+        <el-table-column label="Description" align="center" prop="description" show-overflow-tooltip/>
+        <el-table-column label="Priority" align="center" prop="priority"></el-table-column>
+        <el-table-column label="Status" align="center" prop="status"></el-table-column>
+        <el-table-column label="CreateTime" align="center" prop="createTime" width="180"/>
         <el-table-column label="Operations" align="center" width="180" >
           <template #default="{ row }">
             <el-row :gutter="10">
@@ -239,6 +252,7 @@ const Params = ref({
   assignedTo: '',
   projectId: projectId,
   delFlag: 1,
+  description: '',
 })
 const visibButten = ref(false)
 const curReq = ref(null)
@@ -359,7 +373,8 @@ const clearAll = () => {
     priority: '',
     status: '',
     assignedTo: '',
-    projectId: projectId
+    projectId: projectId,
+    description: '',
   }
 
 

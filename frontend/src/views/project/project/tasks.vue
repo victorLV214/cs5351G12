@@ -6,6 +6,45 @@
         <el-button type="primary" :icon="Download" @click="downloadItemList()">Download</el-button>
       </div>
 
+      <div class="search">
+        <el-form :inline="true" :model="Params" label-width="50">
+          <el-form-item label="Title">
+            <el-input v-model="Params.title"
+                      placeholder="Please input title"
+                      clearable
+                      style="width: 200px"
+                      @keyup.enter="handleQuery"
+            />
+          </el-form-item>
+          <el-form-item label="Type">
+            <el-select v-model="Params.type" placeholder="Please select type" clearable style="width: 200px">
+              <el-option label="Development Task" value="Development Task"/>
+              <el-option label="Test Task" value="Test Task"/>
+              <el-option label="Design Task" value="Design Task"/>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="Status">
+            <el-select v-model="Params.status" placeholder="Please select priority" clearable style="width: 200px">
+              <el-option label="Not Started" value="Not Started"/>
+              <el-option label="In Progress" value="In Progress"/>
+              <el-option label="Completed" value="Completed"/>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="Priority">
+            <el-select v-model="Params.priority" placeholder="Please select priority" clearable style="width: 200px">
+              <el-option label="P1" :value="1"/>
+              <el-option label="P2" :value="2"/>
+              <el-option label="P3" :value="3"/>
+              <el-option label="P4" :value="4"/>
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" :icon="Search" @click="handleQuery">Search</el-button>
+            <el-button :icon="Refresh" @click="resetQuery">Refresh</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+
       <el-table :data="list" v-loading="loading">
 <!--        <el-table-column label="ID" prop="workItemId" width="80" align="center"/>-->
         <el-table-column label="Title" prop="title" width="300" align="center"/>
@@ -119,7 +158,7 @@
 </template>
 
 <script setup>
-import {ref, onMounted} from 'vue'
+import {ref, onMounted, reactive} from 'vue'
 import {useRoute} from 'vue-router'
 import {listItem, addItem, updateItem, delItem, exportItem} from '@/api/project/item'
 import {listProjectMember} from '@/api/project/member'
@@ -129,7 +168,7 @@ import {addNotice} from "@/api/notice/noticeapi.js";
 import { listRole } from '@/api/system/role.js'
 import { gantt } from 'dhtmlx-gantt'
 import 'dhtmlx-gantt/codebase/dhtmlxgantt.css'
-import {Delete, Download, Edit, Plus} from "@element-plus/icons-vue";
+import {Delete, Download, Edit, Plus, Refresh, Search} from "@element-plus/icons-vue";
 import {delTask} from "@/api/project/tasks.js";
 import {ElMessageBox} from "element-plus";
 const booladmin=ref(false)
@@ -146,7 +185,7 @@ const addDialog = ref(false)
 
 const queryParams = ref({
   pageNum: 1,
-  pageSize: 10,
+  pageSize: 999,
   projectId: projectId
 })
 
@@ -164,6 +203,25 @@ const form = ref({
   description: '',
   projectId: projectId
 })
+const Params = reactive({
+  pageNum: 1,
+  pageSize: 999,
+  projectId: projectId,
+})
+const handleQuery = async () => {
+  loading.value = true
+  const searchProject = await listItem(Params)
+  list.value = searchProject.rows
+  total.value = searchProject.total
+  loading.value = false
+}
+const resetQuery = async () => {
+  Params.title = ''
+  Params.type = ''
+  Params.priority = ''
+  Params.status = ''
+  getList()
+}
 
 async function getList() {
   loading.value = true

@@ -1,6 +1,30 @@
 <template>
   <div class="project-container">
     <el-card class="project-card">
+      <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="true" label-width="120px">
+        <el-form-item label="Project Name" prop="projectName">
+          <el-input
+              v-model="queryParams.projectName"
+              placeholder="Please input project name"
+              clearable
+              style="width: 240px"
+              @keyup.enter="handleQuery"
+          />
+        </el-form-item>
+        <el-form-item label="Project Code" prop="projectCode">
+          <el-input
+              v-model="queryParams.projectCode"
+              placeholder="Please input project code"
+              clearable
+              style="width: 240px"
+              @keyup.enter="handleQuery"
+          />
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" icon="Search" @click="handleQuery">Search</el-button>
+          <el-button icon="Refresh" @click="resetQuery">Reset</el-button>
+        </el-form-item>
+      </el-form>
       <template #header>
         <div class="card-header">
           <span class="header-title">
@@ -20,7 +44,7 @@
           </div>
         </div>
       </template>
-       <el-table :data="projectList" style="width: 100%" class="project-table" :row-class-name="tableRowClassName" @row-click="doRCS">
+       <el-table v-loading="loading" :data="projectList" style="width: 100%" class="project-table" :row-class-name="tableRowClassName" @row-click="doRCS">
         <el-table-column prop="projectName" label="Project Name">
           <template #default="scope">
             <a href="javascript:;" @click="checkProjectAccess(scope.row)"
@@ -231,9 +255,10 @@ import {
 } from '@element-plus/icons-vue'
 const projectFormTitle = ref('')
 const projectUpdateFormTitle = ref('')
+const queryRef = ref(null)
 const formRef = ref(null)
 const updateFormRef = ref(null)
-import {getUser} from "@/api/system/user.js";
+import {getUser, listUser} from "@/api/system/user.js";
 import { useRouter } from 'vue-router'
 const router = useRouter()
 const userStore = useUserStore()
@@ -242,6 +267,7 @@ import { listRole } from '@/api/system/role.js'
 const currentRow = ref(null)
 const pFormVisi = ref(false)
 const booleanForVis = ref(false)
+const loading = ref(false);
 
 import useUserStore from "@/store/modules/user.js"
 import {exportProject, exportProjectList} from "@/api/download.js";
@@ -282,6 +308,24 @@ const theBiggsetForm = reactive({
   startDate: '',
   status: '',
 })
+const queryParams = reactive({
+  pageNum: 1,
+  pageSize: 999,
+  userId: '',
+})
+const handleQuery = async () => {
+  loading.value = true
+  const userStore = useUserStore()
+  queryParams.userId = userStore.id
+
+  const searchProject = await listProject(queryParams)
+  projectList.value = searchProject.rows
+  loading.value = false
+}
+const resetQuery = async () => {
+  queryRef.value.resetFields()
+  getList()
+}
 const checkRoles = async () => {
 
     const res = await listRole()
