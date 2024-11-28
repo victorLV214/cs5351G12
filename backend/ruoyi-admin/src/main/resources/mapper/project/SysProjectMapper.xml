@@ -154,7 +154,7 @@
         </foreach>
     </delete>
 
-    <select id="selectProjectsByIds" parameterType="List" resultType="SysProject">
+    <select id="selectProjectsByIds" parameterType="List" resultMap="SysProjectResult">
         <include refid="selectSysProjectVo"/>
         WHERE project_id IN
         <foreach item="projectId" collection="list" open="(" separator="," close=")">
