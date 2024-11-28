@@ -46,15 +46,15 @@ public class SysDashboardServiceImpl implements ISysDashboardService {
 
             // 根据项目状态分类
             List<SysProject> plannedProjects = projects.stream()
-                    .filter(p -> "规划中".equals(p.getStatus()))
+                    .filter(p -> "Planning".equals(p.getStatus()))
                     .collect(Collectors.toList());
 
             List<SysProject> ongoingProjects = projects.stream()
-                    .filter(p -> "进行中".equals(p.getStatus()))
+                    .filter(p -> "In Progress".equals(p.getStatus()))
                     .collect(Collectors.toList());
 
             List<SysProject> completedProjects = projects.stream()
-                    .filter(p -> "已完成".equals(p.getStatus()))
+                    .filter(p -> "Completed".equals(p.getStatus()))
                     .collect(Collectors.toList());
 
             sysDashboard.setPlannedProjects(plannedProjects);
@@ -68,11 +68,11 @@ public class SysDashboardServiceImpl implements ISysDashboardService {
         if (tasks != null && !tasks.isEmpty()) {
             // 根据任务状态分类
             List<SysTask> ongoingTasks = tasks.stream()
-                    .filter(t -> "进行中".equals(t.getStatus()))
+                    .filter(t -> "In Progress".equals(t.getStatus()))
                     .collect(Collectors.toList());
 
             List<SysTask> completedTasks = tasks.stream()
-                    .filter(t -> "已完成".equals(t.getStatus()))
+                    .filter(t -> "Completed".equals(t.getStatus()))
                     .collect(Collectors.toList());
 
             sysDashboard.setOngoingTasks(ongoingTasks);
