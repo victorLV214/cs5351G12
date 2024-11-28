@@ -43,13 +43,13 @@
       </el-table>
     </el-card>
 
-    <el-dialog title="user" v-model="buttenVis" width="600px">
+    <el-dialog title="Member Detail" v-model="buttenVis" width="600px">
       <el-form ref="formRef" :model="form" :ruleX="ruleX" label-width="100px">
-        <el-form-item label="User" prop="userId">
-          <el-select v-model="form.userId" placeholder="Select user">
-            <el-option v-for="user in usersss" :key="user.userId" :label="user.userName" :value="user.userId"/>
-          </el-select>
-        </el-form-item>
+<!--        <el-form-item label="User" prop="userId">-->
+<!--          <el-select v-model="form.userId" placeholder="Select user">-->
+<!--            <el-option v-for="user in usersss" :key="user.userId" :label="user.userName" :value="user.userId"/>-->
+<!--          </el-select>-->
+<!--        </el-form-item>-->
         <el-form-item label="Role" prop="role">
           <el-input v-model="form.role" placeholder="Role" />
         </el-form-item>
