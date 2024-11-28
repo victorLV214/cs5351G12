@@ -1,5 +1,32 @@
 <template>
   <div class="app-container">
+    <div class="search">
+      <el-form :inline="true" :model="queryParams" label-width="120">
+        <el-form-item label="Iteration Name" prop="iterationName">
+          <el-input
+              v-model="queryParams.name"
+              placeholder="Please input name"
+              clearable
+              style="width: 200px"
+              @keyup.enter="handleQuery"
+          />
+        </el-form-item>
+        <el-form-item label="Story Points" prop="iterationStoryPoints">
+          <el-input
+              v-model="queryParams.plannedStoryPoints"
+              placeholder="Please input story points"
+              clearable
+              style="width: 200px"
+              @keyup.enter="handleQuery"
+          />
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" :icon="Search" @click="handleQuery">Search</el-button>
+          <el-button :icon="Refresh" @click="resetQuery">Refresh</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
+
     <div class="mb-20">
       <el-button type="primary" :icon="Plus" @click="doDiga">Add Iteration</el-button>
       <el-button type="primary" :icon="Download" @click="downloadIterationList()" class="download-button">Download</el-button>
@@ -82,13 +109,13 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import {ref, onMounted, watch, reactive} from 'vue'
 import { useRoute } from 'vue-router'
 import {ElMessage, ElMessageBox} from 'element-plus'
 import {listIteration, addIteration, updateIteration, exportIteration} from '@/api/project/iteration'
 import { listItem } from '@/api/project/item'
 import * as echarts from 'echarts'
-import {Delete, Download, Edit, Plus, TrendCharts} from "@element-plus/icons-vue";
+import {Delete, Download, Edit, Plus, Refresh, Search, TrendCharts} from "@element-plus/icons-vue";
 import {delDefect} from "@/api/project/defect.js";
 import {listRole} from "@/api/system/role.js";
 import html2canvas from "html2canvas";
@@ -116,6 +143,20 @@ const form = ref({
   plannedStoryPoints: 0,
   status:'1',
 })
+const queryParams = reactive({
+  projectId: projectId,
+})
+const handleQuery = async () => {
+  loading.value = true
+  const searchProject = await listIteration(queryParams)
+  list.value = searchProject.rows
+  loading.value = false
+}
+const resetQuery = async () => {
+  queryParams.plannedStoryPoints = ''
+  queryParams.name = ''
+  getList()
+}
 const checkRoles = async () => {
 
   const res = await listRole()

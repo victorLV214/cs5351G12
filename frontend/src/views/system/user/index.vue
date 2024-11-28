@@ -28,7 +28,16 @@
          </el-col>
          <!--用户数据-->
          <el-col :span="20" :xs="24">
-            <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
+            <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="70px">
+              <el-form-item label="用户编号" prop="userId">
+                <el-input
+                    v-model="queryParams.userId"
+                    placeholder="请输入用户编号"
+                    clearable
+                    style="width: 240px"
+                    @keyup.enter="handleQuery"
+                />
+              </el-form-item>
                <el-form-item label="用户名称" prop="userName">
                   <el-input
                      v-model="queryParams.userName"
@@ -62,7 +71,7 @@
                      />
                   </el-select>
                </el-form-item>
-               <el-form-item label="创建时间" style="width: 308px;">
+               <el-form-item label="创建时间" style="width: 310px;">
                   <el-date-picker
                      v-model="dateRange"
                      value-format="YYYY-MM-DD"
@@ -384,6 +393,7 @@ const data = reactive({
     pageNum: 1,
     pageSize: 10,
     userName: undefined,
+    userId: undefined,
     phonenumber: undefined,
     status: undefined,
     deptId: undefined
