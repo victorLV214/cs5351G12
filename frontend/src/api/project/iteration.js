@@ -38,7 +38,7 @@ export function updateIteration(data) {
 // 删除迭代
 export function deleteIteration(iterationId) {
     return request({
-        url: '/dev-api/project/iteration/' + iterationId,
+        url: `/dev-api/project/iteration/${iterationId}`,
         method: 'delete'
     })
 }

@@ -89,7 +89,6 @@ import {listIteration, addIteration, updateIteration, exportIteration} from '@/a
 import { listItem } from '@/api/project/item'
 import * as echarts from 'echarts'
 import {Delete, Download, Edit, Plus, TrendCharts} from "@element-plus/icons-vue";
-import {delDefect} from "@/api/project/defect.js";
 import {listRole} from "@/api/system/role.js";
 import html2canvas from "html2canvas";
 
@@ -108,7 +107,7 @@ const wList = ref([])
 
 const formRef = ref(null)
 const form = ref({
-  iterationId: undefined,
+  // iterationId: undefined,
   projectId: projectId,
   name: '',
   startDate: '',
@@ -167,9 +166,9 @@ const delIteration = async (row) => {
       }
   )
   loading.value = true
-  await delDefect(row.defectId)
+  await delIteration(row.iterationId)
   boolVis1.value = false
-  await getReqs()
+  await getList()
   loading.value = false
 }
 
@@ -334,7 +333,7 @@ const sF1 = () => {
 const rF1 = () => {
   formRef.value?.resetFields()
   form.value = {
-    iterationId: undefined,
+    // iterationId: undefined,
     projectId: projectId,
     name: '',
     startDate: '',
