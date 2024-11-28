@@ -1,6 +1,15 @@
 <template>
    <div class="app-container">
-      <el-form :model="queryParams" ref="queryRef" v-show="showSearch" :inline="true" label-width="68px">
+      <el-form :model="queryParams" ref="queryRef" v-show="showSearch" :inline="true" label-width="70px">
+        <el-form-item label="角色编号" prop="roleId">
+          <el-input
+              v-model="queryParams.roleId"
+              placeholder="请输入角色编号"
+              clearable
+              style="width: 240px"
+              @keyup.enter="handleQuery"
+          />
+        </el-form-item>
          <el-form-item label="角色名称" prop="roleName">
             <el-input
                v-model="queryParams.roleName"
@@ -34,7 +43,7 @@
                />
             </el-select>
          </el-form-item>
-         <el-form-item label="创建时间" style="width: 308px">
+         <el-form-item label="创建时间" style="width: 310px">
             <el-date-picker
                v-model="dateRange"
                value-format="YYYY-MM-DD"
@@ -283,6 +292,7 @@ const data = reactive({
   queryParams: {
     pageNum: 1,
     pageSize: 10,
+    roleId: undefined,
     roleName: undefined,
     roleKey: undefined,
     status: undefined
