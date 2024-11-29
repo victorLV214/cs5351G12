@@ -164,6 +164,6 @@
         SELECT COUNT(*)
         FROM sys_requirement
         WHERE project_id = #{projectId}
-          AND status = '已完成'
+          AND status = 'Completed'
     </select>
 </mapper>
