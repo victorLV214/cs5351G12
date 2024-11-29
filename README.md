@@ -38,13 +38,13 @@ npm run dev
 
 ## Contributors
 
-CityU CS5351 Group 12
-Group Members:
-  LYU mingyuan 58856019  
-  WANG chenchen 56344983  
-  LIU siyuan 58803468  
-  CUI yifan 58951207  
-  XU ye 56641930  
-  MAcheng59046021  
-  GENG qiyang 59063379  
-  YAO shanheng 58872204  
+CityU CS5351 Group 12  
+Group Members:  
+  LYU mingyuan 58856019 victorLV214 https://github.com/victorLV214   
+  WANG chenchen 56344983 MioAyanokouji https://github.com/MioAyanokouji   
+  LIU siyuan 58803468 AB-IN-lsy https://github.com/AB-IN-lsy      
+  CUI yifan 58951207 SarekCuimian https://github.com/SarekCuimian & SarekCM https://github.com/SarekCM  
+  XU ye 56641930 yexu42 https://github.com/yexu42   
+  MA cheng 59046021 Mountain001 https://github.com/Mountain001
+  GENG qiyang 59063379 wheelrolling https://github.com/wheelrolling       
+  YAO shanheng 58872204 Shigure7 https://github.com/Shigure7  
