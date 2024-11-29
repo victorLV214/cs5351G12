@@ -39,3 +39,12 @@ npm run dev
 ## Contributors
 
 CityU CS5351 Group 12
+Group Members:
+  LYU mingyuan 58856019
+  WANG chenchen 56344983
+  LIU siyuan 58803468
+  CUI yifan 58951207
+  XU ye 56641930
+  MAcheng59046021
+  GENG qiyang 59063379
+  YAO shanheng 58872204
